@@ -1,0 +1,7 @@
+{
+  "name": "TrainingRoutinePCV_FB",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}
