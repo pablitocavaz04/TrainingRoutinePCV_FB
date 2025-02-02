@@ -10,6 +10,9 @@ import { AppRoutingModule } from './app-routing.module';
 // Firebase
 import { initializeApp } from "firebase/app";
 import { environment } from '../environments/environment';
+//Lottie
+import { provideLottieOptions } from 'ngx-lottie';
+import player from 'lottie-web';
 
 @NgModule({
   declarations: [AppComponent],
@@ -17,7 +20,11 @@ import { environment } from '../environments/environment';
     BrowserModule, 
     IonicModule.forRoot(), 
     AppRoutingModule],
-  providers: [{ provide: RouteReuseStrategy, useClass: IonicRouteStrategy }],
+    providers: [{ provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
+      provideLottieOptions({
+        player: () => player,
+      })
+    ],
   bootstrap: [AppComponent],
 })
 export class AppModule {
