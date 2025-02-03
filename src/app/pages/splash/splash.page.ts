@@ -27,7 +27,7 @@ export class SplashPage implements OnInit {
 
     // Leer el parámetro redirect
     this.route.queryParams.subscribe((params) => {
-      const redirectTo = params['redirect'] || '/home'; // Por defecto, ir a /landing
+      const redirectTo = params['redirect'] || '/landing'; // Por defecto, ir a /landing
       setTimeout(() => {
         this.router.navigate([redirectTo]); // Navegar al destino indicado
       }, 3000); // Esperar 3 segundos

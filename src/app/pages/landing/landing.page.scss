@@ -1,0 +1,17 @@
+:host {
+    display: block;
+    height: 100vh;
+  }
+  
+  /* Animación para el carrusel */
+  div {
+    transition: transform 0.5s ease-in-out;
+  }
+  
+  span {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    transition: background-color 0.3s ease-in-out, transform 0.3s ease-in-out;
+  }
+  
