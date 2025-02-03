@@ -30,7 +30,7 @@ export class SplashPage implements OnInit {
       const redirectTo = params['redirect'] || '/landing'; // Por defecto, ir a /landing
       setTimeout(() => {
         this.router.navigate([redirectTo]); // Navegar al destino indicado
-      }, 3000); // Esperar 3 segundos
+      }, 4000); // Esperar 3 segundos
     });
   }
 }
