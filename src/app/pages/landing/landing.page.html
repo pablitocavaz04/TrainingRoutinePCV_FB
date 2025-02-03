@@ -6,7 +6,7 @@
       <div class="animate-spin rounded-full h-12 w-12 border-t-4 border-blue-500"></div>
     </div>
 
-    <!-- Contenedor del carrusel (inicialmente oculto hasta que todo está listo) -->
+    <!-- Contenedor del carrusel -->
     <div [ngClass]="{'hidden': isLoading, 'block': !isLoading}"
          class="flex transition-transform duration-500 ease-in-out" 
          [ngStyle]="{'transform': 'translateX(' + (-currentIndex * 100) + '%)'}">
@@ -15,18 +15,48 @@
            (mouseenter)="showOverlay(true)" 
            (mouseleave)="showOverlay(false)" 
            (click)="toggleTextVisibility()">
-        <img [src]="slide.url" alt="Imagen de {{ slide.name }}" class="w-full h-[600px] object-cover">
-        <div class="absolute inset-0 bg-black transition-all duration-300 flex items-center justify-center"
-             [ngClass]="{'bg-opacity-50': isOverlayVisible, 'bg-opacity-0': !isOverlayVisible}">
-          <p class="text-white text-2xl font-semibold transition-opacity duration-300 text-center"
-             [ngClass]="{'opacity-100': isOverlayVisible, 'opacity-0': !isOverlayVisible}">
-            {{ getOverlayText(slide.name) }}
-          </p>
-        </div>
+           
+           <ng-container *ngIf="slide.isInfo; else regularSlide">
+            <img [src]="slide.url" alt="Imagen informativa" class="w-full h-[600px] object-cover">
+          
+            <!-- Mismo overlay y efecto que las demás diapositivas -->
+            <div class="absolute inset-0 bg-black transition-all duration-300 flex flex-col items-start justify-center px-10"
+                 [ngClass]="{'bg-opacity-50': isOverlayVisible, 'bg-opacity-0': !isOverlayVisible}">
+          
+              <!-- Texto y botones con transición correcta -->
+              <div class="text-white max-w-lg transition-all duration-500 ease-in-out transform"
+                   [ngClass]="{'opacity-100 translate-y-0': isOverlayVisible, 'opacity-0 translate-y-5': !isOverlayVisible}">
+                <div class="w-16 h-1 bg-white mb-4"></div> <!-- Línea elegante -->
+                <h2 class="text-2xl font-semibold uppercase">Más de 20 años de</h2>
+                <h1 class="text-5xl font-bold">Experiencia</h1>
+                <p class="mt-2 text-lg opacity-80">Desde 1990, nuestra empresa se ha dedicado a ofrecer la mejor gestión y asesoría en entrenamientos y sesiones especializadas.</p>
+                
+                <!-- Botones de acceso -->
+                <div class="mt-6 flex gap-4">
+                  <a href="/login" class="bg-blue-500 text-white px-5 py-3 rounded-md hover:bg-blue-600 transition">Iniciar sesión</a>
+                  <a href="/register" class="bg-gray-300 text-gray-800 px-5 py-3 rounded-md hover:bg-gray-400 transition">Registrarse</a>
+                </div>
+              </div>
+            </div>
+          </ng-container>
+          
+          
+        <!-- Imágenes normales del carrusel -->
+        <ng-template #regularSlide>
+          <img [src]="slide.url" alt="Imagen de {{ slide.name }}" class="w-full h-[600px] object-cover">
+          <div class="absolute inset-0 bg-black transition-all duration-300 flex items-center justify-center"
+               [ngClass]="{'bg-opacity-50': isOverlayVisible, 'bg-opacity-0': !isOverlayVisible}">
+            <p class="text-white text-2xl font-semibold transition-opacity duration-300 text-center"
+               [ngClass]="{'opacity-100': isOverlayVisible, 'opacity-0': !isOverlayVisible}">
+              {{ getOverlayText(slide.name) }}
+            </p>
+          </div>
+        </ng-template>
+
       </div>
     </div>
 
-    <!-- Botones de Navegación (ocultos hasta que el carrusel esté listo) -->
+    <!-- Botones de Navegación -->
     <button *ngIf="!isLoading" (click)="prevSlide()" class="absolute top-1/2 left-4 transform -translate-y-1/2 bg-black bg-opacity-50 text-white p-3 rounded-full hover:bg-opacity-75">
       ❮
     </button>
