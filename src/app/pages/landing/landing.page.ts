@@ -8,6 +8,8 @@ import { getStorage, ref, getDownloadURL } from "firebase/storage";
   standalone: false
 })
 export class LandingPage implements OnInit {
+  isAuthModalOpen: boolean = false;
+  isLoginMode: boolean = true;
   slides = [
     { name: 'informacion', url: '', loaded: false, isInfo: true },
     { name: 'sesiones', url: '', loaded: false },
@@ -77,5 +79,14 @@ export class LandingPage implements OnInit {
       default:
         return '';
     }
+  }
+
+  openAuthModal(isLogin: boolean) {
+    this.isLoginMode = isLogin; 
+    this.isAuthModalOpen = true;
+  }
+
+  closeAuthModal() {
+    this.isAuthModalOpen = false;
   }
 }
