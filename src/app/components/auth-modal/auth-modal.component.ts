@@ -7,7 +7,7 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
   standalone:false
 })
 export class AuthModalComponent {
-  @Input() isLoginMode: boolean = true; // Se recibe desde la Landing Page
+  @Input() isLoginMode: boolean = true; // Este estado lo recibimos desde la landing page.
   @Output() close = new EventEmitter<void>();
 
   closeModal() {

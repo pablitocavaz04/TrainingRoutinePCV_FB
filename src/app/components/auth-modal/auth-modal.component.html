@@ -1,5 +1,5 @@
 <div class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
-  <div class="bg-white p-6 rounded-lg shadow-lg w-96 relative">
+  <div class="bg-white p-6 rounded-lg shadow-lg w-96 relative transform transition-all duration-300">
     <button (click)="closeModal()" class="absolute top-2 right-2 text-gray-600 hover:text-gray-900">✕</button>
 
     <h2 class="text-2xl font-semibold text-center mb-4">
@@ -7,26 +7,28 @@
     </h2>
 
     <form>
-      <div class="mb-4">
-        <label class="block text-gray-700">Correo Electrónico</label>
-        <input type="email" class="w-full px-4 py-2 border rounded-md focus:border-blue-500 focus:ring-1 focus:ring-blue-500" placeholder="correo@ejemplo.com">
+      <!-- Input de Correo -->
+      <div class="input-container">
+        <input type="email" id="email" placeholder="Correo Electrónico" required>
       </div>
 
-      <div class="mb-4">
-        <label class="block text-gray-700">Contraseña</label>
-        <input type="password" class="w-full px-4 py-2 border rounded-md focus:border-blue-500 focus:ring-1 focus:ring-blue-500" placeholder="••••••••">
+      <!-- Input de Contraseña -->
+      <div class="input-container">
+        <input type="password" id="password" placeholder="Contraseña" required>
       </div>
 
-      <div *ngIf="!isLoginMode" class="mb-4">
-        <label class="block text-gray-700">Confirmar Contraseña</label>
-        <input type="password" class="w-full px-4 py-2 border rounded-md focus:border-blue-500 focus:ring-1 focus:ring-blue-500" placeholder="••••••••">
+      <!-- Input de Confirmar Contraseña (Solo en Registro) -->
+      <div *ngIf="!isLoginMode" class="input-container">
+        <input type="password" id="confirm-password" placeholder="Confirmar Contraseña" required>
       </div>
 
+      <!-- Botón de Enviar -->
       <button class="w-full bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition">
         {{ isLoginMode ? 'Iniciar Sesión' : 'Registrarse' }}
       </button>
     </form>
 
+    <!-- Enlace para cambiar entre Login y Registro -->
     <p class="text-center text-gray-600 mt-4">
       {{ isLoginMode ? '¿No tienes cuenta?' : '¿Ya tienes cuenta?' }}
       <span (click)="toggleMode()" class="text-blue-500 cursor-pointer hover:underline">
