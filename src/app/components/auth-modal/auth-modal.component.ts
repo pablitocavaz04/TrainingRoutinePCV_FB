@@ -4,7 +4,7 @@ import { Component, Input, Output, EventEmitter } from '@angular/core';
   selector: 'app-auth-modal',
   templateUrl: './auth-modal.component.html',
   styleUrls: ['./auth-modal.component.scss'],
-  standalone:false
+  standalone: false
 })
 export class AuthModalComponent {
   @Input() isLoginMode = true;
@@ -19,13 +19,5 @@ export class AuthModalComponent {
 
   toggleMode() {
     this.isLoginMode = !this.isLoginMode;
-  }
-
-  togglePasswordVisibility(field: string) {
-    if (field === 'password') {
-      this.showPassword = !this.showPassword;
-    } else if (field === 'confirm-password') {
-      this.showConfirmPassword = !this.showConfirmPassword;
-    }
   }
 }
