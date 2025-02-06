@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, Input, Output, EventEmitter } from '@angular/core';
 
 @Component({
   selector: 'app-auth-modal',
@@ -7,8 +7,11 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
   standalone:false
 })
 export class AuthModalComponent {
-  @Input() isLoginMode: boolean = true; // Este estado lo recibimos desde la landing page.
+  @Input() isLoginMode = true;
   @Output() close = new EventEmitter<void>();
+
+  showPassword = false;
+  showConfirmPassword = false;
 
   closeModal() {
     this.close.emit();
@@ -16,5 +19,13 @@ export class AuthModalComponent {
 
   toggleMode() {
     this.isLoginMode = !this.isLoginMode;
+  }
+
+  togglePasswordVisibility(field: string) {
+    if (field === 'password') {
+      this.showPassword = !this.showPassword;
+    } else if (field === 'confirm-password') {
+      this.showConfirmPassword = !this.showConfirmPassword;
+    }
   }
 }

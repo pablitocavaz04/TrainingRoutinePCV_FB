@@ -1,39 +1,58 @@
 <div class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
-  <div class="bg-white p-6 rounded-lg shadow-lg w-96 relative transform transition-all duration-300">
-    <button (click)="closeModal()" class="absolute top-2 right-2 text-gray-600 hover:text-gray-900">✕</button>
+  <div class="bg-white p-8 rounded-lg shadow-xl w-full max-w-lg relative transform transition-all duration-300 scale-95 opacity-0 animate-fadeIn">
+    
+    <!-- Botón de Cerrar -->
+    <button (click)="closeModal()" class="absolute top-3 right-3 text-gray-600 hover:text-gray-900 text-xl">✕</button>
 
-    <h2 class="text-2xl font-semibold text-center mb-4">
+    <!-- Título -->
+    <h2 class="text-3xl font-bold text-center mb-6 text-gray-800">
       {{ isLoginMode ? 'Iniciar Sesión' : 'Registrarse' }}
     </h2>
 
-    <form>
-      <!-- Input de Correo -->
-      <div class="input-container">
-        <input type="email" id="email" placeholder="Correo Electrónico" required>
+    <!-- Formulario -->
+    <form class="space-y-5">
+      
+      <!-- Correo -->
+      <div>
+        <label for="email" class="block text-gray-600 font-medium">Correo Electrónico</label>
+        <input type="email" id="email" class="w-full mt-1 p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-400 focus:outline-none" placeholder="ejemplo@correo.com" required>
       </div>
 
-      <!-- Input de Contraseña -->
-      <div class="input-container">
-        <input type="password" id="password" placeholder="Contraseña" required>
+      <!-- Contraseña -->
+      <div>
+        <label for="password" class="block text-gray-600 font-medium">Contraseña</label>
+        <div class="relative">
+          <input [type]="showPassword ? 'text' : 'password'" id="password" class="w-full mt-1 p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-400 focus:outline-none" placeholder="Introduce tu contraseña" required>
+          <button type="button" (click)="togglePasswordVisibility('password')" class="absolute right-3 top-4 text-gray-500 hover:text-gray-700">
+            👁
+          </button>
+        </div>
       </div>
 
-      <!-- Input de Confirmar Contraseña (Solo en Registro) -->
-      <div *ngIf="!isLoginMode" class="input-container">
-        <input type="password" id="confirm-password" placeholder="Confirmar Contraseña" required>
+      <!-- Confirmar Contraseña (Solo en Registro) -->
+      <div *ngIf="!isLoginMode">
+        <label for="confirm-password" class="block text-gray-600 font-medium">Confirmar Contraseña</label>
+        <div class="relative">
+          <input [type]="showConfirmPassword ? 'text' : 'password'" id="confirm-password" class="w-full mt-1 p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-400 focus:outline-none" placeholder="Repite tu contraseña" required>
+          <button type="button" (click)="togglePasswordVisibility('confirm-password')" class="absolute right-3 top-4 text-gray-500 hover:text-gray-700">
+            👁
+          </button>
+        </div>
       </div>
 
       <!-- Botón de Enviar -->
-      <button class="w-full bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition">
+      <button class="w-full bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700 transition">
         {{ isLoginMode ? 'Iniciar Sesión' : 'Registrarse' }}
       </button>
     </form>
 
     <!-- Enlace para cambiar entre Login y Registro -->
-    <p class="text-center text-gray-600 mt-4">
+    <p class="text-center text-gray-600 mt-5">
       {{ isLoginMode ? '¿No tienes cuenta?' : '¿Ya tienes cuenta?' }}
       <span (click)="toggleMode()" class="text-blue-500 cursor-pointer hover:underline">
         {{ isLoginMode ? 'Regístrate aquí' : 'Inicia sesión' }}
       </span>
     </p>
+
   </div>
 </div>
