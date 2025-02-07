@@ -1,46 +1,61 @@
 .input-container {
-    position: relative;
-    margin-bottom: 16px;
+  position: relative;
+  margin-bottom: 16px;
+}
+
+.input-container input {
+  width: 100%;
+  padding: 12px 14px;
+  border: 2px solid #ddd;
+  border-radius: 8px;
+  font-size: 16px;
+  transition: all 0.3s ease-in-out;
+  background-color: white;
+  color: #333;
+}
+
+.input-container input:focus {
+  border-color: #4facfe;
+  box-shadow: 0px 0px 12px rgba(79, 172, 254, 0.5);
+  transform: scale(1.02);
+}
+
+.input-container input::placeholder {
+  color: rgba(100, 100, 100, 0.7);
+  transition: opacity 0.3s ease-in-out;
+}
+
+.input-container input:focus::placeholder {
+  opacity: 0.5;
+}
+
+/* Estilo para el icono del ojo */
+.password-icon {
+  position: absolute;
+  right: 12px; /* Separación del borde derecho */
+  top: 50%; /* Centrar verticalmente */
+  transform: translateY(-50%); /* Ajuste para centrarlo */
+  font-size: 22px; /* Aumentar el tamaño del icono */
+  color: #666;
+  cursor: pointer;
+  transition: color 0.3s ease;
+}
+
+.password-icon:hover {
+  color: #333;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
   }
-  
-  .input-container input {
-    width: 100%;
-    padding: 12px 14px;
-    border: 2px solid #ddd;
-    border-radius: 8px;
-    font-size: 16px;
-    transition: all 0.3s ease-in-out;
-    background-color: white;
-    color: #333;
+  to {
+    opacity: 1;
+    transform: scale(1);
   }
-  
-  .input-container input:focus {
-    border-color: #4facfe;
-    box-shadow: 0px 0px 12px rgba(79, 172, 254, 0.5);
-    transform: scale(1.02);
-  }
-  
-  .input-container input::placeholder {
-    color: rgba(100, 100, 100, 0.7);
-    transition: opacity 0.3s ease-in-out;
-  }
-  
-  .input-container input:focus::placeholder {
-    opacity: 0.5;
-  }
-  
-  @keyframes fadeIn {
-    from {
-      opacity: 0;
-      transform: scale(0.9);
-    }
-    to {
-      opacity: 1;
-      transform: scale(1);
-    }
-  }
-  
-  .animate-fadeIn {
-    animation: fadeIn 0.3s ease-out forwards;
-  }
-  
+}
+
+.animate-fadeIn {
+  animation: fadeIn 0.3s ease-out forwards;
+}
