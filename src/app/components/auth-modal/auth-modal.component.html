@@ -73,4 +73,11 @@
     </p>
 
   </div>
+  
 </div>
+
+<app-role-selection-modal 
+  *ngIf="showRoleModal"
+  [roles]="availableRoles"
+  (roleSelected)="selectRole($event)">
+</app-role-selection-modal>

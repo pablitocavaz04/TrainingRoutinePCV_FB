@@ -7,6 +7,7 @@ import { LandingPageRoutingModule } from './landing-routing.module';
 import { LandingPage } from './landing.page';
 import { AuthModalComponent } from 'src/app/components/auth-modal/auth-modal.component';
 import { PasswordTogglePipe } from 'src/app/pipes/password-toggle.pipe'; // ✅ Importar el Pipe
+import { RoleSelectionModalComponent } from 'src/app/components/role-selection-modal/role-selection-modal.component';
 
 @NgModule({
   imports: [
@@ -18,7 +19,8 @@ import { PasswordTogglePipe } from 'src/app/pipes/password-toggle.pipe'; // ✅ 
   ],
   declarations: [
     LandingPage,
-    AuthModalComponent
+    AuthModalComponent,
+    RoleSelectionModalComponent
   ]
 })
 export class LandingPageModule {}
