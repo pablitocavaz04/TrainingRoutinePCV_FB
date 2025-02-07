@@ -1,4 +1,5 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { Router } from '@angular/router';
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth";
 import { getFirestore, doc, setDoc, getDoc } from "firebase/firestore";
 
@@ -21,6 +22,8 @@ export class AuthModalComponent {
   errorMessage = ''; 
   isLoading = false;
 
+  constructor(private router: Router) {}
+  
   closeModal() {
     this.close.emit();
   }
@@ -36,9 +39,41 @@ export class AuthModalComponent {
       this.errorMessage = "El formato del correo electrónico es inválido.";
       return;
     }
-
+  
     if (this.password !== this.confirmPassword) {
       this.errorMessage = "Las contraseñas no coinciden.";
+      return;
+    }
+  
+    this.isLoading = true;
+    const auth = getAuth();
+    const db = getFirestore();
+  
+    try {
+      const userCredential = await createUserWithEmailAndPassword(auth, this.email.trim(), this.password);
+      const user = userCredential.user;
+  
+      await setDoc(doc(db, "personas", user.uid), {
+        userID: user.uid,
+        userImage: "",
+        roles: ["Jugador"]
+      });
+  
+      // Cambiar al modo de inicio de sesión después de registrarse
+      this.isLoginMode = true;
+      this.errorMessage = "Registro exitoso. Ahora puedes iniciar sesión.";
+    } catch (error: any) {
+      console.error("Error en el registro:", error);
+      this.errorMessage = "Error al registrar: " + error.message;
+    } finally {
+      this.isLoading = false;
+    }
+  }
+
+  async login() {
+    this.errorMessage = '';
+    if (!this.email.includes("@") || !this.email.includes(".")) {
+      this.errorMessage = "El formato del correo electrónico es inválido.";
       return;
     }
 
@@ -47,56 +82,24 @@ export class AuthModalComponent {
     const db = getFirestore();
 
     try {
-      const userCredential = await createUserWithEmailAndPassword(auth, this.email.trim(), this.password);
+      const userCredential = await signInWithEmailAndPassword(auth, this.email.trim(), this.password);
       const user = userCredential.user;
 
-      await setDoc(doc(db, "personas", user.uid), {
-        userID: user.uid,
-        userImage: "",
-        roles: ["Jugador"]
-      });
+      // Obtener datos del usuario en Firestore
+      const userDocRef = doc(db, "personas", user.uid);
+      const userDocSnap = await getDoc(userDocRef);
 
-      this.closeModal();
+      if (!userDocSnap.exists()) {
+        throw new Error("No se encontró el usuario en la base de datos.");
+      }
+
+      this.closeModal(); // Cerrar modal después del login
+      this.router.navigate(['/home']); // Redirigir al home
     } catch (error: any) {
-      console.error("Error en el registro:", error);
-      this.errorMessage = error.message;
+      console.error("Error en el inicio de sesión:", error);
+      this.errorMessage = "Error al iniciar sesión: " + error.message;
     } finally {
       this.isLoading = false;
     }
   }
-
-    async login() {
-      this.errorMessage = '';
-      if (!this.email.includes("@") || !this.email.includes(".")) {
-        this.errorMessage = "El formato del correo electrónico es inválido.";
-        return;
-      }
-
-      this.isLoading = true;
-      const auth = getAuth();
-      const db = getFirestore();
-
-      try {
-        const userCredential = await signInWithEmailAndPassword(auth, this.email.trim(), this.password);
-        const user = userCredential.user;
-
-        // Obtener los datos del usuario en Firestore
-        const userDocRef = doc(db, "personas", user.uid);
-        const userDocSnap = await getDoc(userDocRef);
-
-        if (!userDocSnap.exists()) {
-          throw new Error("No se encontró el usuario en la base de datos.");
-        }
-
-        const userData = userDocSnap.data();
-        console.log("Usuario autenticado:", userData);
-
-        this.closeModal(); // Cerrar el modal tras el login
-      } catch (error: any) {
-        console.error("Error en el inicio de sesión:", error);
-        this.errorMessage = "Error al iniciar sesión: " + error.message;
-      } finally {
-        this.isLoading = false;
-      }
-    }
 }
