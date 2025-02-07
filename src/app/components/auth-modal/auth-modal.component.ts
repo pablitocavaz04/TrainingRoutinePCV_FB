@@ -1,6 +1,6 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
-import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
-import { getFirestore, doc, setDoc } from "firebase/firestore";
+import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth";
+import { getFirestore, doc, setDoc, getDoc } from "firebase/firestore";
 
 @Component({
   selector: 'app-auth-modal',
@@ -18,8 +18,8 @@ export class AuthModalComponent {
   email = '';
   password = '';
   confirmPassword = '';
-  errorMessage = ''; // Variable para mostrar errores en la UI
-  isLoading = false; // Estado de carga para deshabilitar el botón mientras procesa
+  errorMessage = ''; 
+  isLoading = false;
 
   closeModal() {
     this.close.emit();
@@ -27,7 +27,7 @@ export class AuthModalComponent {
 
   toggleMode() {
     this.isLoginMode = !this.isLoginMode;
-    this.errorMessage = ''; // Limpiar errores al cambiar de modo
+    this.errorMessage = ''; // Limpiar errores cuando cambiamos de modo
   }
 
   async register() {
@@ -65,7 +65,38 @@ export class AuthModalComponent {
     }
   }
 
-  async login() {
-    // Implementaremos esta función en el siguiente paso.
-  }
+    async login() {
+      this.errorMessage = '';
+      if (!this.email.includes("@") || !this.email.includes(".")) {
+        this.errorMessage = "El formato del correo electrónico es inválido.";
+        return;
+      }
+
+      this.isLoading = true;
+      const auth = getAuth();
+      const db = getFirestore();
+
+      try {
+        const userCredential = await signInWithEmailAndPassword(auth, this.email.trim(), this.password);
+        const user = userCredential.user;
+
+        // Obtener los datos del usuario en Firestore
+        const userDocRef = doc(db, "personas", user.uid);
+        const userDocSnap = await getDoc(userDocRef);
+
+        if (!userDocSnap.exists()) {
+          throw new Error("No se encontró el usuario en la base de datos.");
+        }
+
+        const userData = userDocSnap.data();
+        console.log("Usuario autenticado:", userData);
+
+        this.closeModal(); // Cerrar el modal tras el login
+      } catch (error: any) {
+        console.error("Error en el inicio de sesión:", error);
+        this.errorMessage = "Error al iniciar sesión: " + error.message;
+      } finally {
+        this.isLoading = false;
+      }
+    }
 }
