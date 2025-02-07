@@ -69,32 +69,44 @@ export class AuthModalComponent {
       this.isLoading = false;
     }
   }
-
+  
   async login() {
     this.errorMessage = '';
     if (!this.email.includes("@") || !this.email.includes(".")) {
       this.errorMessage = "El formato del correo electrónico es inválido.";
       return;
     }
-
+  
     this.isLoading = true;
     const auth = getAuth();
     const db = getFirestore();
-
+  
     try {
       const userCredential = await signInWithEmailAndPassword(auth, this.email.trim(), this.password);
       const user = userCredential.user;
-
+  
       // Obtener datos del usuario en Firestore
       const userDocRef = doc(db, "personas", user.uid);
       const userDocSnap = await getDoc(userDocRef);
-
+  
       if (!userDocSnap.exists()) {
         throw new Error("No se encontró el usuario en la base de datos.");
       }
-
-      this.closeModal(); // Cerrar modal después del login
-      this.router.navigate(['/home']); // Redirigir al home
+  
+      const userData = userDocSnap.data();
+      const roles: string[] = userData['roles'] || [];
+  
+      // 🔹 Si el usuario tiene más de un rol, mostrar alert para elegir
+      let selectedRole = roles[0]; // Por defecto, el primer rol
+  
+      if (roles.includes('Jugador') && roles.includes('Entrenador')) {
+        selectedRole = await this.askUserRole();
+      }
+  
+      localStorage.setItem('selectedRole', selectedRole); // Guardamos el rol elegido
+  
+      this.closeModal(); // Cierra el modal después del login
+      this.router.navigate(['/home']); // Redirigir a Home
     } catch (error: any) {
       console.error("Error en el inicio de sesión:", error);
       this.errorMessage = "Error al iniciar sesión: " + error.message;
@@ -102,4 +114,13 @@ export class AuthModalComponent {
       this.isLoading = false;
     }
   }
+  
+  // Método para preguntar el rol con un Alert
+  askUserRole(): Promise<string> {
+    return new Promise((resolve) => {
+      const choice = window.confirm('¿Con qué perfil quieres acceder? (Aceptar: Entrenador, Cancelar: Jugador)');
+      resolve(choice ? 'Entrenador' : 'Jugador');
+    });
+  }
+  
 }
