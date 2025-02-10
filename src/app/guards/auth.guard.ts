@@ -15,6 +15,7 @@ export class AuthGuard implements CanActivate {
       onAuthStateChanged(auth, (user) => {
         resolve(!!user); // 🔹 Si hay usuario autenticado, permite el acceso
       }, () => {
+        this.router.navigate(['/landing']);
         resolve(false);
       });
     });

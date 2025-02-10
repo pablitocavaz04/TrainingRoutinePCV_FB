@@ -1,12 +1,26 @@
-<div class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
-  <div class="bg-white p-6 rounded-lg shadow-xl w-96 text-center">
-    <h2 class="text-2xl font-bold mb-4">Selecciona tu perfil</h2>
+<div class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4">
+  <div class="bg-white bg-opacity-80 backdrop-blur-md p-6 rounded-xl shadow-2xl w-96 text-center animate-fadeIn border border-gray-200">
     
+    <!-- Icono y Título -->
+    <div class="mb-6">
+      <h2 class="text-2xl font-bold text-gray-800">Selecciona tu perfil</h2>
+      <p class="text-sm text-gray-600">Elige cómo deseas acceder</p>
+    </div>
+
+    <!-- Botones de Roles -->
     <div class="flex flex-col space-y-4">
       <button *ngFor="let role of roles"
         (click)="selectRole(role)"
-        class="w-full py-3 px-4 rounded-lg text-white text-lg font-semibold transition duration-300"
-        [ngClass]="role === 'Jugador' ? 'bg-green-600 hover:bg-green-700' : 'bg-blue-600 hover:bg-blue-700'">
+        class="flex items-center justify-center gap-3 w-full py-3 px-4 rounded-lg text-white text-lg font-semibold transition-all duration-300 transform hover:scale-105"
+        [ngClass]="{
+          'bg-green-600 hover:bg-green-700 shadow-lg': role === 'Jugador',
+          'bg-blue-600 hover:bg-blue-700 shadow-lg': role === 'Entrenador'
+        }">
+        
+        <!-- Iconos opcionales -->
+        <ion-icon [name]="role === 'Jugador' ? 'football' : 'school'"
+          class="text-2xl text-white"></ion-icon>
+
         Acceder como {{ role }}
       </button>
     </div>
