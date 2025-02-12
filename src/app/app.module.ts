@@ -13,10 +13,16 @@ import { environment } from '../environments/environment';
 //Lottie
 import { provideLottieOptions } from 'ngx-lottie';
 import player from 'lottie-web';
+//Componentes
 import { NavBarComponent } from './components/nav-bar/nav-bar.component';
+import { ProfileModalComponent } from './components/profile-modal/profile-modal.component';
 
 @NgModule({
-  declarations: [AppComponent,NavBarComponent],
+  declarations: [
+    AppComponent,
+    NavBarComponent,
+    ProfileModalComponent
+  ],
   imports: [
     BrowserModule, 
     IonicModule.forRoot(), 
@@ -27,7 +33,7 @@ import { NavBarComponent } from './components/nav-bar/nav-bar.component';
       })
     ],
   bootstrap: [AppComponent],
-  exports: [NavBarComponent]
+  exports: [NavBarComponent,ProfileModalComponent]
 })
 export class AppModule {
   constructor() {

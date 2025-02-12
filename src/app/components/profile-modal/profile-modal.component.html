@@ -1,28 +1,34 @@
-<!-- Modal de perfil adaptativo -->
-<div *ngIf="isOpen" class="fixed inset-0 bg-black bg-opacity-50 flex justify-end md:justify-end">
+<div *ngIf="isOpen" class="fixed inset-0 bg-black bg-opacity-50 flex justify-end md:justify-end" (click)="closeModal()">
   
-  <!-- Modal para móviles (sheet desde abajo) -->
-  <div class="md:hidden fixed bottom-0 w-full bg-white rounded-t-lg shadow-lg p-6 transition-transform duration-300" [class.translate-y-full]="!isOpen">
-    <button class="absolute top-2 right-4 text-gray-600" (click)="closeModal()">✕</button>
-    <h2 class="text-xl font-bold mb-4">Mi Perfil</h2>
-    <div class="flex flex-col items-center text-center">
-      <img [src]="userImage" alt="Avatar" class="w-20 h-20 rounded-full mb-2">
-      <p class="text-lg font-semibold">{{ userName }}</p>
-      <p class="text-sm text-gray-500">{{ userEmail }}</p>
+  <div class="md:hidden fixed bottom-0 w-full bg-white rounded-t-lg shadow-lg p-6 transition-transform duration-300 h-1/3" 
+       [class.translate-y-full]="!isOpen" (click)="$event.stopPropagation()">
+    <div class="relative flex flex-col items-center">
+      
+      <div class="absolute -top-16 w-24 h-24 bg-white rounded-full shadow-lg border-4 border-blue-400 overflow-hidden">
+        <img [src]="userImage" alt="Avatar" class="w-full h-full object-cover">
+      </div>
+      
+      <div class="mt-10 text-center w-full">
+        <p class="text-lg font-semibold">{{ userEmail }}</p>
+        <button class="mt-3 w-full bg-blue-500 text-white py-2 rounded-lg">Elegir Perfil</button>
+        <button class="mt-2 w-full bg-red-500 text-white py-2 rounded-lg">Cerrar Sesión</button>
+      </div>
     </div>
   </div>
 
-  <!-- Modal para escritorio (pegado a la derecha y navbar) -->
-  <div class="hidden md:block w-1/4 bg-white h-full fixed top-14 right-0 shadow-lg p-6 transition-transform duration-300" [class.translate-x-full]="!isOpen">
-    <button class="absolute top-2 right-4 text-gray-600" (click)="closeModal()">✕</button>
-    <h2 class="text-xl font-bold mb-4">Mi Perfil</h2>
+<div class="hidden md:block w-1/5 bg-white h-full fixed top-[4.5rem] right-0 shadow-lg p-6 transition-transform duration-300" 
+     [class.translate-x-full]="!isOpen" (click)="$event.stopPropagation()">
+
     <div class="flex flex-col items-center text-center">
-      <img [src]="userImage" alt="Avatar" class="w-20 h-20 rounded-full mb-2">
-      <p class="text-lg font-semibold">{{ userName }}</p>
-      <p class="text-sm text-gray-500">{{ userEmail }}</p>
+      <button class="absolute top-2 right-4 text-gray-600" (click)="closeModal()">✕</button>
+      
+      <div class="w-24 h-24 bg-white rounded-full shadow-lg border-4 border-blue-400 overflow-hidden">
+        <img [src]="userImage" alt="Avatar" class="w-full h-full object-cover">
+      </div>
+      
+      <p class="mt-4 text-lg font-semibold">{{ userEmail }}</p>
+      <button class="mt-4 w-full bg-blue-500 text-white py-2 rounded-lg">Elegir Perfil</button>
+      <button class="mt-2 w-full bg-red-500 text-white py-2 rounded-lg">Cerrar Sesión</button>
     </div>
   </div>
 </div>
-
-
-

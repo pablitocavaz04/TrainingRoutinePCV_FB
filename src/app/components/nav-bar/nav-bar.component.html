@@ -1,5 +1,4 @@
-<!-- Barra de navegación moderna con Tailwind e Ionic -->
-<nav class="bg-blue-400 text-white px-6 py-3 flex justify-between items-center shadow-lg">
+<nav class="bg-blue-400 text-white px-6 py-3 flex justify-between items-center shadow-lg relative">
   
   <div class="text-2xl font-bold">Training Routine</div>
   
@@ -12,13 +11,21 @@
       <span class="absolute inset-0 border-2 border-transparent group-hover:border-white rounded-lg transition-all duration-300"></span>
       <span class="relative z-10 block w-full text-center">{{ item.label }}</span>
     </li>
+    
+    <li class="cursor-pointer px-4 py-2 rounded-lg transition-all duration-300 relative group"
+        [class.border-b-4]="isProfileOpen"
+        [class.border-white]="isProfileOpen"
+        (click)="toggleProfile()">
+      <span class="absolute inset-0 border-2 border-transparent group-hover:border-white rounded-lg transition-all duration-300"></span>
+      <span class="relative z-10 block w-full text-center">Mi Perfil</span>
+    </li>
   </ul>
   
-  <button class="md:hidden text-white" (click)="toggleMenu()">
+  <button class="md:hidden text-white absolute right-4 top-1/2 transform -translate-y-1/2" (click)="toggleMenu()">
     <ion-icon name="menu" size="large"></ion-icon>
   </button>
 
-  <div *ngIf="isMenuOpen" class="absolute top-14 right-0 bg-blue-500 bg-opacity-90 w-48 rounded-lg shadow-md md:hidden">
+  <div *ngIf="isMenuOpen" class="absolute top-full right-0 bg-blue-500 bg-opacity-90 w-48 rounded-lg shadow-md md:hidden">
     <ul class="flex flex-col text-center text-white">
       <li *ngFor="let item of menuItems" 
           [class.border-l-4]="currentPage === item.route"
@@ -28,6 +35,17 @@
         <span class="absolute inset-0 border-2 border-transparent group-hover:border-white rounded-lg transition-all duration-300"></span>
         <span class="relative z-10 block w-full text-center">{{ item.label }}</span>
       </li>
+      
+      <li class="py-3 cursor-pointer relative transition-all duration-300 bg-opacity-50"
+          [class.border-l-4]="isProfileOpen"
+          [class.border-white]="isProfileOpen"
+          (click)="toggleProfile(); toggleMenu()">
+        <span class="absolute inset-0 border-2 border-transparent group-hover:border-white rounded-lg transition-all duration-300"></span>
+        <span class="relative z-10 block w-full text-center">Mi Perfil</span>
+      </li>
     </ul>
   </div>
+
+  <app-profile-modal [isOpen]="isProfileOpen" (close)="toggleProfile()"></app-profile-modal>
+
 </nav>

@@ -5,11 +5,12 @@ import { Router } from '@angular/router';
   selector: 'app-nav-bar',
   templateUrl: './nav-bar.component.html',
   styleUrls: ['./nav-bar.component.scss'],
-  standalone:false
+  standalone: false
 })
 export class NavBarComponent {
   isMenuOpen = false;
   currentPage: string = '';
+  isProfileOpen = false;
 
   menuItems = [
     { label: 'Home', route: '/home' },
@@ -17,7 +18,6 @@ export class NavBarComponent {
     { label: 'Entrenamientos', route: '/entrenamientos' },
     { label: 'Jugadores', route: '/jugadores' },
     { label: 'Entrenadores', route: '/entrenadores' },
-    { label: 'Mi Perfil', route: '' } // Abrirá modal en el futuro
   ];
 
   constructor(private router: Router) {
@@ -28,6 +28,11 @@ export class NavBarComponent {
     this.isMenuOpen = !this.isMenuOpen;
   }
 
+  toggleProfile() {
+    this.isProfileOpen = !this.isProfileOpen;
+  }
+  
+  
   navigateTo(route: string) {
     if (route) {
       this.router.navigate([route]).then(() => {
