@@ -1,0 +1,28 @@
+<!-- Modal de perfil adaptativo -->
+<div *ngIf="isOpen" class="fixed inset-0 bg-black bg-opacity-50 flex justify-end md:justify-end">
+  
+  <!-- Modal para móviles (sheet desde abajo) -->
+  <div class="md:hidden fixed bottom-0 w-full bg-white rounded-t-lg shadow-lg p-6 transition-transform duration-300" [class.translate-y-full]="!isOpen">
+    <button class="absolute top-2 right-4 text-gray-600" (click)="closeModal()">✕</button>
+    <h2 class="text-xl font-bold mb-4">Mi Perfil</h2>
+    <div class="flex flex-col items-center text-center">
+      <img [src]="userImage" alt="Avatar" class="w-20 h-20 rounded-full mb-2">
+      <p class="text-lg font-semibold">{{ userName }}</p>
+      <p class="text-sm text-gray-500">{{ userEmail }}</p>
+    </div>
+  </div>
+
+  <!-- Modal para escritorio (pegado a la derecha y navbar) -->
+  <div class="hidden md:block w-1/4 bg-white h-full fixed top-14 right-0 shadow-lg p-6 transition-transform duration-300" [class.translate-x-full]="!isOpen">
+    <button class="absolute top-2 right-4 text-gray-600" (click)="closeModal()">✕</button>
+    <h2 class="text-xl font-bold mb-4">Mi Perfil</h2>
+    <div class="flex flex-col items-center text-center">
+      <img [src]="userImage" alt="Avatar" class="w-20 h-20 rounded-full mb-2">
+      <p class="text-lg font-semibold">{{ userName }}</p>
+      <p class="text-sm text-gray-500">{{ userEmail }}</p>
+    </div>
+  </div>
+</div>
+
+
+
