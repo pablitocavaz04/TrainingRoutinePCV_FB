@@ -1,13 +1,13 @@
 <div *ngIf="isOpen" class="fixed inset-0 bg-black bg-opacity-50 flex justify-end md:justify-end" (click)="closeModal()">
   
-  <div class="md:hidden fixed bottom-0 w-full bg-white rounded-t-lg shadow-lg p-6 transition-transform duration-300 h-1/3" 
-       [class.translate-y-full]="!isOpen" (click)="$event.stopPropagation()">
+  <!-- Modal en dispositivos móviles -->
+  <div class="md:hidden fixed bottom-0 w-full bg-white rounded-t-lg shadow-lg p-6 transition-transform duration-300 h-1/3"
+       [ngClass]="{'translate-y-full': modalState === 'closed', 'translate-y-0': modalState === 'open'}"
+       (click)="$event.stopPropagation()">
     <div class="relative flex flex-col items-center">
-      
       <div class="absolute -top-16 w-24 h-24 bg-white rounded-full shadow-lg border-4 border-blue-400 overflow-hidden">
         <img [src]="userImage" alt="Avatar" class="w-full h-full object-cover">
       </div>
-      
       <div class="mt-10 text-center w-full">
         <p class="text-lg font-semibold">{{ userEmail }}</p>
         <button class="mt-3 w-full bg-blue-500 text-white py-2 rounded-lg">Elegir Perfil</button>
@@ -16,16 +16,15 @@
     </div>
   </div>
 
-<div class="hidden md:block w-1/5 bg-white h-full fixed top-[4.5rem] right-0 shadow-lg p-6 transition-transform duration-300" 
-     [class.translate-x-full]="!isOpen" (click)="$event.stopPropagation()">
-
+  <!-- Modal en escritorio -->
+  <div class="hidden md:block w-1/5 bg-white h-full fixed top-[4.5rem] right-0 shadow-lg p-6 transition-transform duration-300"
+       [ngClass]="{'translate-x-full': modalState === 'closed', 'translate-x-0': modalState === 'open'}"
+       (click)="$event.stopPropagation()">
     <div class="flex flex-col items-center text-center">
       <button class="absolute top-2 right-4 text-gray-600" (click)="closeModal()">✕</button>
-      
       <div class="w-24 h-24 bg-white rounded-full shadow-lg border-4 border-blue-400 overflow-hidden">
         <img [src]="userImage" alt="Avatar" class="w-full h-full object-cover">
       </div>
-      
       <p class="mt-4 text-lg font-semibold">{{ userEmail }}</p>
       <button class="mt-4 w-full bg-blue-500 text-white py-2 rounded-lg">Elegir Perfil</button>
       <button class="mt-2 w-full bg-red-500 text-white py-2 rounded-lg">Cerrar Sesión</button>
