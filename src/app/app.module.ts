@@ -13,9 +13,10 @@ import { environment } from '../environments/environment';
 //Lottie
 import { provideLottieOptions } from 'ngx-lottie';
 import player from 'lottie-web';
+import { NavBarComponent } from './components/nav-bar/nav-bar.component';
 
 @NgModule({
-  declarations: [AppComponent],
+  declarations: [AppComponent,NavBarComponent],
   imports: [
     BrowserModule, 
     IonicModule.forRoot(), 
@@ -26,6 +27,7 @@ import player from 'lottie-web';
       })
     ],
   bootstrap: [AppComponent],
+  exports: [NavBarComponent]
 })
 export class AppModule {
   constructor() {

@@ -1,0 +1,33 @@
+<!-- Barra de navegación moderna con Tailwind e Ionic -->
+<nav class="bg-blue-400 text-white px-6 py-3 flex justify-between items-center shadow-lg">
+  
+  <div class="text-2xl font-bold">MiApp</div>
+  
+  <ul class="hidden md:flex gap-8 text-lg mx-auto">
+    <li *ngFor="let item of menuItems" 
+        [class.border-b-4]="currentPage === item.route"
+        [class.border-white]="currentPage === item.route"
+        class="cursor-pointer px-4 py-2 rounded-lg transition-all duration-300 relative group"
+        (click)="navigateTo(item.route)">
+      <span class="absolute inset-0 border-2 border-transparent group-hover:border-white rounded-lg transition-all duration-300"></span>
+      <span class="relative z-10 block w-full text-center">{{ item.label }}</span>
+    </li>
+  </ul>
+  
+  <button class="md:hidden text-white" (click)="toggleMenu()">
+    <ion-icon name="menu" size="large"></ion-icon>
+  </button>
+
+  <div *ngIf="isMenuOpen" class="absolute top-14 right-0 bg-blue-500 bg-opacity-90 w-48 rounded-lg shadow-md md:hidden">
+    <ul class="flex flex-col text-center text-white">
+      <li *ngFor="let item of menuItems" 
+          [class.border-l-4]="currentPage === item.route"
+          [class.border-white]="currentPage === item.route"
+          class="py-3 cursor-pointer relative transition-all duration-300 bg-opacity-50"
+          (click)="navigateTo(item.route); toggleMenu()">
+        <span class="absolute inset-0 border-2 border-transparent group-hover:border-white rounded-lg transition-all duration-300"></span>
+        <span class="relative z-10 block w-full text-center">{{ item.label }}</span>
+      </li>
+    </ul>
+  </div>
+</nav>

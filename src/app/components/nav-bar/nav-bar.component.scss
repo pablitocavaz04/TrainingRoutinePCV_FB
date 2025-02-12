@@ -1,0 +1,16 @@
+nav {
+    transition: all 0.3s ease-in-out;
+  }
+  
+  ul li {
+    transition: color 0.3s ease-in-out;
+  }
+  
+  button {
+    transition: transform 0.2s ease-in-out;
+  }
+  
+  button:active {
+    transform: scale(0.95);
+  }
+  
