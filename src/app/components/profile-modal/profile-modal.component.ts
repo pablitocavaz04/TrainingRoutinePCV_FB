@@ -1,5 +1,6 @@
 import { Component, EventEmitter, Input, Output, OnChanges, SimpleChanges, OnInit } from '@angular/core';
 import { getAuth, onAuthStateChanged, User } from 'firebase/auth';
+import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
   selector: 'app-profile-modal',
@@ -14,6 +15,8 @@ export class ProfileModalComponent implements OnInit, OnChanges {
 
   modalState: 'open' | 'closed' = 'closed';
   userEmail: string = "Cargando...";
+
+  constructor(public authService: AuthService) {}
 
   ngOnInit() {
     const auth = getAuth();
@@ -41,5 +44,10 @@ export class ProfileModalComponent implements OnInit, OnChanges {
     setTimeout(() => {
       this.close.emit();
     }, 300);
+  }
+
+  async logout() {
+    await this.authService.logout();
+    this.closeModal(); // 🔹 Cierra el modal después de cerrar sesión
   }
 }
