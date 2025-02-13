@@ -1,7 +1,6 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { Router } from '@angular/router';
-import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth";
-import { getFirestore, doc, setDoc, getDoc } from "firebase/firestore";
+import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
   selector: 'app-auth-modal',
@@ -13,18 +12,18 @@ export class AuthModalComponent {
   @Input() isLoginMode = true;
   @Output() close = new EventEmitter<void>();
 
-  showPassword = false;
-  showConfirmPassword = false;
-  
   email = '';
   password = '';
   confirmPassword = '';
   errorMessage = ''; 
   isLoading = false;
+  
+  showPassword = false;
+  showConfirmPassword = false;
   showRoleModal = false;
   availableRoles: string[] = [];
 
-  constructor(private router: Router) {}
+  constructor(private authService: AuthService, private router: Router) {}
 
   closeModal() {
     this.close.emit();
@@ -48,19 +47,8 @@ export class AuthModalComponent {
     }
 
     this.isLoading = true;
-    const auth = getAuth();
-    const db = getFirestore();
-
     try {
-      const userCredential = await createUserWithEmailAndPassword(auth, this.email.trim(), this.password);
-      const user = userCredential.user;
-
-      await setDoc(doc(db, "personas", user.uid), {
-        userID: user.uid,
-        userImage: "",
-        roles: ["Jugador"]
-      });
-
+      await this.authService.register(this.email, this.password);
       this.isLoginMode = true;
       this.errorMessage = "Registro exitoso. Ahora puedes iniciar sesión.";
     } catch (error: any) {
@@ -78,31 +66,9 @@ export class AuthModalComponent {
     }
 
     this.isLoading = true;
-    const auth = getAuth();
-    const db = getFirestore();
-
     try {
-      const userCredential = await signInWithEmailAndPassword(auth, this.email.trim(), this.password);
-      const user = userCredential.user;
-
-      const userDocRef = doc(db, "personas", user.uid);
-      const userDocSnap = await getDoc(userDocRef);
-
-      if (!userDocSnap.exists()) {
-        throw new Error("No se encontró el usuario en la base de datos.");
-      }
-
-      const userData = userDocSnap.data();
-      const roles: string[] = userData['roles'] || [];
-
-      if (roles.includes('Jugador') && roles.includes('Entrenador')) {
-        this.availableRoles = roles;
-        this.showRoleModal = true;
-      } else {
-        localStorage.setItem('selectedRole', roles[0]);
-        this.navigateToHome();
-      }
-
+      await this.authService.login(this.email, this.password);
+      this.navigateToHome();
     } catch (error: any) {
       this.errorMessage = "Error al iniciar sesión: " + error.message;
     } finally {
@@ -111,7 +77,7 @@ export class AuthModalComponent {
   }
 
   selectRole(role: string) {
-    localStorage.setItem('selectedRole', role);
+    this.authService.setSelectedRole(role);
     this.showRoleModal = false;
     this.navigateToHome();
   }
@@ -121,4 +87,3 @@ export class AuthModalComponent {
     this.router.navigate(['/home']);
   }
 }
-
