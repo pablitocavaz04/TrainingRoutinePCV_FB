@@ -16,18 +16,42 @@ export class ProfileModalComponent implements OnInit, OnChanges {
   modalState: 'open' | 'closed' = 'closed';
   userEmail: string = "Cargando...";
   userRole: string = "Cargando...";
+  canSwitchRole: boolean = false; // 🔹 Controla si el botón debe mostrarse
 
   constructor(public authService: AuthService) {}
 
   ngOnInit() {
     const auth = getAuth();
-    onAuthStateChanged(auth, (user: User | null) => {
+    onAuthStateChanged(auth, async (user: User | null) => {
       if (user) {
         this.userEmail = user.email || "Correo no disponible";
-        this.userRole = this.authService.getSelectedRole() || "Rol no disponible"; // 🔹 Obtener rol desde AuthService
+        this.userRole = this.authService.getSelectedRole() || "Rol no disponible";
+
+        // 🔹 Obtener los roles del usuario desde AuthService
+        const roles = await this.authService.getUserRoles(user.uid);
+        this.canSwitchRole = roles.includes('Jugador') && roles.includes('Entrenador');
       }
     });
   }
+
+  confirmRoleChange() {
+    const confirmation = window.confirm("¿Estás seguro de que quieres cambiar de perfil?");
+    if (confirmation) {
+      this.switchRole();
+    }
+  }
+  
+  switchRole() {
+    const currentRole = this.authService.getSelectedRole();
+    if (!currentRole) return;
+  
+    const newRole = currentRole === 'Jugador' ? 'Entrenador' : 'Jugador'; // 🔹 Cambiar entre Jugador y Entrenador
+    this.authService.setSelectedRole(newRole);
+    this.userRole = newRole; // 🔹 Actualizamos el rol en el modal
+    this.closeModal();
+    window.location.reload(); // 🔹 Recargamos la página para aplicar los cambios
+  }
+  
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes["isOpen"]) {

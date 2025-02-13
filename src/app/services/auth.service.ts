@@ -61,19 +61,35 @@ export class AuthService {
     }
   }
 
+  //Con esta funcion Obtenemos el Rol que ha seleccionado el usuario que tiene mas de 1
   getSelectedRole(): string | null {
     return this.selectedRole;
   }
-
+//Seleccioansmo el rol 
   setSelectedRole(role: string): void {
     this.selectedRole = role;
     localStorage.setItem('selectedRole', role);
   }
-
+//Cargaamos el rol 
   private loadSelectedRole(): void {
     this.selectedRole = localStorage.getItem('selectedRole');
   }
 
+  //Comprobamos si el usuario tiene mas de un rol
+  async getUserRoles(userId: string): Promise<string[]> {
+    const userDocRef = doc(this.db, "personas", userId);
+    const userDocSnap = await getDoc(userDocRef);
+  
+    if (!userDocSnap.exists()) {
+      return [];
+    }
+  
+    const userData = userDocSnap.data();
+    return userData['roles'] || [];
+  }
+  
+
+  
   async logout(): Promise<void> {
     await signOut(this.auth);
     localStorage.removeItem('selectedRole');
