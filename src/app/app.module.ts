@@ -16,12 +16,14 @@ import player from 'lottie-web';
 //Componentes
 import { NavBarComponent } from './components/nav-bar/nav-bar.component';
 import { ProfileModalComponent } from './components/profile-modal/profile-modal.component';
+import { ChangeProfileComponent } from './components/change-profile/change-profile.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     NavBarComponent,
-    ProfileModalComponent
+    ProfileModalComponent,
+    ChangeProfileComponent
   ],
   imports: [
     BrowserModule, 
@@ -33,7 +35,11 @@ import { ProfileModalComponent } from './components/profile-modal/profile-modal.
       })
     ],
   bootstrap: [AppComponent],
-  exports: [NavBarComponent,ProfileModalComponent]
+  exports: [
+    NavBarComponent,
+    ProfileModalComponent,
+    ChangeProfileComponent
+  ]
 })
 export class AppModule {
   constructor() {

@@ -16,7 +16,9 @@ export class ProfileModalComponent implements OnInit, OnChanges {
   modalState: 'open' | 'closed' = 'closed';
   userEmail: string = "Cargando...";
   userRole: string = "Cargando...";
-  canSwitchRole: boolean = false; // 🔹 Controla si el botón debe mostrarse
+  canSwitchRole: boolean = false;//Miramos si tenemos que mostrar el boton
+  isConfirmModalOpen: boolean = false; //Controlamos la visibilidad del modal de confirmación
+
 
   constructor(public authService: AuthService) {}
 
@@ -27,7 +29,7 @@ export class ProfileModalComponent implements OnInit, OnChanges {
         this.userEmail = user.email || "Correo no disponible";
         this.userRole = this.authService.getSelectedRole() || "Rol no disponible";
 
-        // 🔹 Obtener los roles del usuario desde AuthService
+        //Obtener los roles del usuario desde AuthService
         const roles = await this.authService.getUserRoles(user.uid);
         this.canSwitchRole = roles.includes('Jugador') && roles.includes('Entrenador');
       }
@@ -35,23 +37,21 @@ export class ProfileModalComponent implements OnInit, OnChanges {
   }
 
   confirmRoleChange() {
-    const confirmation = window.confirm("¿Estás seguro de que quieres cambiar de perfil?");
-    if (confirmation) {
-      this.switchRole();
-    }
+    this.isConfirmModalOpen = true; // 🔹 Mostramos el modal de confirmación
   }
-  
+
   switchRole() {
     const currentRole = this.authService.getSelectedRole();
     if (!currentRole) return;
-  
-    const newRole = currentRole === 'Jugador' ? 'Entrenador' : 'Jugador'; // 🔹 Cambiar entre Jugador y Entrenador
+
+    const newRole = currentRole === 'Jugador' ? 'Entrenador' : 'Jugador'; //Cambiar entre Jugador y Entrenador
     this.authService.setSelectedRole(newRole);
-    this.userRole = newRole; // 🔹 Actualizamos el rol en el modal
+    this.userRole = newRole; //Actualizamos el rol en el modal
+    this.isConfirmModalOpen = false;
     this.closeModal();
-    window.location.reload(); // 🔹 Recargamos la página para aplicar los cambios
+    window.location.reload(); //Recargamos la página para aplicar los cambios
   }
-  
+
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes["isOpen"]) {

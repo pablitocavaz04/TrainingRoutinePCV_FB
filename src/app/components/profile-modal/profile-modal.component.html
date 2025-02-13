@@ -37,3 +37,8 @@
     </div>
   </div>
 </div>
+
+<app-change-profile *ngIf="isConfirmModalOpen" 
+  (confirm)="switchRole()" 
+  (cancel)="isConfirmModalOpen = false">
+</app-change-profile>

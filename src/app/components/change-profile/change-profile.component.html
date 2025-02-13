@@ -1,0 +1,17 @@
+<div class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4">
+  <div class="bg-white p-6 rounded-lg shadow-lg w-96 text-center animate-fadeIn border border-gray-200">
+    
+    <!-- Título -->
+    <h2 class="text-xl font-bold text-gray-800">¿Estás seguro que quieres cambiar de perfil?</h2>
+
+    <!-- Botones de Confirmación -->
+    <div class="flex justify-center gap-4 mt-6">
+      <button (click)="confirmChange()" class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition">
+        Sí
+      </button>
+      <button (click)="closeModal()" class="bg-gray-400 text-white px-4 py-2 rounded-lg hover:bg-gray-600 transition">
+        No
+      </button>
+    </div>
+  </div>
+</div>
