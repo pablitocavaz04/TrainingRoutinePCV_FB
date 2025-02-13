@@ -53,6 +53,22 @@ export class ProfileModalComponent implements OnInit, OnChanges {
   }
 
 
+  //IMAGENES
+  triggerFileInput() {
+    const fileInput = document.querySelector<HTMLInputElement>('input[type="file"]');
+    if (fileInput) {
+      fileInput.click();
+    }
+  }
+  
+  uploadImage(event: any) {
+    const file = event.target.files[0]; // 🔹 Obtenemos el archivo seleccionado
+    if (!file) return;
+  
+    console.log("Archivo seleccionado:", file);
+  }
+  
+////////////////////////
   ngOnChanges(changes: SimpleChanges) {
     if (changes["isOpen"]) {
       if (this.isOpen) {
