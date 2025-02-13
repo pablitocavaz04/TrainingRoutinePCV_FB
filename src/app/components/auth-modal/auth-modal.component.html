@@ -77,7 +77,7 @@
 </div>
 
 <app-role-selection-modal 
-  *ngIf="showRoleModal"
-  [roles]="availableRoles"
-  (roleSelected)="selectRole($event)">
+  *ngIf="authService.showRoleModal"
+  [roles]="authService.availableRoles"
+  (roleSelected)="onRoleSelected($event)">
 </app-role-selection-modal>

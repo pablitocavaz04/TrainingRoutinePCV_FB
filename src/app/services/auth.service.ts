@@ -10,6 +10,9 @@ export class AuthService {
   private auth = getAuth();
   private db = getFirestore();
   private selectedRole: string | null = null;
+  showRoleModal = false;
+  availableRoles: string[] = [];
+  roleSelectionCallback!: (role: string) => void;
 
   constructor(private router: Router) {
     this.loadSelectedRole();
@@ -44,19 +47,25 @@ export class AuthService {
     const roles: string[] = userData['roles'] || [];
 
     if (roles.includes('Jugador') && roles.includes('Entrenador')) {
-      this.selectedRole = await this.askUserRole();
+      this.availableRoles = roles;
+      this.showRoleModal = true; // 🔹 Activamos el modal para seleccionar el rol
+      return new Promise((resolve) => {
+        this.roleSelectionCallback = (selectedRole) => {
+          this.setSelectedRole(selectedRole);
+          this.showRoleModal = false;
+          resolve();
+        };
+      });
     } else {
-      this.selectedRole = roles[0];
+      this.setSelectedRole(roles[0]);
     }
-
-    this.setSelectedRole(this.selectedRole); // 🔹 Ahora usamos el nuevo método para guardar el rol
   }
 
   getSelectedRole(): string | null {
     return this.selectedRole;
   }
 
-  setSelectedRole(role: string): void { // 🔹 Agregado para evitar el error
+  setSelectedRole(role: string): void {
     this.selectedRole = role;
     localStorage.setItem('selectedRole', role);
   }
@@ -69,12 +78,5 @@ export class AuthService {
     await signOut(this.auth);
     localStorage.removeItem('selectedRole');
     this.router.navigate(['/landing']);
-  }
-
-  private askUserRole(): Promise<string> {
-    return new Promise((resolve) => {
-      const choice = window.confirm('¿Con qué perfil quieres acceder? (Aceptar: Entrenador, Cancelar: Jugador)');
-      resolve(choice ? 'Entrenador' : 'Jugador');
-    });
   }
 }

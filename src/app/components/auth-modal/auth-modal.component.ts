@@ -20,10 +20,8 @@ export class AuthModalComponent {
   
   showPassword = false;
   showConfirmPassword = false;
-  showRoleModal = false;
-  availableRoles: string[] = [];
 
-  constructor(private authService: AuthService, private router: Router) {}
+  constructor(public authService: AuthService, private router: Router) {}
 
   closeModal() {
     this.close.emit();
@@ -68,6 +66,12 @@ export class AuthModalComponent {
     this.isLoading = true;
     try {
       await this.authService.login(this.email, this.password);
+
+      // 🔹 Si el usuario tiene que seleccionar un rol, esperar a que lo haga
+      if (this.authService.showRoleModal) {
+        return; 
+      }
+
       this.navigateToHome();
     } catch (error: any) {
       this.errorMessage = "Error al iniciar sesión: " + error.message;
@@ -76,9 +80,10 @@ export class AuthModalComponent {
     }
   }
 
-  selectRole(role: string) {
-    this.authService.setSelectedRole(role);
-    this.showRoleModal = false;
+  onRoleSelected(role: string) {
+    if (this.authService.roleSelectionCallback) {
+      this.authService.roleSelectionCallback(role);
+    }
     this.navigateToHome();
   }
 

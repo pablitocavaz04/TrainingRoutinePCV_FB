@@ -11,6 +11,6 @@ export class RoleSelectionModalComponent {
   @Output() roleSelected = new EventEmitter<string>();
 
   selectRole(role: string) {
-    this.roleSelected.emit(role); // 🔹 Emitimos solo el string del rol seleccionado
+    this.roleSelected.emit(role);
   }
 }
