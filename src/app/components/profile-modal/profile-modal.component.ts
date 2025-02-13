@@ -15,6 +15,7 @@ export class ProfileModalComponent implements OnInit, OnChanges {
 
   modalState: 'open' | 'closed' = 'closed';
   userEmail: string = "Cargando...";
+  userRole: string = "Cargando...";
 
   constructor(public authService: AuthService) {}
 
@@ -23,6 +24,7 @@ export class ProfileModalComponent implements OnInit, OnChanges {
     onAuthStateChanged(auth, (user: User | null) => {
       if (user) {
         this.userEmail = user.email || "Correo no disponible";
+        this.userRole = this.authService.getSelectedRole() || "Rol no disponible"; // 🔹 Obtener rol desde AuthService
       }
     });
   }
@@ -48,6 +50,6 @@ export class ProfileModalComponent implements OnInit, OnChanges {
 
   async logout() {
     await this.authService.logout();
-    this.closeModal(); // 🔹 Cierra el modal después de cerrar sesión
+    this.closeModal();
   }
 }
