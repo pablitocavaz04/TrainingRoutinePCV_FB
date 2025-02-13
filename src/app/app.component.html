@@ -1,2 +1,5 @@
-<app-nav-bar></app-nav-bar>
-<router-outlet></router-outlet>
+<ng-container *ngIf="!isLandingOrSplashPage">
+    <app-nav-bar></app-nav-bar>
+  </ng-container>
+  <router-outlet></router-outlet>
+  
