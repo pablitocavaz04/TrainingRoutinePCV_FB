@@ -37,7 +37,7 @@ export class ProfileModalComponent implements OnInit, OnChanges {
   }
 
   confirmRoleChange() {
-    this.isConfirmModalOpen = true; // 🔹 Mostramos el modal de confirmación
+    this.isConfirmModalOpen = true; //Mostramos el modal de confirmación
   }
 
   switchRole() {
@@ -54,6 +54,8 @@ export class ProfileModalComponent implements OnInit, OnChanges {
 
 
   //IMAGENES
+
+  //Explorador de imagenes CHATGPT
   triggerFileInput() {
     const fileInput = document.querySelector<HTMLInputElement>('input[type="file"]');
     if (fileInput) {
@@ -62,7 +64,7 @@ export class ProfileModalComponent implements OnInit, OnChanges {
   }
   
   uploadImage(event: any) {
-    const file = event.target.files[0]; // 🔹 Obtenemos el archivo seleccionado
+    const file = event.target.files[0]; //Obtenemos el archivo seleccionado
     if (!file) return;
   
     console.log("Archivo seleccionado:", file);
