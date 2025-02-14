@@ -2,6 +2,9 @@ import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, User } from "firebase/auth";
 import { getFirestore, doc, setDoc, getDoc } from "firebase/firestore";
+//Import necesarias para imagenes
+import { getStorage, ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
+
 
 @Injectable({
   providedIn: 'root'
@@ -87,6 +90,35 @@ export class AuthService {
     const userData = userDocSnap.data();
     return userData['roles'] || [];
   }
+
+  //Subir imagenes
+  async uploadProfileImage(userId: string, file: File): Promise<string> {
+    const storage = getStorage();
+    const storageRef = ref(storage, `uploads/${userId}`);
+    const uploadTask = uploadBytesResumable(storageRef, file);
+  
+    return new Promise((resolve, reject) => {
+      uploadTask.on(
+        "state_changed",
+        null,
+        (error) => reject(error),
+        async () => {
+          const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
+          await this.updateUserImage(userId, downloadURL);
+          resolve(downloadURL);
+        }
+      );
+    });
+  }
+  
+
+  //Actualizarla
+  async updateUserImage(userId: string, imageUrl: string): Promise<void> {
+    const userDocRef = doc(this.db, "personas", userId);
+    await setDoc(userDocRef, { userImage: imageUrl }, { merge: true });
+  }
+  
+  
   
 
   

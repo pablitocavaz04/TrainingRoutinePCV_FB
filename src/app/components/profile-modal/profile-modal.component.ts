@@ -1,6 +1,7 @@
 import { Component, EventEmitter, Input, Output, OnChanges, SimpleChanges, OnInit } from '@angular/core';
 import { getAuth, onAuthStateChanged, User } from 'firebase/auth';
 import { AuthService } from 'src/app/services/auth.service';
+import { getFirestore, doc, getDoc } from 'firebase/firestore';
 
 @Component({
   selector: 'app-profile-modal',
@@ -10,15 +11,15 @@ import { AuthService } from 'src/app/services/auth.service';
 })
 export class ProfileModalComponent implements OnInit, OnChanges {
   @Input() isOpen: boolean = false;
-  @Input() userImage: string = "https://via.placeholder.com/100";
   @Output() close = new EventEmitter<void>();
 
   modalState: 'open' | 'closed' = 'closed';
   userEmail: string = "Cargando...";
   userRole: string = "Cargando...";
-  canSwitchRole: boolean = false;//Miramos si tenemos que mostrar el boton
-  isConfirmModalOpen: boolean = false; //Controlamos la visibilidad del modal de confirmación
-
+  userImage: string = "assets/default-avatar.png";
+  canSwitchRole: boolean = false; 
+  isConfirmModalOpen: boolean = false; 
+  isLoading: boolean = false;
 
   constructor(public authService: AuthService) {}
 
@@ -29,7 +30,16 @@ export class ProfileModalComponent implements OnInit, OnChanges {
         this.userEmail = user.email || "Correo no disponible";
         this.userRole = this.authService.getSelectedRole() || "Rol no disponible";
 
-        //Obtener los roles del usuario desde AuthService
+        //Obtenemos la imagen del perfil
+        const userDocRef = doc(getFirestore(), "personas", user.uid);
+        const userDocSnap = await getDoc(userDocRef);
+
+        if (userDocSnap.exists()) {
+          const userData = userDocSnap.data();
+          this.userImage = userData['userImage'] || "assets/default-avatar.png"; 
+        }
+
+        //Obtenemos los roles del usuario
         const roles = await this.authService.getUserRoles(user.uid);
         this.canSwitchRole = roles.includes('Jugador') && roles.includes('Entrenador');
       }
@@ -37,25 +47,22 @@ export class ProfileModalComponent implements OnInit, OnChanges {
   }
 
   confirmRoleChange() {
-    this.isConfirmModalOpen = true; //Mostramos el modal de confirmación
+    this.isConfirmModalOpen = true; 
   }
 
   switchRole() {
     const currentRole = this.authService.getSelectedRole();
     if (!currentRole) return;
 
-    const newRole = currentRole === 'Jugador' ? 'Entrenador' : 'Jugador'; //Cambiar entre Jugador y Entrenador
+    const newRole = currentRole === 'Jugador' ? 'Entrenador' : 'Jugador'; 
     this.authService.setSelectedRole(newRole);
-    this.userRole = newRole; //Actualizamos el rol en el modal
+    this.userRole = newRole; 
     this.isConfirmModalOpen = false;
     this.closeModal();
-    window.location.reload(); //Recargamos la página para aplicar los cambios
+    window.location.reload();
   }
 
-
-  //IMAGENES
-
-  //Explorador de imagenes CHATGPT
+  //Abrimos el explorardor de archivos
   triggerFileInput() {
     const fileInput = document.querySelector<HTMLInputElement>('input[type="file"]');
     if (fileInput) {
@@ -63,14 +70,28 @@ export class ProfileModalComponent implements OnInit, OnChanges {
     }
   }
   
-  uploadImage(event: any) {
-    const file = event.target.files[0]; //Obtenemos el archivo seleccionado
+  //Subir Imagen a Firebase Storage y actualizar Firestore
+  async uploadImage(event: any) {
+    const file = event.target.files[0]; 
     if (!file) return;
   
-    console.log("Archivo seleccionado:", file);
-  }
+    const userId = getAuth().currentUser?.uid;
+    if (!userId) {
+      console.error("Usuario no autenticado.");
+      return;
+    }
   
-////////////////////////
+    try {
+      this.isLoading = true;
+      const imageUrl = await this.authService.uploadProfileImage(userId, file);
+      this.userImage = imageUrl; //Actualizamos la imagen en UI
+    } catch (error) {
+      console.error("Error al subir la imagen:", error);
+    } finally {
+      this.isLoading = false;
+    }
+  }
+
   ngOnChanges(changes: SimpleChanges) {
     if (changes["isOpen"]) {
       if (this.isOpen) {
