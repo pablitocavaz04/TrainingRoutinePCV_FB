@@ -1,0 +1,11 @@
+.card-effect {
+    transition: transform 0.3s ease-out, box-shadow 0.3s ease-in-out;
+    will-change: transform;
+    perspective: 1000px;
+  }
+  
+  /* Efecto cuando se pasa el ratón por encima */
+  .card-effect:hover {
+    box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.2);
+  }
+  

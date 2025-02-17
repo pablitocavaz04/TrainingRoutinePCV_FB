@@ -59,4 +59,26 @@ export class JugadoresPage implements OnInit {
       console.error("Error al eliminar el jugador:", error);
     }
   }
+
+  handleMouseMove(event: MouseEvent, cardId: string) {
+    const card = document.querySelector(`[data-id="${cardId}"]`) as HTMLElement;
+    if (!card) return;
+  
+    const rect = card.getBoundingClientRect();
+    const x = event.clientX - rect.left - rect.width / 2;
+    const y = event.clientY - rect.top - rect.height / 2;
+  
+    const rotateX = (y / rect.height) * -10;
+    const rotateY = (x / rect.width) * 10;
+  
+    card.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.05)`;
+  }
+  
+  resetTransform(cardId: string) {
+    const card = document.querySelector(`[data-id="${cardId}"]`) as HTMLElement;
+    if (card) {
+      card.style.transform = `rotateX(0) rotateY(0) scale(1)`;
+    }
+  }
+  
 }
