@@ -21,6 +21,12 @@ const routes: Routes = [
     path: 'landing',
     loadChildren: () => import('./pages/landing/landing.module').then( m => m.LandingPageModule)
   },
+  {
+    path: 'jugadores',
+    loadChildren: () => import('./pages/jugadores/jugadores.module').then( m => m.JugadoresPageModule),
+    canActivate: [AuthGuard]
+  },
+
 
 ];
 

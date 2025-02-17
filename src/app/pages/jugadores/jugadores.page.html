@@ -1,0 +1,26 @@
+<div class="p-6">
+  <h1 class="text-2xl font-bold text-center">Lista de Jugadores</h1>
+
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-6">
+    <div *ngFor="let jugador of jugadores" class="bg-white shadow-md rounded-lg p-4 relative">
+
+      <div class="flex justify-center">
+        <img [src]="jugador.userImage || 'assets/default-avatar.png'" alt="Jugador" class="w-24 h-24 rounded-full object-cover">
+      </div>
+
+      <p class="text-center text-gray-700 mt-4">{{ jugador.userEmail || 'Correo no disponible' }}</p>
+
+      <div *ngIf="userRole === 'Gestor'" class="flex justify-between mt-4">
+        <button class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition">
+          <ion-icon name="create-outline"></ion-icon> Editar
+        </button>
+        <button class="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-700 transition"
+        (click)="deleteJugador(jugador.id, jugador.userID)">
+          <ion-icon name="trash-outline"></ion-icon> Eliminar
+        </button>
+
+      </div>
+
+    </div>
+  </div>
+</div>

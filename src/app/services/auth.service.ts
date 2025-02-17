@@ -24,13 +24,15 @@ export class AuthService {
   async register(email: string, password: string): Promise<void> {
     const userCredential = await createUserWithEmailAndPassword(this.auth, email.trim(), password);
     const user = userCredential.user;
-
+  
     await setDoc(doc(this.db, "personas", user.uid), {
       userID: user.uid,
+      userEmail: email.trim(), //Guardamos el correo en Firestore en su persona para luego poder mostrar el correo de cada jugador o entrenador.
       userImage: "",
       roles: ["Jugador"]
     });
   }
+  
 
   async login(email: string, password: string): Promise<void> {
     const userCredential = await signInWithEmailAndPassword(this.auth, email.trim(), password);
