@@ -33,7 +33,7 @@ export class AuthService {
     });
   }
   
-
+  
   async login(email: string, password: string): Promise<void> {
     const userCredential = await signInWithEmailAndPassword(this.auth, email.trim(), password);
     const user = userCredential.user;
