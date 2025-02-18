@@ -1,6 +1,13 @@
 nav {
-    transition: all 0.3s ease-in-out;
-  }
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 1000; /* Muy alto para estar siempre por encima */
+  background-color: rgba(59, 130, 246, 0.95); /* Azul con opacidad para efecto moderno */
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+}
+
   
   ul li {
     transition: color 0.3s ease-in-out;
