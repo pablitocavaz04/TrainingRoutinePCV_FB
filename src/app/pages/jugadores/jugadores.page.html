@@ -1,31 +1,29 @@
-<div class="p-6">
-  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-    <div *ngFor="let jugador of jugadores" 
-      class="relative bg-white shadow-lg rounded-xl p-6 transition-transform duration-300 transform hover:scale-105 hover:shadow-2xl card-effect"
-      (mousemove)="handleMouseMove($event, jugador.id)" 
-      (mouseleave)="resetTransform(jugador.id)"
-      [attr.data-id]="jugador.id">
+<div class="jugadores-container p-4 md:p-6 flex flex-wrap justify-center gap-6">
+  <div *ngFor="let jugador of jugadores" 
+    class="relative bg-white shadow-lg rounded-xl p-5 transition-transform duration-300 transform hover:scale-105 hover:shadow-2xl card-effect"
+    (mousemove)="handleMouseMove($event, jugador.id)" 
+    (mouseleave)="resetTransform(jugador.id)"
+    [attr.data-id]="jugador.id">
 
-      <!-- Imagen de perfil -->
-      <div class="flex justify-center">
-        <img [src]="jugador.userImage || 'assets/default-avatar.png'" 
-             alt="Jugador" 
-             class="w-24 h-24 rounded-full object-cover shadow-md border-2 border-gray-300">
-      </div>
+    <!-- Imagen de perfil -->
+    <div class="flex justify-center">
+      <img [src]="jugador.userImage || 'assets/default-avatar.png'" 
+           alt="Jugador" 
+           class="w-20 h-20 md:w-24 md:h-24 rounded-full object-cover shadow-md border-2 border-gray-300">
+    </div>
 
-      <!-- Datos del Jugador -->
-      <p class="text-center text-gray-700 mt-4 font-medium">{{ jugador.userEmail || 'Correo no disponible' }}</p>
+    <!-- Datos del Jugador -->
+    <p class="text-center text-gray-700 mt-3 text-sm md:text-base font-medium">{{ jugador.userEmail || 'Correo no disponible' }}</p>
 
-      <!-- Botones de Edición y Eliminación (Solo si el usuario es Gestor) -->
-      <div *ngIf="userRole === 'Gestor'" class="flex justify-between mt-4">
-        <button class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition flex items-center gap-2">
-          <ion-icon name="create-outline"></ion-icon> Editar
-        </button>
-        <button class="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-700 transition flex items-center gap-2"
-        (click)="deleteJugador(jugador.id, jugador.userID)">
-          <ion-icon name="trash-outline"></ion-icon> Eliminar
-        </button>
-      </div>
+    <!-- Botones de Edición y Eliminación (Solo si el usuario es Gestor) -->
+    <div *ngIf="userRole === 'Gestor'" class="flex justify-between mt-3 md:mt-2 space-x-2">
+      <button class="bg-blue-500 text-white px-3 py-1 md:px-4 md:py-2 rounded-lg hover:bg-blue-700 transition flex items-center gap-1 md:gap-2 text-sm">
+        <ion-icon name="create-outline"></ion-icon> Editar
+      </button>
+      <button class="bg-red-500 text-white px-3 py-1 md:px-4 md:py-2 rounded-lg hover:bg-red-700 transition flex items-center gap-1 md:gap-2 text-sm"
+      (click)="deleteJugador(jugador.id, jugador.userID)">
+        <ion-icon name="trash-outline"></ion-icon> Eliminar
+      </button>
     </div>
   </div>
 </div>
