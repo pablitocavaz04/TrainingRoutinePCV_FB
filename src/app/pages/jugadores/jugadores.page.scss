@@ -1,77 +1,22 @@
-.jugadores-container {
-  position: relative;
-  z-index: 1;
-  padding-top: 6rem; /* Espacio extra para no tocar el navbar */
-  padding-bottom: 80px;
-  overflow-y: auto;
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center; /* Alinea las cards en el centro */
-  gap: 20px; /* Espaciado en móvil se mantiene */
-}
-
-/* Estilo de las cards */
-.card-effect {
-  transition: transform 0.3s ease-out, box-shadow 0.3s ease-in-out;
-  will-change: transform;
-  perspective: 800px;
-  border-radius: 16px;
-  background: linear-gradient(145deg, #ffffff, #e6e6e6);
-  box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.15), -5px -5px 15px rgba(255, 255, 255, 0.8);
-  padding: 30px; /* Más espacio dentro */
-  width: 320px; /* Ajustamos el ancho fijo */
-}
-
-/* Hover con sombra más marcada */
-.card-effect:hover {
-  box-shadow: 0px 12px 24px rgba(0, 0, 0, 0.2);
-}
-
-/* Animación de hover en las cards */
-@media (hover: hover) {
-  .card-effect:hover {
-    transform: translateY(-6px) scale(1.05);
-  }
-}
-
-/* Mantener el diseño en móvil */
-@media (max-width: 768px) {
-  .jugadores-container {
-    flex-direction: column; /* Se mantienen alineadas en una sola columna */
-    align-items: center;
-  }
-
-  .card-effect {
-    width: 80%; /* Se mantiene el tamaño en móvil */
-    padding: 35px;
-  }
-
-  /* Imagen de perfil más grande en móvil */
-  .card-effect img {
-    width: 100px;
-    height: 100px;
-  }
-}
-
-/* Solo en escritorio: más separación entre cards */
-@media (min-width: 1024px) {
-  .jugadores-container {
-    gap: 50px; /* Aumentamos aún más el espacio entre las cards */html, body {
+/* Asegurar que html y body ocupen toda la pantalla y permitan scroll */
+html, body {
   height: 100%;
-  overflow-y: auto; /* Permitir scroll */
+  overflow-y: auto; /* Permitir scroll en toda la página */
+  margin: 0;
+  padding: 0;
 }
 
+/* Contenedor principal de los jugadores */
 .jugadores-container {
   position: relative;
   z-index: 1;
-  padding-top: 6rem; /* Espacio extra para no tocar el navbar */
+  padding-top: 6rem; /* Espacio extra para despegar del navbar */
   padding-bottom: 80px;
-  overflow-y: visible; /* Permitir que crezca con el contenido */
   display: flex;
   flex-wrap: wrap;
-  justify-content: center; /* Alinea las cards en el centro */
-  gap: 50px; /* Mantiene el espaciado entre cards */
-  min-height: 100vh; /* Asegura que haya espacio suficiente */
+  justify-content: center; /* Alinear las cards */
+  gap: 50px; /* Mantiene la separación entre cards */
+  min-height: auto; /* Permitir que crezca con el contenido */
 }
 
 /* Estilo de las cards */
@@ -95,7 +40,7 @@
   }
 
   .card-effect {
-    width: 80%;
+    width: 90%;
     padding: 35px;
   }
 
@@ -105,21 +50,14 @@
   }
 }
 
-/* En escritorio, aseguramos que haya scroll si es necesario */
+/* En escritorio, aseguramos que el contenido fluya naturalmente */
 @media (min-width: 1024px) {
   .jugadores-container {
-    min-height: 100vh; /* Asegura que haya espacio para scroll */
-    overflow-y: auto; /* Permitir scroll si el contenido es largo */
+    flex-wrap: wrap;
+    min-height: auto; /* Permitir crecimiento */
   }
 
   .card-effect {
-    width: 400px;
-  }
-}
-
-  }
-
-  .card-effect {
-    width: 400px; /* Se mantiene el ancho en escritorio */
+    width: 400px; /* Cards más anchas */
   }
 }
