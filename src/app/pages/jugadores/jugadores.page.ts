@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from 'src/app/services/auth.service';
-import { getFirestore, collection, query, where, getDocs, deleteDoc, doc } from 'firebase/firestore';
+import { getFirestore, collection, query, where, getDocs, deleteDoc, doc, getDoc, updateDoc } from 'firebase/firestore';
 import { getAuth } from 'firebase/auth';
 
 @Component({
@@ -13,6 +13,7 @@ export class JugadoresPage implements OnInit {
   jugadores: any[] = [];
   userRole: string = '';
   mostrarModal: boolean = false; 
+  jugadorSeleccionado: string = '';
 
   constructor(private authService: AuthService) {}
 
@@ -80,11 +81,53 @@ export class JugadoresPage implements OnInit {
   }
 
   // Métodos para abrir y cerrar el modal
-  abrirModal() {
+  abrirModal(jugadorId: string) {
+    this.jugadorSeleccionado = jugadorId;
     this.mostrarModal = true;
   }
+  
 
   cerrarModal() {
     this.mostrarModal = false;
   }
+  async updateJugadorRole(tipoCambio: string) {
+    if (!this.jugadorSeleccionado) {
+      console.log("Error: No hay jugador seleccionado.");
+      return;
+    }
+  
+    console.log(`vento recibido en jugadores.page.ts: ${tipoCambio}`);
+  
+    try {
+      const db = getFirestore();
+      const jugadorRef = doc(db, "personas", this.jugadorSeleccionado);
+  
+      // 🔹 Obtener los roles actuales
+      const jugadorSnap = await getDoc(jugadorRef);
+      if (!jugadorSnap.exists()) {
+        console.log(" Error: Jugador no encontrado en Firestore.");
+        return;
+      }
+  
+      let roles = jugadorSnap.data()['roles'] || [];
+  
+      if (tipoCambio === 'convertir') {
+        roles = ['Entrenador'];
+      } else if (tipoCambio === 'añadir' && !roles.includes('Entrenador')) {
+        roles.push('Entrenador');
+      }
+  
+      await updateDoc(jugadorRef, { roles });
+  
+      console.log(`✅ Rol actualizado en Firestore: ${roles}`);
+  
+      this.jugadores = this.jugadores.map(jugador =>
+        jugador.id === this.jugadorSeleccionado ? { ...jugador, roles } : jugador
+      );
+  
+    } catch (error) {
+      console.error("Error al actualizar el rol:", error);
+    }
+  }
+  
 }
