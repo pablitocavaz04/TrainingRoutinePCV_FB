@@ -7,6 +7,7 @@ import { IonicModule } from '@ionic/angular';
 import { JugadoresPageRoutingModule } from './jugadores-routing.module';
 
 import { JugadoresPage } from './jugadores.page';
+import { EditRolComponent } from 'src/app/components/edit-rol/edit-rol.component';
 
 @NgModule({
   imports: [
@@ -15,6 +16,6 @@ import { JugadoresPage } from './jugadores.page';
     IonicModule,
     JugadoresPageRoutingModule
   ],
-  declarations: [JugadoresPage]
+  declarations: [JugadoresPage, EditRolComponent]
 })
 export class JugadoresPageModule {}

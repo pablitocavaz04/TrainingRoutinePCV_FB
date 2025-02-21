@@ -19,11 +19,12 @@
 
         <!-- Botones si el usuario que se ha logueado es el gestor -->
         <div *ngIf="userRole === 'Gestor'" class="flex justify-between mt-3 md:mt-2 space-x-2">
-          <button class="bg-blue-500 text-white px-3 py-1 md:px-4 md:py-2 rounded-lg hover:bg-blue-700 transition flex items-center gap-1 md:gap-2 text-sm">
+          <button class="bg-blue-500 text-white px-3 py-1 md:px-4 md:py-2 rounded-lg hover:bg-blue-700 transition flex items-center gap-1 md:gap-2 text-sm"
+            (click)="abrirModal()">
             <ion-icon name="create-outline"></ion-icon> Editar
           </button>
           <button class="bg-red-500 text-white px-3 py-1 md:px-4 md:py-2 rounded-lg hover:bg-red-700 transition flex items-center gap-1 md:gap-2 text-sm"
-          (click)="deleteJugador(jugador.id, jugador.userID)">
+            (click)="deleteJugador(jugador.id, jugador.userID)">
             <ion-icon name="trash-outline"></ion-icon> Eliminar
           </button>
         </div>
@@ -31,3 +32,4 @@
     </div>
   </div>
 </div>
+<app-edit-rol *ngIf="mostrarModal" (closeModal)="cerrarModal()"></app-edit-rol>
