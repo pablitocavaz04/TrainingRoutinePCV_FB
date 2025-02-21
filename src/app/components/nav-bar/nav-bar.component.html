@@ -11,7 +11,16 @@
       <span class="absolute inset-0 border-2 border-transparent group-hover:border-white rounded-lg transition-all duration-300"></span>
       <span class="relative z-10 block w-full text-center">{{ item.label }}</span>
     </li>
-    
+
+    <li *ngIf="hasRole('Gestor') || hasRole('Entrenador')"
+        class="cursor-pointer px-4 py-2 rounded-lg transition-all duration-300 relative group"
+        [class.border-b-4]="isProfileOpen"
+        [class.border-white]="isProfileOpen"
+        (click)="navigateTo('/jugadores')">
+      <span class="absolute inset-0 border-2 border-transparent group-hover:border-white rounded-lg transition-all duration-300"></span>
+      <span class="relative z-10 block w-full text-center">Jugadores</span>
+    </li>
+
     <li class="cursor-pointer px-4 py-2 rounded-lg transition-all duration-300 relative group"
         [class.border-b-4]="isProfileOpen"
         [class.border-white]="isProfileOpen"
@@ -36,6 +45,15 @@
         <span class="relative z-10 block w-full text-center">{{ item.label }}</span>
       </li>
       
+      <li *ngIf="hasRole('Gestor') || hasRole('Entrenador')"
+          class="py-3 cursor-pointer relative transition-all duration-300 bg-opacity-50"
+          [class.border-l-4]="currentPage === '/jugadores'"
+          [class.border-white]="currentPage === '/jugadores'"
+          (click)="navigateTo('/jugadores'); toggleMenu()">
+        <span class="absolute inset-0 border-2 border-transparent group-hover:border-white rounded-lg transition-all duration-300"></span>
+        <span class="relative z-10 block w-full text-center">Jugadores</span>
+      </li>
+
       <li class="py-3 cursor-pointer relative transition-all duration-300 bg-opacity-50"
           [class.border-l-4]="isProfileOpen"
           [class.border-white]="isProfileOpen"
