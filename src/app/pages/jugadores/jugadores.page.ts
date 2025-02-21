@@ -19,13 +19,12 @@ export class JugadoresPage implements OnInit {
     this.userRole = this.authService.getSelectedRole() || '';
 
     if (this.userRole === 'Jugador') {
-      return; //Si el usuario es "Jugador", no carga nada para no sobrecargar la web , además ocultaremos el boton de la barra de navegacion
+      return; 
     }
 
     await this.getJugadores();
   }
 
-  //Obtenemos los jugadores con sus datos
   async getJugadores() {
     const db = getFirestore();
     const personasRef = collection(db, 'personas');
@@ -40,7 +39,6 @@ export class JugadoresPage implements OnInit {
   }
   
 
-  //Mostramos el alert para confirmar
   async deleteJugador(jugadorId: string, userId: string) {
     const confirmDelete = confirm("¿Estás seguro de que quieres eliminar este jugador?");
     if (!confirmDelete) return;
@@ -49,17 +47,15 @@ export class JugadoresPage implements OnInit {
       const db = getFirestore();
       const auth = getAuth();
   
-      //Eliminamos de la tabla
       await deleteDoc(doc(db, "personas", jugadorId));
   
   
-      //Aqui vamos a actualizar la liste de los jugadores despues de eliminarlo
+      //Actualizamos despues de borarr a un jugador 
       this.jugadores = this.jugadores.filter(jugador => jugador.id !== jugadorId);
     } catch (error) {
       console.error("Error al eliminar el jugador:", error);
     }
   }
-
   handleMouseMove(event: MouseEvent, cardId: string) {
     const card = document.querySelector(`[data-id="${cardId}"]`) as HTMLElement;
     if (!card) return;
@@ -68,17 +64,20 @@ export class JugadoresPage implements OnInit {
     const x = event.clientX - rect.left - rect.width / 2;
     const y = event.clientY - rect.top - rect.height / 2;
   
-    const rotateX = (y / rect.height) * -10;
-    const rotateY = (x / rect.width) * 10;
+    const rotateX = (y / rect.height) * -18; 
+    const rotateY = (x / rect.width) * 18;  
   
-    card.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.05)`;
+    card.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.08)`;
+    card.style.transition = 'transform 0.2s ease-out'; 
   }
   
   resetTransform(cardId: string) {
     const card = document.querySelector(`[data-id="${cardId}"]`) as HTMLElement;
     if (card) {
       card.style.transform = `rotateX(0) rotateY(0) scale(1)`;
+      card.style.transition = 'transform 0.3s ease-in-out'; 
     }
   }
+  
   
 }
