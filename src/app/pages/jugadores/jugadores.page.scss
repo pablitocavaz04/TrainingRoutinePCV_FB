@@ -1,47 +1,72 @@
-/* Asegurar que html y body ocupen toda la pantalla y permitan scroll */
 html, body {
-  height: 100%;
-  overflow-y: auto; /* Permitir scroll en toda la página */
+  height: 100vh;
+  overflow: hidden; 
   margin: 0;
   padding: 0;
 }
 
-/* Contenedor principal de los jugadores */
-.jugadores-container {
+
+.page-container {
   position: relative;
-  z-index: 1;
-  padding-top: 6rem; /* Espacio extra para despegar del navbar */
-  padding-bottom: 80px;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+
+.scroll-container {
+  flex: 1; 
+  width: 100%;
+  overflow-y: auto;
+  overflow-x: hidden; 
+}
+
+
+.jugadores-container {
+  width: 100%;
   display: flex;
   flex-wrap: wrap;
-  justify-content: center; /* Alinear las cards */
-  gap: 50px; /* Mantiene la separación entre cards */
-  min-height: auto; /* Permitir que crezca con el contenido */
+  justify-content: center;
+  align-content: flex-start;
+  gap: 50px;
+  padding-top: 6rem;
+  padding-bottom: 80px;
 }
 
-/* Estilo de las cards */
-.card-effect {
-  transition: transform 0.3s ease-out, box-shadow 0.3s ease-in-out;
-  will-change: transform;
-  perspective: 800px;
-  border-radius: 16px;
-  background: linear-gradient(145deg, #ffffff, #e6e6e6);
-  box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.15), -5px -5px 15px rgba(255, 255, 255, 0.8);
-  padding: 30px;
-  width: 320px; /* Mantiene el tamaño de las cards */
+
+.scroll-container::-webkit-scrollbar {
+  width: 6px;
 }
 
-/* Mantener el diseño en móvil */
+.scroll-container::-webkit-scrollbar-thumb {
+  background-color: rgba(59, 130, 246, 0.7);
+  border-radius: 4px;
+}
+
+.scroll-container::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.05);
+}
+
+
 @media (max-width: 768px) {
+  .scroll-container {
+    height: calc(100vh - 6rem);
+    overflow-y: auto; 
+    overflow-x: hidden;
+    padding-bottom: 100px;
+  }
+
   .jugadores-container {
-    flex-direction: column;
+    flex-direction: column; 
     align-items: center;
-    min-height: auto; /* Permite scroll */
+    justify-content: flex-start;
   }
 
   .card-effect {
-    width: 90%;
+    width: 85%;
     padding: 35px;
+    margin-left: 8%;
   }
 
   .card-effect img {
@@ -50,14 +75,14 @@ html, body {
   }
 }
 
-/* En escritorio, aseguramos que el contenido fluya naturalmente */
+
 @media (min-width: 1024px) {
   .jugadores-container {
     flex-wrap: wrap;
-    min-height: auto; /* Permitir crecimiento */
+    justify-content: center;
   }
 
   .card-effect {
-    width: 400px; /* Cards más anchas */
+    width: 400px;
   }
 }

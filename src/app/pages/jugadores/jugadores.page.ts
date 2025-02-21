@@ -64,8 +64,8 @@ export class JugadoresPage implements OnInit {
     const x = event.clientX - rect.left - rect.width / 2;
     const y = event.clientY - rect.top - rect.height / 2;
   
-    const rotateX = (y / rect.height) * -18; 
-    const rotateY = (x / rect.width) * 18;  
+    const rotateX = (y / rect.height) * -22; 
+    const rotateY = (x / rect.width) * 22;  
   
     card.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.08)`;
     card.style.transition = 'transform 0.2s ease-out'; 
