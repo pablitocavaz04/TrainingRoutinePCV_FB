@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { AuthService } from 'src/app/services/auth.service';
 import { getFirestore, collection, query, where, getDocs, deleteDoc, doc, getDoc, updateDoc } from 'firebase/firestore';
 import { getAuth } from 'firebase/auth';
+import { AlertController } from '@ionic/angular';
 
 @Component({
   selector: 'app-jugadores',
@@ -15,7 +16,7 @@ export class JugadoresPage implements OnInit {
   mostrarModal: boolean = false; 
   jugadorSeleccionado: string = '';
 
-  constructor(private authService: AuthService) {}
+  constructor(private authService: AuthService, private alertController: AlertController) {}
 
   async ngOnInit() {
     this.userRole = this.authService.getSelectedRole() || '';
@@ -40,18 +41,34 @@ export class JugadoresPage implements OnInit {
     }));
   }
 
-  async deleteJugador(jugadorId: string, userId: string) {
-    const confirmDelete = confirm("¿Estás seguro de que quieres eliminar este jugador?");
-    if (!confirmDelete) return;
-  
+  async confirmarEliminarJugador(jugadorId: string) {
+    const alert = await this.alertController.create({
+      header: 'Confirmación',
+      message: '¿Estás seguro de que quieres eliminar este jugador?',
+      buttons: [
+        {
+          text: 'Cancelar',
+          role: 'cancel',
+          handler: () => console.log('Eliminación cancelada')
+        },
+        {
+          text: 'Sí, eliminar',
+          handler: () => this.deleteJugador(jugadorId) 
+        }
+      ]
+    });
+
+    await alert.present();
+  }
+
+  async deleteJugador(jugadorId: string) {
     try {
       const db = getFirestore();
-      const auth = getAuth();
-  
       await deleteDoc(doc(db, "personas", jugadorId));
 
-      // Actualizamos después de borrar a un jugador 
+      //ACtualizamos despues de eliminar jugador para que no aparezca
       this.jugadores = this.jugadores.filter(jugador => jugador.id !== jugadorId);
+
     } catch (error) {
       console.error("Error al eliminar el jugador:", error);
     }
@@ -102,7 +119,7 @@ export class JugadoresPage implements OnInit {
       const db = getFirestore();
       const jugadorRef = doc(db, "personas", this.jugadorSeleccionado);
   
-      // 🔹 Obtener los roles actuales
+      // Aqui obtenemos los roles actuales
       const jugadorSnap = await getDoc(jugadorRef);
       if (!jugadorSnap.exists()) {
         console.log(" Error: Jugador no encontrado en Firestore.");

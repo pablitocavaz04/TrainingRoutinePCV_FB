@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from 'src/app/services/auth.service';
 import { getFirestore, collection, query, where, getDocs, deleteDoc, doc } from 'firebase/firestore';
+import { AlertController } from '@ionic/angular';
 
 @Component({
   selector: 'app-entrenadores',
@@ -14,7 +15,7 @@ export class EntrenadoresPage implements OnInit {
   mostrarModal: boolean = false; 
   entrenadorSeleccionado: string = '';
 
-  constructor(private authService: AuthService) {}
+  constructor(private authService: AuthService, private alertController : AlertController) {}
 
   async ngOnInit() {
     this.userRole = this.authService.getSelectedRole() || '';
@@ -35,16 +36,34 @@ export class EntrenadoresPage implements OnInit {
     }));
   }
 
+  async confirmarEliminarEntrenador(entrenadorId: string) {
+    const alert = await this.alertController.create({
+      header: 'Confirmación',
+      message: '¿Estás seguro de que quieres eliminar este entrenador?',
+      buttons: [
+        {
+          text: 'Cancelar',
+          role: 'cancel',
+          handler: () => console.log('Eliminación cancelada')
+        },
+        {
+          text: 'Sí, eliminar',
+          handler: () => this.deleteEntrenador(entrenadorId)
+        }
+      ]
+    });
+
+    await alert.present();
+  }
+
   async deleteEntrenador(entrenadorId: string) {
-    const confirmDelete = confirm("¿Estás seguro de que quieres eliminar este entrenador?");
-    if (!confirmDelete) return;
-  
     try {
       const db = getFirestore();
       await deleteDoc(doc(db, "personas", entrenadorId));
 
-      // Actualizamos después de borrar al entrenador 
+      //Actualizamos despues de eliminar
       this.entrenadores = this.entrenadores.filter(entrenador => entrenador.id !== entrenadorId);
+
     } catch (error) {
       console.error("Error al eliminar el entrenador:", error);
     }

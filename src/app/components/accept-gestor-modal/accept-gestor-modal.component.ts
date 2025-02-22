@@ -1,5 +1,7 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { getFirestore, doc, updateDoc } from 'firebase/firestore';
+import { AuthService } from 'src/app/services/auth.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-accept-gestor-modal',
@@ -8,14 +10,15 @@ import { getFirestore, doc, updateDoc } from 'firebase/firestore';
   standalone: false
 })
 export class AcceptGestorModalComponent {
-  @Input() entrenadorId: string = ''; 
+  @Input() entrenadorId: string = ''; // Recibe el ID del entrenador
   @Output() closeModal = new EventEmitter<void>();
+
+  constructor(private authService: AuthService, private router: Router) {}
 
   cerrarModal() {
     this.closeModal.emit();
   }
 
-  //Si el entrandor acepta la solicitud
   async aceptarSolicitud() {
     if (!this.entrenadorId) return;
 
@@ -28,6 +31,13 @@ export class AcceptGestorModalComponent {
         pendingGestorRequest: false
       });
 
+
+      this.authService.setSelectedRole('Gestor');
+
+      this.router.navigate(['/home']).then(() => {
+        window.location.reload(); 
+      });
+
     } catch (error) {
       console.error('Error al aceptar la solicitud:', error);
     }
@@ -35,8 +45,6 @@ export class AcceptGestorModalComponent {
     this.cerrarModal();
   }
 
-
-  //Si el ennrreandor rechaza la solicutd
   async rechazarSolicitud() {
     if (!this.entrenadorId) return;
 
