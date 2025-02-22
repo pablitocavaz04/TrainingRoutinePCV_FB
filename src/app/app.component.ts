@@ -12,7 +12,7 @@ export class AppComponent {
 
   isLandingOrSplashPage = false;
 
-  constructor(private router: Router, public authService: AuthService) { // 🔹 Inyectamos AuthService
+  constructor(private router: Router, public authService: AuthService) {
     this.router.events.subscribe(() => {
       const currentUrl = this.router.url;
       this.isLandingOrSplashPage = currentUrl === '/landing' || currentUrl === '/splash';

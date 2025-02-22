@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, NavigationEnd } from '@angular/router';
 import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
@@ -21,12 +21,17 @@ export class NavBarComponent implements OnInit {
     { label: 'Entrenadores', route: '/entrenadores' }
   ];
 
-  constructor(private router: Router, private authService: AuthService) {
-    this.currentPage = this.router.url;
-  }
+  constructor(private router: Router, private authService: AuthService) {}
 
   ngOnInit() {
     this.loadUserRoles();
+
+    // 📌 Escuchar cambios en la URL para actualizar `currentPage`
+    this.router.events.subscribe(event => {
+      if (event instanceof NavigationEnd) {
+        this.currentPage = event.urlAfterRedirects;
+      }
+    });
   }
 
   loadUserRoles() {
@@ -50,7 +55,7 @@ export class NavBarComponent implements OnInit {
     if (route) {
       this.router.navigate([route]).then(() => {
         this.currentPage = route;
-        this.isMenuOpen = false; // Cierra el menú tras la navegación en móviles
+        this.isMenuOpen = false;
       });
     }
   }
