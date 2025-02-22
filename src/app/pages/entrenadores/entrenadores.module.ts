@@ -7,6 +7,7 @@ import { IonicModule } from '@ionic/angular';
 import { EntrenadoresPageRoutingModule } from './entrenadores-routing.module';
 
 import { EntrenadoresPage } from './entrenadores.page';
+import { EditTrainerComponent } from 'src/app/components/edit-trainer/edit-trainer.component';
 
 @NgModule({
   imports: [
@@ -15,6 +16,6 @@ import { EntrenadoresPage } from './entrenadores.page';
     IonicModule,
     EntrenadoresPageRoutingModule
   ],
-  declarations: [EntrenadoresPage]
+  declarations: [EntrenadoresPage, EditTrainerComponent]
 })
 export class EntrenadoresPageModule {}

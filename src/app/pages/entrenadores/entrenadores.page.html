@@ -33,3 +33,7 @@
   </div>
 </div>
 
+<app-edit-trainer *ngIf="mostrarModal"
+  [entrenadorId]="entrenadorSeleccionado"
+  (closeModal)="cerrarModal()">
+</app-edit-trainer>

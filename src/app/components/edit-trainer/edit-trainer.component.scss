@@ -1,0 +1,19 @@
+.fixed {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .bg-opacity-50 {
+    background-color: rgba(0, 0, 0, 0.5);
+  }
+  
+  .relative {
+    max-width: 400px;
+    width: 100%;
+  }
+  
+  button {
+    transition: all 0.3s ease-in-out;
+  }
+  
