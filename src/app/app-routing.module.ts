@@ -25,7 +25,11 @@ const routes: Routes = [
     path: 'jugadores',
     loadChildren: () => import('./pages/jugadores/jugadores.module').then( m => m.JugadoresPageModule),
     canActivate: [AuthGuard]
+  },  {
+    path: 'entrenadores',
+    loadChildren: () => import('./pages/entrenadores/entrenadores.module').then( m => m.EntrenadoresPageModule)
   },
+
 
 
 ];

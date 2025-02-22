@@ -1,0 +1,35 @@
+<div class="page-container">
+  <div class="scroll-container">
+    <div class="entrenadores-container">
+      <div *ngFor="let entrenador of entrenadores" 
+        class="relative bg-white shadow-lg rounded-xl p-5 transition-transform duration-300 transform hover:scale-105 hover:shadow-2xl card-effect"
+        (mousemove)="handleMouseMove($event, entrenador.id)" 
+        (mouseleave)="resetTransform(entrenador.id)"
+        [attr.data-id]="entrenador.id">
+
+        <!-- Imagen de perfil -->
+        <div class="flex justify-center">
+          <img [src]="entrenador.userImage || 'assets/default-avatar.png'" 
+               alt="Entrenador" 
+               class="w-20 h-20 md:w-24 md:h-24 rounded-full object-cover shadow-md border-2 border-gray-300">
+        </div>
+
+        <!-- Datos del Entrenador -->
+        <p class="text-center text-gray-700 mt-3 text-sm md:text-base font-medium">{{ entrenador.userEmail || 'Correo no disponible' }}</p>
+
+        <!-- Botones si el usuario que se ha logueado es el gestor -->
+        <div *ngIf="userRole === 'Gestor'" class="flex justify-between mt-3 md:mt-2 space-x-2">
+          <button class="bg-blue-500 text-white px-3 py-1 md:px-4 md:py-2 rounded-lg hover:bg-blue-700 transition flex items-center gap-1 md:gap-2 text-sm"
+            (click)="abrirModal(entrenador.id)">
+            <ion-icon name="create-outline"></ion-icon> Editar
+          </button>
+          <button class="bg-red-500 text-white px-3 py-1 md:px-4 md:py-2 rounded-lg hover:bg-red-700 transition flex items-center gap-1 md:gap-2 text-sm"
+            (click)="deleteEntrenador(entrenador.id)">
+            <ion-icon name="trash-outline"></ion-icon> Eliminar
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
