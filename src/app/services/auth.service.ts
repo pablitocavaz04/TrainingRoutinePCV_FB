@@ -16,6 +16,8 @@ export class AuthService {
   showRoleModal = false;
   availableRoles: string[] = [];
   roleSelectionCallback!: (role: string) => void;
+  pendingGestorUserId: string | null = null;
+  showGestorRequestModal = false;
 
   constructor(private router: Router) {
     this.loadSelectedRole();
@@ -37,7 +39,19 @@ export class AuthService {
   async login(email: string, password: string): Promise<void> {
     const userCredential = await signInWithEmailAndPassword(this.auth, email.trim(), password);
     const user = userCredential.user;
+    
     await this.setUserRole(user);
+    await this.checkGestorRequest(user.uid);
+  }
+
+  async checkGestorRequest(userId: string) {
+    const userDocRef = doc(this.db, "personas", userId);
+    const userDocSnap = await getDoc(userDocRef);
+
+    if (userDocSnap.exists() && userDocSnap.data()['pendingGestorRequest']) {
+      this.showGestorRequestModal = true;
+      this.pendingGestorUserId = userId;
+    }
   }
 
   async setUserRole(user: User): Promise<void> {

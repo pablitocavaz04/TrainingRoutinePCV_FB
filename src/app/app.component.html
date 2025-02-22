@@ -1,5 +1,12 @@
 <ng-container *ngIf="!isLandingOrSplashPage">
-    <app-nav-bar></app-nav-bar>
-  </ng-container>
-  <router-outlet></router-outlet>
-  
+  <app-nav-bar></app-nav-bar>
+</ng-container>
+
+<router-outlet></router-outlet>
+
+<app-accept-gestor-modal 
+  *ngIf="authService.showGestorRequestModal && authService.pendingGestorUserId"
+  [entrenadorId]="authService.pendingGestorUserId || ''"
+  (closeModal)="authService.showGestorRequestModal = false">
+</app-accept-gestor-modal>
+

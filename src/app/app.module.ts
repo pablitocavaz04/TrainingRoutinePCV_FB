@@ -17,13 +17,15 @@ import player from 'lottie-web';
 import { NavBarComponent } from './components/nav-bar/nav-bar.component';
 import { ProfileModalComponent } from './components/profile-modal/profile-modal.component';
 import { ChangeProfileComponent } from './components/change-profile/change-profile.component';
+import { AcceptGestorModalComponent } from './components/accept-gestor-modal/accept-gestor-modal.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     NavBarComponent,
     ProfileModalComponent,
-    ChangeProfileComponent
+    ChangeProfileComponent,
+    AcceptGestorModalComponent
   ],
   imports: [
     BrowserModule, 
