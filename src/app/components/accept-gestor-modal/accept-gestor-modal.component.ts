@@ -8,13 +8,14 @@ import { getFirestore, doc, updateDoc } from 'firebase/firestore';
   standalone: false
 })
 export class AcceptGestorModalComponent {
-  @Input() entrenadorId: string = ''; // Recibe el ID del entrenador
+  @Input() entrenadorId: string = ''; 
   @Output() closeModal = new EventEmitter<void>();
 
   cerrarModal() {
     this.closeModal.emit();
   }
 
+  //Si el entrandor acepta la solicitud
   async aceptarSolicitud() {
     if (!this.entrenadorId) return;
 
@@ -22,13 +23,11 @@ export class AcceptGestorModalComponent {
       const db = getFirestore();
       const entrenadorRef = doc(db, 'personas', this.entrenadorId);
 
-      // ✅ Convertimos al usuario en Gestor y eliminamos la solicitud pendiente
       await updateDoc(entrenadorRef, {
         roles: ['Gestor'],
         pendingGestorRequest: false
       });
 
-      console.log(`✅ El usuario ${this.entrenadorId} ahora es Gestor.`);
     } catch (error) {
       console.error('Error al aceptar la solicitud:', error);
     }
@@ -36,6 +35,8 @@ export class AcceptGestorModalComponent {
     this.cerrarModal();
   }
 
+
+  //Si el ennrreandor rechaza la solicutd
   async rechazarSolicitud() {
     if (!this.entrenadorId) return;
 
@@ -43,10 +44,8 @@ export class AcceptGestorModalComponent {
       const db = getFirestore();
       const entrenadorRef = doc(db, 'personas', this.entrenadorId);
 
-      // ❌ Eliminamos la solicitud pendiente sin cambiar el rol
       await updateDoc(entrenadorRef, { pendingGestorRequest: false });
 
-      console.log(`❌ El usuario ${this.entrenadorId} ha rechazado ser Gestor.`);
     } catch (error) {
       console.error('Error al rechazar la solicitud:', error);
     }

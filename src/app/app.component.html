@@ -4,6 +4,7 @@
 
 <router-outlet></router-outlet>
 
+<!-- Si el usuario Entrenador tiene la notificacion para ser gestor aquí aparecera -->
 <app-accept-gestor-modal 
   *ngIf="authService.showGestorRequestModal && authService.pendingGestorUserId"
   [entrenadorId]="authService.pendingGestorUserId || ''"

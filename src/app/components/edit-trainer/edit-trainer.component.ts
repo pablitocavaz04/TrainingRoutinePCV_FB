@@ -1,5 +1,6 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { getFirestore, doc, updateDoc, getDoc } from 'firebase/firestore';
+import { AlertController } from '@ionic/angular';
 
 @Component({
   selector: 'app-edit-trainer',
@@ -8,8 +9,10 @@ import { getFirestore, doc, updateDoc, getDoc } from 'firebase/firestore';
   standalone: false
 })
 export class EditTrainerComponent {
-  @Input() entrenadorId: string = ''; // Recibe el ID del entrenador a editar
+  @Input() entrenadorId: string = '';
   @Output() closeModal = new EventEmitter<void>();
+
+  constructor(private alertController: AlertController) {}
 
   cerrarModal() {
     this.closeModal.emit();
@@ -24,7 +27,6 @@ export class EditTrainerComponent {
 
       await updateDoc(entrenadorRef, { roles: ['Jugador'] });
 
-      console.log(`✅ El usuario ${this.entrenadorId} ahora es solo Jugador.`);
     } catch (error) {
       console.error('Error al actualizar el rol:', error);
     }
@@ -46,13 +48,32 @@ export class EditTrainerComponent {
       if (!roles.includes('Jugador')) {
         roles.push('Jugador');
         await updateDoc(entrenadorRef, { roles });
-        console.log(`✅ Jugador añadido al usuario ${this.entrenadorId}.`);
       }
     } catch (error) {
       console.error('Error al añadir Jugador:', error);
     }
 
     this.cerrarModal();
+  }
+
+  async confirmarProponerGestor() {
+    const alert = await this.alertController.create({
+      header: 'Confirmación',
+      message: '¿Estás seguro de que quieres proponer a este Entrenador como Gestor?',
+      buttons: [
+        {
+          text: 'Cancelar',
+          role: 'cancel',
+          handler: () => console.log('Solicitud cancelada')
+        },
+        {
+          text: 'Sí, confirmar',
+          handler: () => this.proponerGestor()
+        }
+      ]
+    });
+
+    await alert.present();
   }
 
   async proponerGestor() {
@@ -64,7 +85,6 @@ export class EditTrainerComponent {
 
       await updateDoc(entrenadorRef, { pendingGestorRequest: true });
 
-      console.log(`✅ Solicitud de Gestor enviada para ${this.entrenadorId}.`);
     } catch (error) {
       console.error('Error al proponer Gestor:', error);
     }

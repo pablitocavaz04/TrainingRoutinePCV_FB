@@ -41,9 +41,10 @@ export class AuthService {
     const user = userCredential.user;
     
     await this.setUserRole(user);
-    await this.checkGestorRequest(user.uid);
+    await this.checkGestorRequest(user.uid);//Hemos añadido esta funcion para comprobar si el usuario logueado tiene que ver esta nfofitcacion
   }
 
+  //Confirmamos que debe ver y mostramos la notu
   async checkGestorRequest(userId: string) {
     const userDocRef = doc(this.db, "personas", userId);
     const userDocSnap = await getDoc(userDocRef);
@@ -67,7 +68,7 @@ export class AuthService {
 
     if (roles.includes('Jugador') && roles.includes('Entrenador')) {
       this.availableRoles = roles;
-      this.showRoleModal = true; // 🔹 Activamos el modal para seleccionar el rol
+      this.showRoleModal = true;
       return new Promise((resolve) => {
         this.roleSelectionCallback = (selectedRole) => {
           this.setSelectedRole(selectedRole);
