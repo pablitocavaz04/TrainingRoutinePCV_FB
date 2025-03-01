@@ -27,8 +27,8 @@
 
     <ion-item>
       <ion-label>Fecha de Caducidad</ion-label>
-      <ion-datetime formControlName="fechaCaducidad" display-format="DD/MM/YYYY"></ion-datetime>
-    </ion-item>
+      <ion-datetime formControlName="fechaCaducidad" presentation="date" display-format="DD/MM/YYYY"></ion-datetime>
+    </ion-item>    
 
     <ion-item>
       <ion-label position="floating">Capacidad Máxima</ion-label>
@@ -36,8 +36,17 @@
     </ion-item>
 
     <ion-item>
-      <ion-label>Imagen</ion-label>
-      <input type="file" (change)="onFileSelected($event)" />
+      <div
+        class="border-2 border-dashed border-gray-400 rounded-lg p-6 text-center cursor-pointer"
+        (dragover)="onDragOver($event)"
+        (drop)="onFileDropped($event)"
+      >
+        <p *ngIf="!imagenVistaPrevia">Arrastra una imagen aquí o</p>
+        <p *ngIf="!imagenVistaPrevia">
+          <input type="file" (change)="onFileSelected($event)" />
+        </p>
+        <img *ngIf="imagenVistaPrevia" [src]="imagenVistaPrevia" class="w-40 h-40 object-cover mx-auto rounded-lg" />
+    </div>
     </ion-item>
 
     <ion-button expand="full" [disabled]="entrenamientoForm.invalid" (click)="guardarEntrenamiento()">
