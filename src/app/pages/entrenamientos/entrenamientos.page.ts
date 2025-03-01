@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ModalController } from '@ionic/angular';
+import { AlertController, ModalController } from '@ionic/angular';
 import { EntrenamientoModalComponent } from 'src/app/components/entrenamiento-modal/entrenamiento-modal.component';
 import { EntrenamientosService } from 'src/app/services/entrenamientos.service';
 
@@ -14,7 +14,8 @@ export class EntrenamientosPage implements OnInit {
 
   constructor(
     private modalController: ModalController,
-    private entrenamientosService: EntrenamientosService
+    private entrenamientosService: EntrenamientosService,
+    private alertController : AlertController
   ) {}
 
   ngOnInit() {
@@ -34,8 +35,30 @@ export class EntrenamientosPage implements OnInit {
     console.log("Editar entrenamiento:", entrenamiento);
   }
   
-  eliminarEntrenamiento(entrenamientoId: string) {
-    console.log("Eliminar entrenamiento con ID:", entrenamientoId);
+  async eliminarEntrenamiento(entrenamientoId: string) {
+    const alert = await this.alertController.create({
+      header: 'Confirmar Eliminación',
+      message: '¿Estás seguro de que deseas eliminar este entrenamiento?',
+      buttons: [
+        {
+          text: 'Cancelar',
+          role: 'cancel',
+        },
+        {
+          text: 'Eliminar',
+          handler: async () => {
+            try {
+              await this.entrenamientosService.eliminarEntrenamiento(entrenamientoId);
+              console.log("Entrenamiento eliminado correctamente");
+            } catch (error) {
+              console.error("Error al eliminar el entrenamiento:", error);
+            }
+          }
+        }
+      ]
+    });
+  
+    await alert.present();
   }
   
 }

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage';
-import { getFirestore, collection, addDoc, query, onSnapshot } from 'firebase/firestore';
+import { getFirestore, collection, addDoc, query, onSnapshot, doc, deleteDoc } from 'firebase/firestore';
 
 @Injectable({
   providedIn: 'root'
@@ -44,5 +44,10 @@ export class EntrenamientosService {
       }));
       callback(entrenamientos);
     });
+  }
+
+  async eliminarEntrenamiento(entrenamientoId: string) {
+    const entrenamientoRef = doc(this.db, 'entrenamientos', entrenamientoId);
+    await deleteDoc(entrenamientoRef);
   }
 }
