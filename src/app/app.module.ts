@@ -18,6 +18,8 @@ import { NavBarComponent } from './components/nav-bar/nav-bar.component';
 import { ProfileModalComponent } from './components/profile-modal/profile-modal.component';
 import { ChangeProfileComponent } from './components/change-profile/change-profile.component';
 import { AcceptGestorModalComponent } from './components/accept-gestor-modal/accept-gestor-modal.component';
+import { EntrenamientoModalComponent } from './components/entrenamiento-modal/entrenamiento-modal.component';
+import { ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -25,9 +27,11 @@ import { AcceptGestorModalComponent } from './components/accept-gestor-modal/acc
     NavBarComponent,
     ProfileModalComponent,
     ChangeProfileComponent,
-    AcceptGestorModalComponent
+    AcceptGestorModalComponent,
+    EntrenamientoModalComponent
   ],
   imports: [
+    ReactiveFormsModule,
     BrowserModule, 
     IonicModule.forRoot(), 
     AppRoutingModule],

@@ -1,0 +1,47 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Crear Entrenamiento</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="closeModal()">✖</ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <form [formGroup]="entrenamientoForm">
+    <ion-item>
+      <ion-label position="floating">Nombre del Entrenamiento</ion-label>
+      <ion-input formControlName="nombre"></ion-input>
+    </ion-item>
+    <p *ngIf="entrenamientoForm.get('nombre')?.invalid && entrenamientoForm.get('nombre')?.touched" class="text-red-500">
+      El nombre es obligatorio y debe tener al menos 3 caracteres.
+    </p>
+
+    <ion-item>
+      <ion-label position="floating">Descripción</ion-label>
+      <ion-textarea formControlName="descripcion"></ion-textarea>
+    </ion-item>
+    <p *ngIf="entrenamientoForm.get('descripcion')?.invalid && entrenamientoForm.get('descripcion')?.touched" class="text-red-500">
+      La descripción debe tener al menos 10 caracteres.
+    </p>
+
+    <ion-item>
+      <ion-label>Fecha de Caducidad</ion-label>
+      <ion-datetime formControlName="fechaCaducidad" display-format="DD/MM/YYYY"></ion-datetime>
+    </ion-item>
+
+    <ion-item>
+      <ion-label position="floating">Capacidad Máxima</ion-label>
+      <ion-input type="number" formControlName="capacidadMaxima"></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label>Imagen</ion-label>
+      <input type="file" (change)="onFileSelected($event)" />
+    </ion-item>
+
+    <ion-button expand="full" [disabled]="entrenamientoForm.invalid" (click)="guardarEntrenamiento()">
+      Guardar Entrenamiento
+    </ion-button>
+  </form>
+</ion-content>
