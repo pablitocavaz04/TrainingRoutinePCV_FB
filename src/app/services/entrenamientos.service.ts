@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage';
-import { getFirestore, collection, addDoc } from 'firebase/firestore';
+import { getFirestore, collection, addDoc, query, onSnapshot } from 'firebase/firestore';
 
 @Injectable({
   providedIn: 'root'
@@ -32,5 +32,17 @@ export class EntrenamientosService {
     };
 
     return addDoc(this.entrenamientosCollection, nuevoEntrenamiento);
+  }
+
+  getEntrenamientos(callback: (entrenamientos: any[]) => void) {
+    const q = query(this.entrenamientosCollection);
+    
+    onSnapshot(q, (snapshot) => {
+      const entrenamientos = snapshot.docs.map(doc => ({
+        id: doc.id,
+        ...doc.data()
+      }));
+      callback(entrenamientos);
+    });
   }
 }
