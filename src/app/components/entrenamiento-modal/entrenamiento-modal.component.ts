@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
 import { ModalController } from '@ionic/angular';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { EntrenamientosService } from 'src/app/services/entrenamientos.service';
@@ -15,6 +15,7 @@ export class EntrenamientoModalComponent implements OnInit {
   imagenSeleccionada: File | null = null;
   imagenVistaPrevia: string | null = null;
   modoEdicion: boolean = false;
+  @ViewChild('fechaPicker', { static: false }) fechaPicker!: ElementRef;
 
   constructor(
     private modalController: ModalController,
@@ -63,6 +64,18 @@ export class EntrenamientoModalComponent implements OnInit {
     }
   }
   
+  abrirCalendario() {
+    if (this.fechaPicker) {
+      this.fechaPicker.nativeElement.classList.remove('hidden');
+      this.fechaPicker.nativeElement.click(); // Simula el click para abrir el selector
+    }
+  }
+  
+  cerrarCalendario() {
+    if (this.fechaPicker) {
+      this.fechaPicker.nativeElement.classList.add('hidden');
+    }
+  }
 
   // 🎯 Función para manejar el arrastre del archivo
   onFileDropped(event: DragEvent) {

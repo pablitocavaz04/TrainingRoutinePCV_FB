@@ -1,53 +1,46 @@
-<ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title>entrenamientos</ion-title>
-  </ion-toolbar>
-</ion-header>
+<div class="page-container">
+  <div class="scroll-container">
+    <div class="entrenamientos-container">
+      
+      <!-- Mensaje si no hay entrenamientos -->
+      <div *ngIf="entrenamientos.length === 0" class="text-center mt-10 text-gray-500">
+        <p>No hay entrenamientos disponibles.</p>
+      </div>
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">entrenamientos</ion-title>
-    </ion-toolbar>
-  </ion-header>
+      <!-- Grid de entrenamientos con imágenes más pequeñas en móvil -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+        <div *ngFor="let entrenamiento of entrenamientos" 
+          class="relative bg-white shadow-lg rounded-xl p-6 transition-transform duration-300 transform hover:scale-105 hover:shadow-2xl card-effect"
+          (mousemove)="handleMouseMove($event, entrenamiento.id)" 
+          (mouseleave)="resetTransform(entrenamiento.id)"
+          [attr.data-id]="entrenamiento.id">
 
-  <!-- Mensaje si no hay entrenamientos -->
-  <div *ngIf="entrenamientos.length === 0" class="text-center mt-10">
-    <p>No hay entrenamientos disponibles.</p>
-  </div>
+          <!-- Imagen del entrenamiento (Diferente tamaño en móvil/escritorio) -->
+          <div class="flex justify-center">
+            <img [src]="entrenamiento.imagen || 'assets/placeholder.png'" 
+                 alt="Entrenamiento" 
+                 class="w-full h-40 md:h-52 object-cover rounded-lg shadow-md border-2 border-gray-300">
+          </div>
 
-  <!-- Grid de entrenamientos -->
-  <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 p-4">
-    <div *ngFor="let entrenamiento of entrenamientos" class="bg-white shadow-md rounded-lg overflow-hidden">
-      <img [src]="entrenamiento.imagen || 'assets/placeholder.png'" class="w-full h-40 object-cover" />
-      <div class="p-4">
-        <h3 class="font-bold text-lg">{{ entrenamiento.nombre }}</h3>
-        <p class="text-gray-600">{{ entrenamiento.descripcion }}</p>
-        <p class="text-sm text-gray-500">Capacidad: {{ entrenamiento.capacidadMaxima }}</p>
-        <p class="text-sm text-gray-500">Fecha Límite: {{ entrenamiento.fechaCaducidad }}</p>
-    
-        <!-- Botones de acciones (solo visibles si el usuario es Gestor) -->
-        <div class="flex justify-end mt-2 space-x-2" *ngIf="userRole === 'Gestor'">
-          <!-- Botón de Editar -->
-          <button class="bg-yellow-500 text-white px-3 py-1 rounded-md" (click)="editarEntrenamiento(entrenamiento)">
-            ✏️ Editar
-          </button>
-    
-          <!-- Botón de Eliminar -->
-          <button class="bg-red-500 text-white px-3 py-1 rounded-md" (click)="eliminarEntrenamiento(entrenamiento.id)">
-            🗑️ Eliminar
-          </button>
+          <!-- Datos del Entrenamiento -->
+          <h3 class="text-center text-gray-800 mt-4 text-lg md:text-xl font-bold">{{ entrenamiento.nombre }}</h3>
+          <p class="text-center text-gray-600 text-sm md:text-base mt-2">{{ entrenamiento.descripcion }}</p>
+          <p class="text-xs md:text-sm text-gray-500 mt-1 text-center">Capacidad: <span class="font-semibold">{{ entrenamiento.capacidadMaxima }}</span></p>
+          <p class="text-xs md:text-sm text-gray-500 mt-1 text-center">Fecha Límite: <span class="font-semibold">{{ entrenamiento.fechaCaducidad }}</span></p>
+
+          <!-- Botones centrados con espacio entre ellos -->
+          <div *ngIf="userRole === 'Gestor'" class="flex justify-between mt-4 space-x-4">
+            <button class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition flex items-center gap-2 text-sm md:text-base"
+              (click)="editarEntrenamiento(entrenamiento)">
+              <ion-icon name="create-outline"></ion-icon> Editar
+            </button>
+            <button class="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-700 transition flex items-center gap-2 text-sm md:text-base"
+              (click)="eliminarEntrenamiento(entrenamiento.id)">
+              <ion-icon name="trash-outline"></ion-icon> Eliminar
+            </button>
+          </div>
         </div>
       </div>
     </div>
   </div>
-</ion-content>
-
-<!-- Botón para agregar entrenamiento (solo visible si el usuario es Gestor) -->
-<button
-  *ngIf="userRole === 'Gestor'"
-  class="fixed bottom-5 right-5 bg-blue-500 text-white p-4 rounded-full shadow-lg"
-  (click)="openCreateTrainingModal()"
->
-  ➕
-</button>
+</div>

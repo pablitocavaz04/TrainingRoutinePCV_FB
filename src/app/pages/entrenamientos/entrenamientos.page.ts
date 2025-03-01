@@ -67,4 +67,28 @@ export class EntrenamientosPage implements OnInit {
 
     await alert.present();
   }
+
+  handleMouseMove(event: MouseEvent, cardId: string) {
+    const card = document.querySelector(`[data-id="${cardId}"]`) as HTMLElement;
+    if (!card) return;
+  
+    const rect = card.getBoundingClientRect();
+    const x = event.clientX - rect.left - rect.width / 2;
+    const y = event.clientY - rect.top - rect.height / 2;
+  
+    const rotateX = (y / rect.height) * -22; 
+    const rotateY = (x / rect.width) * 22;  
+  
+    card.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.08)`;
+    card.style.transition = 'transform 0.2s ease-out'; 
+  }
+  
+  resetTransform(cardId: string) {
+    const card = document.querySelector(`[data-id="${cardId}"]`) as HTMLElement;
+    if (card) {
+      card.style.transform = `rotateX(0) rotateY(0) scale(1)`;
+      card.style.transition = 'transform 0.3s ease-in-out'; 
+    }
+  }
+  
 }

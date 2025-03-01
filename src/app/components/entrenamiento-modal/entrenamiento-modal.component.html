@@ -1,55 +1,51 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>{{ modoEdicion ? 'Editar Entrenamiento' : 'Crear Entrenamiento' }}</ion-title>
+    <ion-title class="text-lg font-semibold text-center">{{ modoEdicion ? 'Editar Entrenamiento' : 'Crear Entrenamiento' }}</ion-title>
     <ion-buttons slot="end">
-      <ion-button (click)="closeModal()">✖</ion-button>
+      <ion-button class="text-gray-500 hover:text-red-500 transition" (click)="closeModal()">
+        <ion-icon name="close-outline"></ion-icon>
+      </ion-button>
     </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
-<ion-content>
-  <form [formGroup]="entrenamientoForm">
-    <ion-item>
+<ion-content class="p-6 bg-gray-50 rounded-lg shadow-xl mx-auto max-w-lg"> <!-- Hacer el modal más moderno y centrado -->
+  <form [formGroup]="entrenamientoForm" class="space-y-6">
+    
+    <ion-item class="shadow-sm rounded-lg bg-white">
       <ion-label position="floating">Nombre del Entrenamiento</ion-label>
       <ion-input formControlName="nombre"></ion-input>
     </ion-item>
-    <p *ngIf="entrenamientoForm.get('nombre')?.invalid && entrenamientoForm.get('nombre')?.touched" class="text-red-500">
-      El nombre es obligatorio y debe tener al menos 3 caracteres.
-    </p>
+    <p *ngIf="entrenamientoForm.get('nombre')?.invalid && entrenamientoForm.get('nombre')?.touched" class="text-red-500 text-sm">El nombre es obligatorio y debe tener al menos 3 caracteres.</p>
 
-    <ion-item>
+    <ion-item class="shadow-sm rounded-lg bg-white">
       <ion-label position="floating">Descripción</ion-label>
       <ion-textarea formControlName="descripcion"></ion-textarea>
     </ion-item>
-    <p *ngIf="entrenamientoForm.get('descripcion')?.invalid && entrenamientoForm.get('descripcion')?.touched" class="text-red-500">
-      La descripción debe tener al menos 10 caracteres.
-    </p>
 
-    <ion-item>
+    <!-- 📌 Fecha (Ion-datetime oculto por defecto y se puede cerrar) -->
+    <ion-item class="shadow-sm rounded-lg bg-white" (click)="abrirCalendario()">
       <ion-label>Fecha de Caducidad</ion-label>
-      <ion-datetime formControlName="fechaCaducidad" presentation="date" display-format="DD/MM/YYYY"></ion-datetime>
-    </ion-item>    
+      <p class="ml-2 text-gray-700">{{ entrenamientoForm.value.fechaCaducidad || 'Seleccionar fecha' }}</p>
+    </ion-item>
+    <ion-datetime #fechaPicker formControlName="fechaCaducidad" presentation="date" display-format="DD/MM/YYYY" class="hidden"></ion-datetime>
+    <button type="button" class="text-blue-500 text-sm mt-1 hover:underline" (click)="cerrarCalendario()">Cerrar fecha</button>
 
-    <ion-item>
+    <ion-item class="shadow-sm rounded-lg bg-white">
       <ion-label position="floating">Capacidad Máxima</ion-label>
       <ion-input type="number" formControlName="capacidadMaxima"></ion-input>
     </ion-item>
 
-    <ion-item>
-      <div
-        class="border-2 border-dashed border-gray-400 rounded-lg p-6 text-center cursor-pointer"
-        (dragover)="onDragOver($event)"
-        (drop)="onFileDropped($event)"
-      >
-        <p *ngIf="!imagenVistaPrevia">Arrastra una imagen aquí o</p>
-        <p *ngIf="!imagenVistaPrevia">
-          <input type="file" (change)="onFileSelected($event)" />
-        </p>
-        <img *ngIf="imagenVistaPrevia" [src]="imagenVistaPrevia" class="w-40 h-40 object-cover mx-auto rounded-lg" />
+    <!-- 📌 Drag and Drop con mejor ajuste y margen interno -->
+    <div class="border-2 border-dashed border-gray-400 rounded-lg p-4 text-center cursor-pointer hover:bg-gray-100 transition mx-auto max-w-sm" (dragover)="onDragOver($event)" (drop)="onFileDropped($event)">
+      <p *ngIf="!imagenVistaPrevia" class="text-gray-500">Arrastra una imagen aquí o selecciona una</p>
+      <input *ngIf="!imagenVistaPrevia" type="file" class="hidden" (change)="onFileSelected($event)" />
+      <img *ngIf="imagenVistaPrevia" [src]="imagenVistaPrevia" class="w-32 h-32 object-cover mx-auto rounded-lg mt-2" />
     </div>
-    </ion-item>
-
-    <ion-button expand="full" [disabled]="entrenamientoForm.invalid" (click)="guardarEntrenamiento()">
+    
+    <!-- 📌 Botón Guardar -->
+    <ion-button expand="full" class="bg-green-500 text-white rounded-lg shadow-md hover:bg-green-600 transition" [disabled]="entrenamientoForm.invalid" (click)="guardarEntrenamiento()">
+      <ion-icon [name]="modoEdicion ? 'save-outline' : 'add-circle-outline'"></ion-icon>
       {{ modoEdicion ? 'Actualizar Entrenamiento' : 'Crear Entrenamiento' }}
     </ion-button>
   </form>
