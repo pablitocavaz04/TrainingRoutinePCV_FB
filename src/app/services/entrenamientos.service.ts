@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage';
-import { getFirestore, collection, addDoc, query, onSnapshot, doc, deleteDoc } from 'firebase/firestore';
+import { getFirestore, collection, addDoc, query, onSnapshot, doc, deleteDoc, updateDoc, getDoc } from 'firebase/firestore';
 
 @Injectable({
   providedIn: 'root'
@@ -49,5 +49,22 @@ export class EntrenamientosService {
   async eliminarEntrenamiento(entrenamientoId: string) {
     const entrenamientoRef = doc(this.db, 'entrenamientos', entrenamientoId);
     await deleteDoc(entrenamientoRef);
+  }
+
+  async actualizarEntrenamiento(entrenamientoId: string, data: any, nuevaImagen: File | null) {
+    const entrenamientoRef = doc(this.db, 'entrenamientos', entrenamientoId);
+  
+    // Obtener los datos actuales del entrenamiento
+    const entrenamientoSnap = await getDoc(entrenamientoRef);
+    const entrenamientoActual = entrenamientoSnap.exists() ? entrenamientoSnap.data() : {};
+  
+    // Si no hay nueva imagen, mantener la imagen anterior
+    if (!nuevaImagen) {
+      data.imagen = entrenamientoActual['imagen'] || ''; 
+    } else {
+      data.imagen = await this.subirImagen(nuevaImagen); // Subir nueva imagen
+    }
+  
+    await updateDoc(entrenamientoRef, data);
   }
 }

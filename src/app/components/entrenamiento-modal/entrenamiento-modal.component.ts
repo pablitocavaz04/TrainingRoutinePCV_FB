@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { ModalController } from '@ionic/angular';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { EntrenamientosService } from 'src/app/services/entrenamientos.service';
@@ -10,9 +10,11 @@ import { EntrenamientosService } from 'src/app/services/entrenamientos.service';
   standalone:false
 })
 export class EntrenamientoModalComponent implements OnInit {
+  @Input() entrenamiento: any | null = null;
   entrenamientoForm!: FormGroup;
   imagenSeleccionada: File | null = null;
   imagenVistaPrevia: string | null = null;
+  modoEdicion: boolean = false;
 
   constructor(
     private modalController: ModalController,
@@ -21,13 +23,19 @@ export class EntrenamientoModalComponent implements OnInit {
   ) {}
 
   ngOnInit() {
+    this.modoEdicion = !!this.entrenamiento;
+
     this.entrenamientoForm = this.fb.group({
-      nombre: ['', [Validators.required, Validators.minLength(3)]],
-      descripcion: ['', [Validators.required, Validators.minLength(10)]],
-      fechaCaducidad: ['', [Validators.required]],
-      capacidadMaxima: [1, [Validators.required, Validators.min(1)]],
-      imagen: [''], // Se actualizará con Drag & Drop
+      nombre: [this.entrenamiento?.nombre || '', [Validators.required, Validators.minLength(3)]],
+      descripcion: [this.entrenamiento?.descripcion || '', [Validators.required, Validators.minLength(10)]],
+      fechaCaducidad: [this.entrenamiento?.fechaCaducidad || '', [Validators.required]],
+      capacidadMaxima: [this.entrenamiento?.capacidadMaxima || 1, [Validators.required, Validators.min(1)]],
+      imagen: [''], 
     });
+
+    if (this.entrenamiento?.imagen) {
+      this.imagenVistaPrevia = this.entrenamiento.imagen;
+    }
   }
 
   closeModal() {
@@ -36,17 +44,26 @@ export class EntrenamientoModalComponent implements OnInit {
 
   async guardarEntrenamiento() {
     if (this.entrenamientoForm.valid) {
-      try {
-        await this.entrenamientoService.crearEntrenamiento(
-          this.entrenamientoForm.value,
+      const entrenamientoData = this.entrenamientoForm.value;
+  
+      if (this.modoEdicion) {
+        await this.entrenamientoService.actualizarEntrenamiento(
+          this.entrenamiento.id,
+          entrenamientoData,
           this.imagenSeleccionada
         );
-        this.modalController.dismiss();
-      } catch (error) {
-        console.error("Error al guardar el entrenamiento:", error);
+      } else {
+        await this.entrenamientoService.crearEntrenamiento(
+          entrenamientoData,
+          this.imagenSeleccionada
+        );
       }
+  
+      this.modalController.dismiss();
     }
   }
+  
+
   // 🎯 Función para manejar el arrastre del archivo
   onFileDropped(event: DragEvent) {
     event.preventDefault();

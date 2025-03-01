@@ -1,6 +1,6 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>Crear Entrenamiento</ion-title>
+    <ion-title>{{ modoEdicion ? 'Editar Entrenamiento' : 'Crear Entrenamiento' }}</ion-title>
     <ion-buttons slot="end">
       <ion-button (click)="closeModal()">✖</ion-button>
     </ion-buttons>
@@ -50,7 +50,7 @@
     </ion-item>
 
     <ion-button expand="full" [disabled]="entrenamientoForm.invalid" (click)="guardarEntrenamiento()">
-      Guardar Entrenamiento
+      {{ modoEdicion ? 'Actualizar Entrenamiento' : 'Crear Entrenamiento' }}
     </ion-button>
   </form>
 </ion-content>

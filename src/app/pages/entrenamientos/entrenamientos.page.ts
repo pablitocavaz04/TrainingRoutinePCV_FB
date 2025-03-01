@@ -31,9 +31,14 @@ export class EntrenamientosPage implements OnInit {
     return await modal.present();
   }
 
-  editarEntrenamiento(entrenamiento: any) {
-    console.log("Editar entrenamiento:", entrenamiento);
+  async editarEntrenamiento(entrenamiento: any) {
+    const modal = await this.modalController.create({
+      component: EntrenamientoModalComponent,
+      componentProps: { entrenamiento } // Pasamos los datos al modal
+    });
+    return await modal.present();
   }
+  
   
   async eliminarEntrenamiento(entrenamientoId: string) {
     const alert = await this.alertController.create({
