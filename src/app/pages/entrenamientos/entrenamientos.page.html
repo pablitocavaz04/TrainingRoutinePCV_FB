@@ -26,8 +26,8 @@
         <p class="text-sm text-gray-500">Capacidad: {{ entrenamiento.capacidadMaxima }}</p>
         <p class="text-sm text-gray-500">Fecha Límite: {{ entrenamiento.fechaCaducidad }}</p>
     
-        <!-- Botones de acciones -->
-        <div class="flex justify-end mt-2 space-x-2">
+        <!-- Botones de acciones (solo visibles si el usuario es Gestor) -->
+        <div class="flex justify-end mt-2 space-x-2" *ngIf="userRole === 'Gestor'">
           <!-- Botón de Editar -->
           <button class="bg-yellow-500 text-white px-3 py-1 rounded-md" (click)="editarEntrenamiento(entrenamiento)">
             ✏️ Editar
@@ -40,12 +40,12 @@
         </div>
       </div>
     </div>
-    
   </div>
 </ion-content>
 
-<!-- Botón para agregar entrenamiento -->
+<!-- Botón para agregar entrenamiento (solo visible si el usuario es Gestor) -->
 <button
+  *ngIf="userRole === 'Gestor'"
   class="fixed bottom-5 right-5 bg-blue-500 text-white p-4 rounded-full shadow-lg"
   (click)="openCreateTrainingModal()"
 >

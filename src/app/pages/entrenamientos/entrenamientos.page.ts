@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { AlertController, ModalController } from '@ionic/angular';
+import { ModalController, AlertController } from '@ionic/angular';
 import { EntrenamientoModalComponent } from 'src/app/components/entrenamiento-modal/entrenamiento-modal.component';
 import { EntrenamientosService } from 'src/app/services/entrenamientos.service';
+import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
   selector: 'app-entrenamientos',
@@ -11,14 +12,19 @@ import { EntrenamientosService } from 'src/app/services/entrenamientos.service';
 })
 export class EntrenamientosPage implements OnInit {
   entrenamientos: any[] = [];
+  userRole: string = '';
 
   constructor(
     private modalController: ModalController,
     private entrenamientosService: EntrenamientosService,
-    private alertController : AlertController
+    private authService: AuthService,
+    private alertController: AlertController
   ) {}
 
-  ngOnInit() {
+  async ngOnInit() {
+    this.userRole = this.authService.getSelectedRole() || '';
+
+    // Cargar los entrenamientos para todos los roles
     this.entrenamientosService.getEntrenamientos((data) => {
       this.entrenamientos = data;
     });
@@ -34,21 +40,17 @@ export class EntrenamientosPage implements OnInit {
   async editarEntrenamiento(entrenamiento: any) {
     const modal = await this.modalController.create({
       component: EntrenamientoModalComponent,
-      componentProps: { entrenamiento } // Pasamos los datos al modal
+      componentProps: { entrenamiento }
     });
     return await modal.present();
   }
-  
-  
+
   async eliminarEntrenamiento(entrenamientoId: string) {
     const alert = await this.alertController.create({
       header: 'Confirmar Eliminación',
       message: '¿Estás seguro de que deseas eliminar este entrenamiento?',
       buttons: [
-        {
-          text: 'Cancelar',
-          role: 'cancel',
-        },
+        { text: 'Cancelar', role: 'cancel' },
         {
           text: 'Eliminar',
           handler: async () => {
@@ -62,8 +64,7 @@ export class EntrenamientosPage implements OnInit {
         }
       ]
     });
-  
+
     await alert.present();
   }
-  
 }
