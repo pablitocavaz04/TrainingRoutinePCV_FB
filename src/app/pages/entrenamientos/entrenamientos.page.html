@@ -2,12 +2,11 @@
   <div class="scroll-container">
     <div class="entrenamientos-container">
       
-      <!-- Mensaje si no hay entrenamientos -->
       <div *ngIf="entrenamientos.length === 0" class="text-center mt-10 text-gray-500">
         <p>No hay entrenamientos disponibles.</p>
       </div>
 
-      <!-- Grid de entrenamientos con imágenes más pequeñas en móvil -->
+      <!-- Grid de entrenamientos -->
       <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
         <div *ngFor="let entrenamiento of entrenamientos" 
           class="relative bg-white shadow-lg rounded-xl p-6 transition-transform duration-300 transform hover:scale-105 hover:shadow-2xl card-effect"
@@ -15,11 +14,11 @@
           (mouseleave)="resetTransform(entrenamiento.id)"
           [attr.data-id]="entrenamiento.id">
 
-          <!-- Imagen del entrenamiento (Diferente tamaño en móvil/escritorio) -->
+          <!-- Imagen del entrenamiento -->
           <div class="flex justify-center">
             <img [src]="entrenamiento.imagen || 'assets/placeholder.png'" 
                  alt="Entrenamiento" 
-                 class="w-full h-40 md:h-52 object-cover rounded-lg shadow-md border-2 border-gray-300">
+                 class="w-full h-52 object-cover rounded-lg shadow-md border-2 border-gray-300">
           </div>
 
           <!-- Datos del Entrenamiento -->
@@ -44,3 +43,10 @@
     </div>
   </div>
 </div>
+
+<button *ngIf="userRole === 'Gestor'" 
+  class="fixed bottom-5 right-5 bg-green-500 text-white p-3 md:p-2 rounded-full shadow-lg hover:bg-green-600 transition flex items-center gap-2 opacity-80 hover:opacity-100"
+  (click)="openCreateTrainingModal()">
+  <ion-icon name="add-outline" class="text-xl md:text-lg"></ion-icon>
+  <span class="hidden sm:inline text-xs md:text-sm font-semibold">Nuevo</span>
+</button>
