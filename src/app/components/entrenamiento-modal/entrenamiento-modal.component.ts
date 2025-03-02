@@ -1,4 +1,4 @@
-import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, Input, OnInit, ViewChild, HostListener } from '@angular/core';
 import { ModalController } from '@ionic/angular';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { EntrenamientosService } from 'src/app/services/entrenamientos.service';
@@ -7,7 +7,7 @@ import { EntrenamientosService } from 'src/app/services/entrenamientos.service';
   selector: 'app-entrenamiento-modal',
   templateUrl: './entrenamiento-modal.component.html',
   styleUrls: ['./entrenamiento-modal.component.scss'],
-  standalone:false
+  standalone: false
 })
 export class EntrenamientoModalComponent implements OnInit {
   @Input() entrenamiento: any | null = null;
@@ -15,6 +15,8 @@ export class EntrenamientoModalComponent implements OnInit {
   imagenSeleccionada: File | null = null;
   imagenVistaPrevia: string | null = null;
   modoEdicion: boolean = false;
+  isDesktop: boolean = window.innerWidth > 1024; // Detecta si es escritorio
+
   @ViewChild('fechaPicker', { static: false }) fechaPicker!: ElementRef;
 
   constructor(
@@ -31,12 +33,14 @@ export class EntrenamientoModalComponent implements OnInit {
       descripcion: [this.entrenamiento?.descripcion || '', [Validators.required, Validators.minLength(10)]],
       fechaCaducidad: [this.entrenamiento?.fechaCaducidad || '', [Validators.required]],
       capacidadMaxima: [this.entrenamiento?.capacidadMaxima || 1, [Validators.required, Validators.min(1)]],
-      imagen: [''], 
+      imagen: [''],
     });
 
     if (this.entrenamiento?.imagen) {
       this.imagenVistaPrevia = this.entrenamiento.imagen;
     }
+
+    this.detectScreenSize(); // Detectar tamaño de pantalla al iniciar
   }
 
   closeModal() {
@@ -46,7 +50,7 @@ export class EntrenamientoModalComponent implements OnInit {
   async guardarEntrenamiento() {
     if (this.entrenamientoForm.valid) {
       const entrenamientoData = this.entrenamientoForm.value;
-  
+
       if (this.modoEdicion) {
         await this.entrenamientoService.actualizarEntrenamiento(
           this.entrenamiento.id,
@@ -59,25 +63,11 @@ export class EntrenamientoModalComponent implements OnInit {
           this.imagenSeleccionada
         );
       }
-  
+
       this.modalController.dismiss();
     }
   }
-  
-  abrirCalendario() {
-    if (this.fechaPicker) {
-      this.fechaPicker.nativeElement.classList.remove('hidden');
-      this.fechaPicker.nativeElement.click(); // Simula el click para abrir el selector
-    }
-  }
-  
-  cerrarCalendario() {
-    if (this.fechaPicker) {
-      this.fechaPicker.nativeElement.classList.add('hidden');
-    }
-  }
 
-  // 🎯 Función para manejar el arrastre del archivo
   onFileDropped(event: DragEvent) {
     event.preventDefault();
     if (event.dataTransfer?.files.length) {
@@ -85,7 +75,6 @@ export class EntrenamientoModalComponent implements OnInit {
     }
   }
 
-  // 🎯 Función para manejar la selección manual del archivo
   onFileSelected(event: any) {
     const file = event.target.files[0];
     if (file) {
@@ -93,12 +82,10 @@ export class EntrenamientoModalComponent implements OnInit {
     }
   }
 
-  // 🎯 Función centralizada para manejar el archivo
   handleFile(file: File) {
     this.imagenSeleccionada = file;
     this.entrenamientoForm.patchValue({ imagen: file });
 
-    // Crear vista previa
     const reader = new FileReader();
     reader.onload = (e: any) => {
       this.imagenVistaPrevia = e.target.result;
@@ -106,8 +93,13 @@ export class EntrenamientoModalComponent implements OnInit {
     reader.readAsDataURL(file);
   }
 
-  // 🎯 Evitar que el navegador abra el archivo al arrastrarlo
   onDragOver(event: DragEvent) {
     event.preventDefault();
+  }
+
+  // Detectar si la pantalla es escritorio o móvil
+  @HostListener('window:resize', ['$event'])
+  detectScreenSize() {
+    this.isDesktop = window.innerWidth > 1024; // Si es mayor a 1024px, es escritorio
   }
 }

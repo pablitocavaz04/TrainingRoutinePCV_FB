@@ -1,0 +1,151 @@
+/* Fondo oscuro */
+.modal-overlay {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+}
+
+/* Contenedor del modal */
+.modal-container {
+  width: 95%;
+  max-width: 400px; /* Móvil */
+  background: white;
+  border-radius: 20px;
+  border: none;
+  transition: all 0.3s ease-in-out;
+  overflow: hidden;
+}
+
+/* Estilo para escritorio (Pantallas grandes) */
+@media (min-width: 1024px) {
+  .modal-container {
+    max-width: 800px; /* Más ancho en escritorio */
+    width: 90%;
+    height: auto;
+  }
+
+  .modal-body {
+    max-height: 600px;
+    padding: 20px 40px; /* Más espacio para mejor distribución */
+  }
+}
+
+/* Header */
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: rgba(0, 0, 0, 0.03);
+  border-bottom: 2px solid #e5e7eb;
+  padding: 15px;
+  border-top-left-radius: 20px;
+  border-top-right-radius: 20px;
+}
+
+/* Botón de cierre */
+.close-btn {
+  font-size: 22px;
+  font-weight: bold;
+  color: #4a4a4a;
+  background: none;
+  border: none;
+  cursor: pointer;
+  transition: color 0.3s ease-in-out;
+}
+
+.close-btn:hover {
+  color: #222;
+}
+
+/* Contenido */
+.modal-body {
+  max-height: 400px;
+  padding: 15px;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: var(--scrollbar-thumb) var(--scrollbar-track);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Inputs */
+.input-field {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #d1d5db;
+  border-radius: 10px;
+  transition: border-color 0.3s ease-in-out;
+}
+
+.input-field:focus {
+  border-color: #4a90e2;
+  outline: none;
+}
+
+/* Imagen */
+.image-upload {
+  border: 2px dashed #4a90e2;
+  border-radius: 12px;
+  padding: 15px;
+  text-align: center;
+  transition: background 0.3s;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+
+.image-upload:hover {
+  background: rgba(0, 0, 0, 0.05);
+}
+
+.preview-image {
+  width: 120px;
+  height: 120px;
+  object-fit: cover;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+/* Botón Guardar */
+.modal-footer {
+  padding: 20px;
+  text-align: center;
+  background: rgba(0, 0, 0, 0.03);
+  border-top: 2px solid #e5e7eb;
+  border-bottom-left-radius: 20px;
+  border-bottom-right-radius: 20px;
+}
+
+.save-button {
+  width: 100%;
+  padding: 14px;
+  font-size: 16px;
+  font-weight: bold;
+  color: white;
+  border-radius: 12px;
+  transition: background 0.3s ease-in-out;
+}
+
+.save-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Responsivo */
+@media (max-width: 768px) {
+  .modal-container {
+    width: 95%;
+  }
+  .preview-image {
+    width: 80px;
+    height: 80px;
+  }
+}
