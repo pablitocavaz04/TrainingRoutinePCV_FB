@@ -15,7 +15,6 @@ export class EntrenamientoModalComponent implements OnInit {
   imagenSeleccionada: File | null = null;
   imagenVistaPrevia: string | null = null;
   modoEdicion: boolean = false;
-  isDesktop: boolean = window.innerWidth > 1024; // Detecta si es escritorio
 
   @ViewChild('fechaPicker', { static: false }) fechaPicker!: ElementRef;
 
@@ -39,8 +38,6 @@ export class EntrenamientoModalComponent implements OnInit {
     if (this.entrenamiento?.imagen) {
       this.imagenVistaPrevia = this.entrenamiento.imagen;
     }
-
-    this.detectScreenSize(); // Detectar tamaño de pantalla al iniciar
   }
 
   closeModal() {
@@ -95,11 +92,5 @@ export class EntrenamientoModalComponent implements OnInit {
 
   onDragOver(event: DragEvent) {
     event.preventDefault();
-  }
-
-  // Detectar si la pantalla es escritorio o móvil
-  @HostListener('window:resize', ['$event'])
-  detectScreenSize() {
-    this.isDesktop = window.innerWidth > 1024; // Si es mayor a 1024px, es escritorio
   }
 }
