@@ -92,15 +92,17 @@ export class HomePage implements OnInit {
 
   async openCreateSesionModal() {
     const modal = await this.modalController.create({
-      component: SesionModalComponent,
+        component: SesionModalComponent,
     });
-  
-    await modal.present();
-    const { data } = await modal.onDidDismiss();
-    if (data?.nuevaSesion) {
-      this.sesiones.push(data.nuevaSesion);
-    }
-  }
+
+    modal.onDidDismiss().then(async (result) => {
+        if (result.data?.nuevaSesion) {
+            this.sesiones.push(result.data.nuevaSesion);
+        }
+    });
+
+    return await modal.present();
+}
   
   voltearCard(sesion: any) {
     sesion.volteada = !sesion.volteada;
@@ -172,13 +174,32 @@ export class HomePage implements OnInit {
   }
   
 
-async editarSesion(sesion: any) {
-  const modal = await this.modalController.create({
-    component: SesionModalComponent,
-    componentProps: { sesion }
-  });
-  return await modal.present();
+  async editarSesion(sesion: any) {
+    const modal = await this.modalController.create({
+        component: SesionModalComponent,
+        componentProps: { sesion, modoEdicion: true }
+    });
+
+    modal.onDidDismiss().then(async (result) => {
+        if (result.data?.sesionActualizada) {
+            // Buscar la sesión en la lista y actualizar sus valores sin recargar la página
+            const index = this.sesiones.findIndex(s => s.id === result.data.sesionActualizada.id);
+            if (index !== -1) {
+                this.sesiones[index] = result.data.sesionActualizada;
+            }
+        }
+    });
+
+    return await modal.present();
 }
+  
+  actualizarSesionLocal(sesionActualizada: any) {
+    const index = this.sesiones.findIndex(s => s.id === sesionActualizada.id);
+    if (index !== -1) {
+      this.sesiones[index] = sesionActualizada;
+    }
+  }
+  
 
 compartirSesion(sesion: any) {
   const url = `${window.location.origin}/sesion/${sesion.id}`;

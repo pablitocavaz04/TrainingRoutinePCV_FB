@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { ModalController } from '@ionic/angular';
+import { ModalController, NavParams } from '@ionic/angular';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { getFirestore, collection, getDocs, addDoc } from 'firebase/firestore';
+import { getFirestore, collection, getDocs, addDoc, doc, updateDoc, query, where } from 'firebase/firestore';
 import { Camera, CameraResultType, CameraSource } from '@capacitor/camera';
 import { getDownloadURL, getStorage, ref, uploadBytes } from 'firebase/storage';
 import { Geolocation } from '@capacitor/geolocation';
@@ -30,24 +30,33 @@ export class SesionModalComponent implements OnInit {
   constructor(
     private modalController: ModalController,
     private fb: FormBuilder,
+    private navParams: NavParams
   ) {}
 
   ngOnInit() {
+    this.modoEdicion = this.navParams.get('modoEdicion') || false; 
+  
+    const sesionData = this.navParams.get('sesion') || {};
+  
     this.sesionForm = this.fb.group({
-      nombre: ['', [Validators.required, Validators.minLength(3)]],
-      fecha: ['', Validators.required], 
-      entrenamientoId: ['', Validators.required], 
-      jugadores: [[], Validators.required],       
-      imagen: [''],
-      coordenadas: [null, Validators.required],
-      estado: ['Activo']
+      nombre: [sesionData.nombre || '', [Validators.required, Validators.minLength(3)]],
+      fecha: [sesionData.fecha || '', Validators.required],
+      entrenamientoId: [sesionData.entrenamientoId || '', Validators.required],
+      jugadores: [sesionData.jugadores || [], Validators.required],
+      imagen: [sesionData.imagen || ''],
+      coordenadas: [sesionData.coordenadas || null, Validators.required],
+      estado: [sesionData.estado || 'Activo']
     });
-
+  
     this.cargarEntrenamientos();
     this.cargarJugadores();
-    this.cargarMapa();
+  
+    if (this.modoEdicion && sesionData.coordenadas) {
+      setTimeout(() => this.cargarMapa(sesionData.coordenadas || null), 500);
+    } else {
+      this.cargarMapa(); 
+    }
   }
-
 onJugadoresSeleccionados() {
   const jugadoresSeleccionados = this.sesionForm.value.jugadores.length;
   const capacidadMaxima = this.getCapacidadMaximaEntrenamiento();
@@ -55,7 +64,7 @@ onJugadoresSeleccionados() {
   if (jugadoresSeleccionados > capacidadMaxima) {
     this.errorCapacidad = `Número de jugadores superado. El límite es ${capacidadMaxima}.`;
   } else {
-    this.errorCapacidad = ''; // Si está dentro del límite, se borra el mensaje
+    this.errorCapacidad = '';
   }
 }
 
@@ -93,59 +102,77 @@ getCapacidadMaximaEntrenamiento(): number {
       }))
       .filter(jugador => jugador.roles.includes('Jugador')); 
   }
-  
   async guardarSesion() {
     if (!this.sesionForm.valid) {
-      return;
+        return;
     }
-  
+
     const sesionData = this.sesionForm.value;
     const entrenamientoSeleccionado = this.entrenamientos.find(e => e.id === sesionData.entrenamientoId);
-  
+
     if (!entrenamientoSeleccionado) {
-      return;
-    }
-  
-    if (sesionData.jugadores.length > entrenamientoSeleccionado.capacidadMaxima) {
-      this.errorCapacidad = `Número de jugadores superado. El límite es ${entrenamientoSeleccionado.capacidadMaxima}.`;
-      return;
-    } else {
-      this.errorCapacidad = ''; 
-    }
-  
-    try {
-      const db = getFirestore();
-      const sesionesRef = collection(db, 'sesiones');
-      const auth = getAuth();
-      const user = auth.currentUser;
-  
-      if (!user) {
         return;
-      }
-  
-      const nuevaSesion = {
-        nombre: sesionData.nombre,
-        fecha: sesionData.fecha,
-        entrenamientoId: sesionData.entrenamientoId,
-        jugadores: sesionData.jugadores,
-        imagen: sesionData.imagen || '',
-        estado: sesionData.estado,
-        coordenadas: sesionData.coordenadas || null,
-        creadorId: user.uid,
-        timestamp: new Date()
-      };
-  
-      const docRef = await addDoc(sesionesRef, nuevaSesion);
-  
-      this.modalController.dismiss({ nuevaSesion: { id: docRef.id, ...nuevaSesion } });
-  
-    } catch (error) {
-      console.error("Error al guardar la sesión:", error);
     }
-  }
-  
-  
-  
+
+    if (sesionData.jugadores.length > entrenamientoSeleccionado.capacidadMaxima) {
+        this.errorCapacidad = `Número de jugadores superado. El límite es ${entrenamientoSeleccionado.capacidadMaxima}.`;
+        return;
+    } else {
+        this.errorCapacidad = ''; 
+    }
+
+    try {
+        const db = getFirestore();
+        const sesionesRef = collection(db, 'sesiones');
+        const auth = getAuth();
+        const user = auth.currentUser;
+
+        if (!user) {
+            return;
+        }
+
+        // Obtener el email del entrenador
+        const entrenadoresRef = collection(db, 'personas');
+        const entrenadoresQuery = query(entrenadoresRef, where('userID', '==', user.uid));
+        const entrenadoresSnapshot = await getDocs(entrenadoresQuery);
+        const entrenadorEmail = !entrenadoresSnapshot.empty ? entrenadoresSnapshot.docs[0].data()['userEmail'] : 'No disponible';
+
+        if (this.modoEdicion) {
+            const sesionRef = doc(db, 'sesiones', this.navParams.get('sesion').id);
+            await updateDoc(sesionRef, sesionData);
+            this.modalController.dismiss({ 
+                sesionActualizada: { 
+                    id: this.navParams.get('sesion').id, 
+                    ...sesionData,
+                    entrenamientoNombre: entrenamientoSeleccionado.nombre, // Agregar el nombre del entrenamiento
+                    entrenadorEmail: entrenadorEmail // Agregar el email del entrenador
+                } 
+            });
+
+        } else {
+            const nuevaSesion = {
+                nombre: sesionData.nombre,
+                fecha: sesionData.fecha,
+                entrenamientoId: sesionData.entrenamientoId,
+                jugadores: sesionData.jugadores,
+                imagen: sesionData.imagen || '',
+                estado: sesionData.estado,
+                coordenadas: sesionData.coordenadas || null,
+                creadorId: user.uid,
+                timestamp: new Date(),
+                entrenamientoNombre: entrenamientoSeleccionado.nombre, // Agregar el nombre del entrenamiento
+                entrenadorEmail: entrenadorEmail // Agregar el email del entrenador
+            };
+
+            const docRef = await addDoc(sesionesRef, nuevaSesion);
+            this.modalController.dismiss({ nuevaSesion: { id: docRef.id, ...nuevaSesion } });
+        }
+
+    } catch (error) {
+        console.error("Error al guardar la sesión:", error);
+    }
+}
+
   // Selección de imagen
   async seleccionarImagen(origen: 'galeria' | 'camara') {
     try {
@@ -192,51 +219,55 @@ getCapacidadMaximaEntrenamiento(): number {
     }, 1000);
   }
 
-  async cargarMapa() {
+  async cargarMapa(coordenadas?: { lat: number, lng: number }) {
     try {
+        const mapElement = document.querySelector("#mapa") as HTMLElement;
 
-      const mapElement = document.querySelector("#mapa") as HTMLElement;
+        if (!mapElement) {
+            setTimeout(() => this.cargarMapa(coordenadas), 500); 
+            return;
+        }
 
-      if (!mapElement) {
-        setTimeout(() => this.cargarMapa(), 500); // Reintentar después de 500ms
-        return;
-      }
-      if (typeof google === "undefined" || typeof google.maps === "undefined") {
-        return;
-      }
+        if (typeof google === "undefined" || typeof google.maps === "undefined") {
+            return;
+        }
 
-      const ubicacionActual = await Geolocation.getCurrentPosition();
-      const lat = ubicacionActual.coords.latitude;
-      const lng = ubicacionActual.coords.longitude;
+        if (!coordenadas) {
+            const ubicacionActual = await Geolocation.getCurrentPosition();
+            coordenadas = {
+                lat: ubicacionActual.coords.latitude,
+                lng: ubicacionActual.coords.longitude
+            };
+        }
 
-      mapElement.style.height = "60vh";
-      mapElement.style.width = "100%";
+        mapElement.style.height = "60vh";
+        mapElement.style.width = "100%";
 
-      // Crear el mapa
-      this.mapa = new google.maps.Map(mapElement, {
-        center: { lat, lng },
-        zoom: 15,
-      });
+        this.mapa = new google.maps.Map(mapElement, {
+            center: coordenadas,
+            zoom: 15,
+        });
 
-      // Agregar marcador
-      this.marker = new google.maps.Marker({
-        position: { lat, lng },
-        map: this.mapa,
-        draggable: true,
-      });
+        this.marker = new google.maps.Marker({
+            position: coordenadas,
+            map: this.mapa,
+            draggable: true,
+        });
 
-      this.marker.addListener("dragend", () => {
-        const posicion = this.marker.getPosition();
-        this.ubicacionSeleccionada = {
-          lat: posicion?.lat() || lat,
-          lng: posicion?.lng() || lng,
-        };
-      });
+        this.marker.addListener("dragend", () => {
+            const posicion = this.marker.getPosition();
+            this.ubicacionSeleccionada = {
+                lat: posicion?.lat() || coordenadas!.lat,
+                lng: posicion?.lng() || coordenadas!.lng,
+            };
+            this.sesionForm.patchValue({ coordenadas: this.ubicacionSeleccionada });
+        });
 
     } catch (error) {
-      console.error("Error al cargar el mapa:", error);
+        console.error("Error al cargar el mapa:", error);
     }
-  }
+}
+
 
     delay(ms: number) {
       return new Promise(resolve => setTimeout(resolve, ms));
