@@ -1,0 +1,58 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>{{ modoEdicion ? 'Editar Sesión' : 'Crear Sesión' }}</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="closeModal()">✖</ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <form [formGroup]="sesionForm">
+    <!-- Nombre de la Sesión -->
+    <ion-item>
+      <ion-label position="floating">Nombre de la Sesión</ion-label>
+      <ion-input formControlName="nombre"></ion-input>
+    </ion-item>
+
+    <!-- Fecha -->
+    <ion-item>
+      <ion-label>Fecha</ion-label>
+      <ion-datetime formControlName="fecha" presentation="date" display-format="DD/MM/YYYY"></ion-datetime>
+    </ion-item>
+
+    <!-- Selección de Entrenamiento -->
+    <ion-item>
+      <ion-label>Entrenamiento</ion-label>
+      <ion-select formControlName="entrenamientoId">
+        <ion-select-option *ngFor="let entrenamiento of entrenamientos" [value]="entrenamiento.id">
+          {{ entrenamiento.nombre }}
+        </ion-select-option>
+      </ion-select>
+    </ion-item>
+
+    <!-- Selección de Jugadores -->
+    <ion-item>
+      <ion-label>Jugadores</ion-label>
+      <ion-select formControlName="jugadores" multiple="true">
+        <ion-select-option *ngFor="let jugador of jugadoresDisponibles" [value]="jugador.id">
+          <img [src]="jugador.imagen" class="w-6 h-6 rounded-full mr-2" /> {{ jugador.userEmail }}
+        </ion-select-option>
+      </ion-select>
+    </ion-item>
+
+
+    <!-- Estado (Activo por defecto) -->
+    <ion-item>
+      <ion-label>Estado</ion-label>
+      <ion-toggle formControlName="estado"></ion-toggle>
+    </ion-item>
+
+    <!-- Botón de Guardar -->
+    <div class="flex justify-center my-4">
+      <button (click)="guardarSesion()" class="bg-blue-500 text-white px-4 py-2 rounded-md">
+        {{ modoEdicion ? 'Actualizar Sesión' : 'Crear Sesión' }}
+      </button>
+    </div>
+  </form>
+</ion-content>

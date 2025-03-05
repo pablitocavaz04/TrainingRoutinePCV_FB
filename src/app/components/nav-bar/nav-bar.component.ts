@@ -16,7 +16,6 @@ export class NavBarComponent implements OnInit {
 
   menuItems = [
     { label: 'Home', route: '/home' },
-    { label: 'Sesiones', route: '/sesiones' },
     { label: 'Entrenamientos', route: '/entrenamientos' },
     { label: 'Entrenadores', route: '/entrenadores' }
   ];
@@ -26,7 +25,6 @@ export class NavBarComponent implements OnInit {
   ngOnInit() {
     this.loadUserRoles();
 
-    // 📌 Escuchar cambios en la URL para actualizar `currentPage`
     this.router.events.subscribe(event => {
       if (event instanceof NavigationEnd) {
         this.currentPage = event.urlAfterRedirects;

@@ -1,0 +1,32 @@
+<ion-content [fullscreen]="true" class="relative pt-20 pb-24">
+  <!-- Mensaje si no hay sesiones -->
+  <div *ngIf="sesiones.length === 0" class="text-center mt-20">
+    <p>No hay sesiones disponibles.</p>
+  </div>
+
+  <!-- Grid de sesiones -->
+  <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 p-4">
+    <div *ngFor="let sesion of sesiones" class="bg-white shadow-md rounded-lg overflow-hidden">
+      <img [src]="sesion.imagen || 'assets/placeholder.png'" class="w-full h-40 object-cover" />
+      <div class="p-4">
+        <h3 class="font-bold text-lg">{{ sesion.nombre }}</h3>
+        <p class="text-gray-600">Fecha: {{ sesion.fecha }}</p>
+        <p class="text-sm text-gray-500">Estado: {{ sesion.estado }}</p>
+
+        <!-- Switch para cambiar el estado (solo visible para Entrenadores) -->
+        <div *ngIf="selectedRole === 'Entrenador'" class="mt-2">
+          <!--<ion-toggle [(ngModel)]="sesion.estado" (ionChange)="cambiarEstadoSesion(sesion)"></ion-toggle>-->
+        </div>
+      </div>
+    </div>
+  </div>
+</ion-content>
+
+<!-- Botón flotante para abrir el modal de creación de sesión (Solo Entrenadores) -->
+<button
+  *ngIf="selectedRole === 'Entrenador'"
+  class="fixed bottom-10 right-5 bg-blue-500 text-white p-4 rounded-full shadow-lg"
+  (click)="openCreateSesionModal()"
+>
+  ➕
+</button>
