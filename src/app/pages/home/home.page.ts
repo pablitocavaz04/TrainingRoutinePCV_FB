@@ -89,14 +89,19 @@ export class HomePage implements OnInit {
   
     this.sesiones = sesionesBase;
   }
-  
+
   async openCreateSesionModal() {
     const modal = await this.modalController.create({
       component: SesionModalComponent,
     });
-    return await modal.present();
+  
+    await modal.present();
+    const { data } = await modal.onDidDismiss();
+    if (data?.nuevaSesion) {
+      this.sesiones.push(data.nuevaSesion);
+    }
   }
-
+  
   voltearCard(sesion: any) {
     sesion.volteada = !sesion.volteada;
 
@@ -138,7 +143,7 @@ export class HomePage implements OnInit {
   async eliminarSesion(sesion: any) {
     const alert = await this.alertController.create({
       header: 'Confirmar Eliminación',
-      message: `¿Estás seguro de que quieres eliminar la sesión "${sesion.nombre}"? Esta acción no se puede deshacer.`,
+      message: `¿Estás seguro de que quieres acabar la sesión "${sesion.nombre}"?`,
       buttons: [
         {
           text: 'Cancelar',
