@@ -22,7 +22,7 @@ export class SesionesService {
 
   // Obtener sesiones creadas por un Entrenador
   async obtenerSesionesPorCreador(userId: string) {
-    const q = query(this.sesionesCollection, where('creador', '==', userId));
+    const q = query(this.sesionesCollection, where('creadorId', '==', userId));
     const querySnapshot = await getDocs(q);
     return querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
   }
