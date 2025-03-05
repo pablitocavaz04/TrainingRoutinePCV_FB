@@ -16,12 +16,43 @@
         <div class="card-front">
           <img [src]="sesion.imagen || 'assets/placeholder.png'" class="w-full h-32 object-cover rounded-lg" />
 
-          <div class="p-3">
+          <div class="p-3 text-left">
             <h3 class="font-bold text-md">{{ sesion.nombre }}</h3>
             <p class="text-gray-600 text-sm">📅 {{ sesion.fecha }}</p>
             <p class="text-gray-500 text-sm">⚡ {{ sesion.estado }}</p>
-            <p class="text-gray-500 text-sm">🏋️ {{ sesion.entrenamientoId }}</p>
-            <p class="text-gray-500 text-sm">👤 {{ sesion.creadorId }}</p>
+            <p class="text-gray-500 text-sm">🏋️ {{ sesion.entrenamientoNombre }}</p>
+            <p class="text-gray-500 text-sm">👤 {{ sesion.entrenadorEmail }}</p>
+
+            <!-- Contenedor de botones -->
+            <div class="flex justify-between items-center mt-3">
+
+              <!-- Botones de Editar y Compartir -->
+              <div class="flex space-x-2">
+                <!-- Botón Eliminar (SOLO PARA ENTRENADORES) -->
+                <button 
+                *ngIf="selectedRole === 'Entrenador'" 
+                class="bg-red-500 text-white px-2 py-1 text-sm rounded-md hover:bg-red-700 transition"
+                (click)="eliminarSesion(sesion); $event.stopPropagation();">
+                🗑️
+                </button>
+
+                <!-- Botón Editar (SOLO PARA ENTRENADORES) -->
+                <button 
+                  *ngIf="selectedRole === 'Entrenador'" 
+                  class="bg-blue-500 text-white px-2 py-1 text-sm rounded-md hover:bg-blue-700 transition"
+                  (click)="editarSesion(sesion); $event.stopPropagation();">
+                  ✏️
+                </button>
+
+                <!-- Botón Compartir (VISIBLE PARA TODOS) -->
+                <button 
+                  class="bg-green-500 text-white px-2 py-1 text-sm rounded-md hover:bg-green-700 transition"
+                  (click)="compartirSesion(sesion); $event.stopPropagation();">
+                  📤
+                </button>
+              </div>
+            </div>
+
           </div>
         </div>
 
