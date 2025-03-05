@@ -36,13 +36,18 @@
     <!-- Selección de Jugadores -->
     <ion-item>
       <ion-label>Jugadores</ion-label>
-      <ion-select formControlName="jugadores" multiple="true">
+      <ion-select formControlName="jugadores" multiple="true" (ionChange)="onJugadoresSeleccionados()">
         <ion-select-option *ngFor="let jugador of jugadoresDisponibles" [value]="jugador.id">
           <img [src]="jugador.imagen" class="w-6 h-6 rounded-full mr-2" /> {{ jugador.userEmail }}
         </ion-select-option>
       </ion-select>
     </ion-item>
-
+    
+    <!-- Mensaje de error si se supera la capacidad -->
+    <p *ngIf="errorCapacidad" class="text-red-500 text-sm mt-2 ml-4">
+      {{ errorCapacidad }}
+    </p>
+    
     <!-- Imagen de la Sesión -->
     <ion-item>
       <ion-label>Imagen</ion-label>

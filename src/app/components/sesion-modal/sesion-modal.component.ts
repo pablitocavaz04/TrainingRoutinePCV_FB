@@ -1,10 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { ModalController } from '@ionic/angular';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { getFirestore, collection, getDocs } from 'firebase/firestore';
+import { getFirestore, collection, getDocs, addDoc } from 'firebase/firestore';
 import { Camera, CameraResultType, CameraSource } from '@capacitor/camera';
 import { getDownloadURL, getStorage, ref, uploadBytes } from 'firebase/storage';
 import { Geolocation } from '@capacitor/geolocation';
+import { getAuth } from 'firebase/auth';
 
 declare var google: any;
 
@@ -23,6 +24,8 @@ export class SesionModalComponent implements OnInit {
   mapa: any;
   marker: any;
   ubicacionSeleccionada: { lat: number, lng: number } | null = null;
+  errorCapacidad: string = '';// para mostrar el mensaje de capacida maxima 
+
 
   constructor(
     private modalController: ModalController,
@@ -48,6 +51,24 @@ export class SesionModalComponent implements OnInit {
     this.cargarMapa();
   }
 
+onJugadoresSeleccionados() {
+  const jugadoresSeleccionados = this.sesionForm.value.jugadores.length;
+  const capacidadMaxima = this.getCapacidadMaximaEntrenamiento();
+
+  if (jugadoresSeleccionados > capacidadMaxima) {
+    this.errorCapacidad = `⚠️ Número de jugadores superado. El límite es ${capacidadMaxima}.`;
+  } else {
+    this.errorCapacidad = ''; // Si está dentro del límite, se borra el mensaje
+  }
+}
+
+getCapacidadMaximaEntrenamiento(): number {
+  const entrenamientoSeleccionado = this.entrenamientos.find(e => e.id === this.sesionForm.value.entrenamientoId);
+  return entrenamientoSeleccionado ? entrenamientoSeleccionado.capacidadMaxima : 0;
+}
+
+
+
   async cargarEntrenamientos() {
     const db = getFirestore();
     const entrenamientosRef = collection(db, 'entrenamientos');
@@ -55,28 +76,83 @@ export class SesionModalComponent implements OnInit {
     this.entrenamientos = entrenamientosSnapshot.docs.map(doc => ({
       id: doc.id,
       nombre: doc.data()['nombre'],
-      imagen: doc.data()['imagen'] || 'assets/default-placeholder.png'
+      imagen: doc.data()['imagen'] || 'assets/default-placeholder.png',
+      capacidadMaxima: doc.data()['capacidadMaxima'] || 1 // Asegurar un valor por defecto
     }));
   }
+  
 
   async cargarJugadores() {
     const db = getFirestore();
     const jugadoresRef = collection(db, 'personas');
     const jugadoresSnapshot = await getDocs(jugadoresRef);
-    this.jugadoresDisponibles = jugadoresSnapshot.docs.map(doc => ({
-      id: doc.id,
-      userEmail: doc.data()['userEmail'] || 'Correo no disponible',
-      imagen: doc.data()['userImage'] || 'assets/default-avatar.png'
-    }));
+  
+    this.jugadoresDisponibles = jugadoresSnapshot.docs
+      .map(doc => ({
+        id: doc.id,
+        userEmail: doc.data()['userEmail'] || 'Correo no disponible',
+        imagen: doc.data()['userImage'] || 'assets/default-avatar.png',
+        roles: doc.data()['roles'] || [] 
+      }))
+      .filter(jugador => jugador.roles.includes('Jugador')); 
   }
+  
+
 
   async guardarSesion() {
-    if (this.sesionForm.valid) {
-      console.log("Sesión guardada:", this.sesionForm.value);
+    if (!this.sesionForm.valid) {
+      console.warn("⚠️ El formulario no es válido.");
+      return;
+    }
+  
+    const sesionData = this.sesionForm.value;
+    const entrenamientoSeleccionado = this.entrenamientos.find(e => e.id === sesionData.entrenamientoId);
+  
+    if (!entrenamientoSeleccionado) {
+      console.error("❌ Entrenamiento no encontrado.");
+      return;
+    }
+  
+    // Verificar que el número de jugadores no supere la capacidad máxima
+    if (sesionData.jugadores.length > entrenamientoSeleccionado.capacidadMaxima) {
+      this.errorCapacidad = `⚠️ Número de jugadores superado. El límite es ${entrenamientoSeleccionado.capacidadMaxima}.`;
+      return;
+    } else {
+      this.errorCapacidad = ''; // Limpiar el mensaje si está dentro del límite
+    }
+  
+    try {
+      const db = getFirestore();
+      const sesionesRef = collection(db, 'sesiones');
+      const auth = getAuth();
+      const user = auth.currentUser;
+  
+      if (!user) {
+        console.error("❌ No hay usuario autenticado.");
+        return;
+      }
+  
+      await addDoc(sesionesRef, {
+        nombre: sesionData.nombre,
+        fecha: sesionData.fecha,
+        entrenamientoId: sesionData.entrenamientoId,
+        jugadores: sesionData.jugadores,
+        imagen: sesionData.imagen || '',
+        estado: sesionData.estado,
+        coordenadas: sesionData.coordenadas || null,
+        creadorId: user.uid,
+        timestamp: new Date()
+      });
+  
+      console.log("✅ Sesión creada con éxito.");
       this.modalController.dismiss();
+  
+    } catch (error) {
+      console.error("❌ Error al guardar la sesión:", error);
     }
   }
-
+  
+  
   // Selección de imagen
   async seleccionarImagen(origen: 'galeria' | 'camara') {
     try {
