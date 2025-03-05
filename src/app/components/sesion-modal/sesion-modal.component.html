@@ -22,7 +22,6 @@
         formControlName="fecha"
         class="w-full p-3 border border-gray-300 rounded-lg focus:border-blue-500 focus:outline-none"/>
     </ion-item>
-    
 
     <!-- Selección de Entrenamiento -->
     <ion-item>
@@ -56,10 +55,22 @@
       </ion-buttons>
     </ion-item>
 
-    <!-- Estado (Activo por defecto) -->
+    <!-- Estado  -->
     <ion-item>
       <ion-label>Estado</ion-label>
       <ion-toggle formControlName="estado"></ion-toggle>
+    </ion-item>
+
+    <!-- Mostrar Mapa para seleccionar ubicación -->
+    <ion-item>
+      <ion-label>Ubicación</ion-label>
+      <div id="mapa" style="width: 100%; height: 60vh;"></div>
+      <ion-button expand="full" color="primary" (click)="guardarUbicacion()">Guardar Ubicación</ion-button>
+    </ion-item>
+
+    <!-- Mostrar coordenadas si ya se seleccionó una ubicación -->
+    <ion-item *ngIf="sesionForm.value.coordenadas">
+      <p>Lat: {{ sesionForm.value.coordenadas.lat }} | Lng: {{ sesionForm.value.coordenadas.lng }}</p>
     </ion-item>
 
     <!-- Botón de Guardar -->
