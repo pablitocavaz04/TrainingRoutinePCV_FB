@@ -15,18 +15,21 @@
       <ion-input formControlName="nombre"></ion-input>
     </ion-item>
 
-    <!-- Fecha -->
+    <!-- Fecha con botón para abrir el calendario -->
     <ion-item>
       <ion-label>Fecha</ion-label>
-      <ion-datetime formControlName="fecha" presentation="date" display-format="DD/MM/YYYY"></ion-datetime>
+      <input type="date"
+        formControlName="fecha"
+        class="w-full p-3 border border-gray-300 rounded-lg focus:border-blue-500 focus:outline-none"/>
     </ion-item>
+    
 
     <!-- Selección de Entrenamiento -->
     <ion-item>
       <ion-label>Entrenamiento</ion-label>
       <ion-select formControlName="entrenamientoId">
         <ion-select-option *ngFor="let entrenamiento of entrenamientos" [value]="entrenamiento.id">
-          {{ entrenamiento.nombre }}
+          <img [src]="entrenamiento.imagen" class="w-6 h-6 rounded-full mr-2" /> {{ entrenamiento.nombre }}
         </ion-select-option>
       </ion-select>
     </ion-item>
@@ -41,6 +44,17 @@
       </ion-select>
     </ion-item>
 
+    <!-- Imagen de la Sesión -->
+    <ion-item>
+      <ion-label>Imagen</ion-label>
+      <ion-thumbnail slot="start">
+        <img *ngIf="sesionForm.value.imagen" [src]="sesionForm.value.imagen" class="w-16 h-16 object-cover rounded-lg">
+      </ion-thumbnail>
+      <ion-buttons slot="end">
+        <ion-button (click)="seleccionarImagen('galeria')">📷 Galería</ion-button>
+        <ion-button (click)="seleccionarImagen('camara')">📸 Cámara</ion-button>
+      </ion-buttons>
+    </ion-item>
 
     <!-- Estado (Activo por defecto) -->
     <ion-item>
