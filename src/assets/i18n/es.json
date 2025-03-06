@@ -1,0 +1,15 @@
+{
+    "NAVBAR": {
+      "HOME": "Inicio",
+      "JUGADORES": "Jugadores",
+      "MI_PERFIL": "Mi Perfil"
+    },
+    "LANDING": {
+      "TITLE": "Training Routine",
+      "EXPERIENCE": "Experiencia",
+      "DESCRIPTION": "Desde 2024, este proyecto intenta ofrecer la mejor gestión y asesoría en entrenamientos y sesiones especializadas.",
+      "LOGIN": "Iniciar Sesión",
+      "REGISTER": "Registrarse"
+    }
+  }
+  

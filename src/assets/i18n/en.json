@@ -1,0 +1,15 @@
+{
+    "NAVBAR": {
+      "HOME": "Home",
+      "JUGADORES": "Players",
+      "MI_PERFIL": "My Profile"
+    },
+    "LANDING": {
+      "TITLE": "Training Routine",
+      "EXPERIENCE": "Experience",
+      "DESCRIPTION": "Since 2024, this project aims to offer the best management and advice in training and specialized sessions.",
+      "LOGIN": "Sign In",
+      "REGISTER": "Sign Up"
+    }
+  }
+  

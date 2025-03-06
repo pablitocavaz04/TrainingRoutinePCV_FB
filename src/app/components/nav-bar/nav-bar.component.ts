@@ -20,7 +20,10 @@ export class NavBarComponent implements OnInit {
     { label: 'Entrenadores', route: '/entrenadores' }
   ];
 
-  constructor(private router: Router, private authService: AuthService) {}
+  constructor(
+    private router: Router, 
+    private authService: AuthService
+  ) {}
 
   ngOnInit() {
     this.loadUserRoles();
