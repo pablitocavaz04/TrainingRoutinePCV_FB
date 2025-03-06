@@ -75,6 +75,18 @@
         <span class="absolute inset-0 border-2 border-transparent group-hover:border-white rounded-lg transition-all duration-300"></span>
         <span class="relative z-10 block w-full text-center">Mi Perfil</span>
       </li>
+
+      <li class="py-3 cursor-pointer relative transition-all duration-300 bg-opacity-50 flex items-center justify-center gap-2"
+          [class.border-l-4]="isLanguageModalOpen"
+          [class.border-white]="isLanguageModalOpen"
+          (click)="openLanguageModal(); toggleMenu()">
+        <span class="absolute inset-0 border-2 border-transparent group-hover:border-white rounded-lg transition-all duration-300"></span>
+        <span class="relative z-10 flex items-center justify-center gap-2">
+          <img [src]="currentLanguageFlag" alt="Flag" class="w-6 h-4 rounded-md">
+          <span class="font-medium">{{ currentLanguageName }}</span>
+        </span>
+      </li>
+
     </ul>
   </div>
 

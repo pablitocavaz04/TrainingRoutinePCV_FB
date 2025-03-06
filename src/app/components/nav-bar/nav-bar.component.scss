@@ -8,16 +8,22 @@ nav {
   box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
 }
 
-  
-  ul li {
-    transition: color 0.3s ease-in-out;
+ul li {
+  transition: color 0.3s ease-in-out;
+}
+
+button {
+  transition: transform 0.2s ease-in-out;
+}
+
+button:active {
+  transform: scale(0.95);
+}
+
+/* Ajuste para que los botones del menú móvil queden alineados */
+@media (max-width: 768px) {
+  .absolute.top-full.right-0 ul li {
+    padding: 12px 0;
+    text-align: center;
   }
-  
-  button {
-    transition: transform 0.2s ease-in-out;
-  }
-  
-  button:active {
-    transform: scale(0.95);
-  }
-  
+}

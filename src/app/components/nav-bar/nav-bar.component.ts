@@ -83,7 +83,7 @@ export class NavBarComponent implements OnInit {
       'es': { name: 'Español', flag: 'assets/flags/es.png' },
       'en': { name: 'English', flag: 'assets/flags/en.png' }
     };
-
+  
     if (languages[lang]) {
       this.currentLanguage = lang;
       this.currentLanguageName = languages[lang].name;
