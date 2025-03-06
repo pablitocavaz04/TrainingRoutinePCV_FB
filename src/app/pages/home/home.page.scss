@@ -20,7 +20,6 @@ html, body {
   overflow-x: hidden; 
 }
 
-
 .sesiones-container {
   width: 100%;
   display: flex;
@@ -80,6 +79,7 @@ html, body {
   transform: rotateY(0);
 }
 
+/* Estilos para la barra de desplazamiento */
 .scroll-container::-webkit-scrollbar {
   width: 6px;
 }
@@ -93,33 +93,51 @@ html, body {
   background: rgba(0, 0, 0, 0.05);
 }
 
-@media (max-width: 768px) {
-  .scroll-container {
-    height: calc(100vh - 6rem);
-    overflow-y: auto; 
-    overflow-x: hidden;
-    padding-bottom: 100px;
-  }
-
-  .sesiones-container {
-    flex-direction: column; 
-    align-items: center;
-    justify-content: flex-start;
-  }
-}
-
-@media (min-width: 1024px) {
-  .sesiones-container {
-    flex-wrap: wrap;
-    justify-content: center;
-  }
-}
-
-/* Efecto del botón flotante */
+/* Botón flotante */
 button.fixed {
   transition: transform 0.2s ease-in-out;
 }
 
 button.fixed:hover {
   transform: scale(1.1);
+}
+
+/* Contenedor de botones */
+.button-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  gap: 15px; /* Más espacio entre los botones */
+  margin-top: 10px;
+}
+
+/* Botones */
+.btn {
+  width: 45px;
+  height: 45px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  font-size: 20px;
+  color: white;
+  transition: transform 0.2s ease-in-out;
+}
+
+.btn:hover {
+  transform: scale(1.1);
+}
+
+/* Ajuste para pantallas pequeñas */
+@media (max-width: 768px) {
+  .button-container {
+    gap: 12px; /* Espaciado más ajustado en móviles */
+  }
+
+  .btn {
+    width: 40px;
+    height: 40px;
+    font-size: 18px;
+  }
 }
