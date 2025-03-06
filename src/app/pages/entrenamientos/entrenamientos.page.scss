@@ -1,4 +1,4 @@
-/* 🔹 Estilos generales */
+/* 🔹 ESTILOS GENERALES */
 html, body {
   height: 100vh;
   overflow: hidden;
@@ -6,7 +6,6 @@ html, body {
   padding: 0;
 }
 
-/* 🔹 Contenedor principal */
 .page-container {
   position: relative;
   height: 100vh;
@@ -15,28 +14,11 @@ html, body {
   align-items: center;
 }
 
-/* 🔹 Contenedor con scroll */
 .scroll-container {
   flex: 1;
   width: 100%;
   overflow-y: auto;
   overflow-x: hidden;
-  scrollbar-width: thin !important; /* Firefox */
-  scrollbar-color: rgba(59, 130, 246, 0.7) rgba(0, 0, 0, 0.05) !important;
-}
-
-/* 🔹 Personalización de la barra de desplazamiento */
-.scroll-container::-webkit-scrollbar {
-  width: 6px !important;
-}
-
-.scroll-container::-webkit-scrollbar-thumb {
-  background-color: rgba(59, 130, 246, 0.7) !important;
-  border-radius: 4px !important;
-}
-
-.scroll-container::-webkit-scrollbar-track {
-  background: rgba(0, 0, 0, 0.05) !important;
 }
 
 /* 🔹 Contenedor de entrenamientos */
@@ -45,22 +27,23 @@ html, body {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  align-content: flex-start;
-  gap: 30px;
-  padding-top: 6rem;
+  gap: 20px;
+  padding-top: 6rem; /* 🔹 Asegura el mismo espacio debajo de la barra de navegación */
   padding-bottom: 80px;
 }
 
-/* 🔹 Ajustar tamaño de las Cards para que coincidan con Home */
 .card-container {
-  width: 250px;
-  height: 340px;
+  width: 250px; /* 🔹 MISMO TAMAÑO QUE EN HOME */
+  height: 340px; /* 🔹 MISMO TAMAÑO QUE EN HOME */
   background: white;
   border-radius: 12px;
   padding: 16px;
   box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
   transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
-  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
 }
 
 .card-container:hover {
@@ -68,40 +51,64 @@ html, body {
   box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.15);
 }
 
-/* 🔹 Imagen dentro de la Card */
-.card-container img {
+/* 🔹 IMAGEN DENTRO DE LA CARD */
+.image-container {
   width: 100%;
   height: 180px;
+  border-radius: 8px;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.session-img {
+  width: 100%;
+  height: 100%;
   object-fit: cover;
   border-radius: 8px;
   border: 2px solid #e5e7eb;
 }
 
-/* 🔹 Texto dentro de la card */
-.card-text {
+/* 🔹 TEXTOS DENTRO DE LA CARD */
+.text-content {
   margin-top: 10px;
-  text-align: center;
-  color: #374151;
-  font-size: 16px;
+  flex-grow: 1; /* 🔹 Asegura que el contenido crezca */
 }
 
-/* 🔹 Contenedor de botones */
+.text-content h3 {
+  font-size: 18px;
+  font-weight: bold;
+  color: #374151;
+}
+
+.text-content p {
+  font-size: 14px;
+  color: #4b5563;
+  margin-top: 4px;
+}
+
+.info-text {
+  font-size: 12px;
+  color: #6b7280;
+}
+
+/* 🔹 BOTONES */
 .button-container {
   display: flex;
   justify-content: center;
-  gap: 15px;
-  margin-top: 12px;
+  gap: 12px;
+  margin-top: 10px;
 }
 
-/* 🔹 Botones */
 .btn {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 45px;
-  height: 45px;
+  width: 40px;
+  height: 40px;
   border-radius: 50%;
-  font-size: 18px;
+  font-size: 16px;
   color: white;
   transition: transform 0.2s ease-in-out;
 }
@@ -110,26 +117,13 @@ html, body {
   transform: scale(1.1);
 }
 
-/* 🔹 Ajustes para pantallas pequeñas */
-@media (max-width: 768px) {
-  .button-container {
-    gap: 12px;
-  }
-
-  .btn {
-    width: 40px;
-    height: 40px;
-    font-size: 16px;
-  }
-}
-
-/* 🔹 Botón flotante */
+/* 🔹 BOTÓN FLOTANTE */
 .floating-button {
   position: fixed;
   bottom: 20px;
   right: 20px;
-  background: #3b82f6 !important; /* 🔹 Color corregido */
-  color: white !important;
+  background: #3b82f6;
+  color: white;
   padding: 14px;
   border-radius: 50%;
   box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.15);
@@ -137,6 +131,30 @@ html, body {
 }
 
 .floating-button:hover {
-  background: #2563eb !important; /* 🔹 Hover corregido */
+  background: #2563eb;
   transform: scale(1.1);
+}
+
+/* 🔹 RESPONSIVE */
+@media (max-width: 768px) {
+  .card-container {
+    width: 220px;
+    height: 320px;
+  }
+
+  .session-img {
+    height: 160px;
+  }
+
+  .text-content h3 {
+    font-size: 16px;
+  }
+
+  .text-content p {
+    font-size: 12px;
+  }
+
+  .info-text {
+    font-size: 10px;
+  }
 }
