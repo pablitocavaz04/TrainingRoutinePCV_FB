@@ -16,6 +16,6 @@ import { SesionModalComponent } from 'src/app/components/sesion-modal/sesion-mod
     HomePageRoutingModule,
     ReactiveFormsModule
   ],
-  declarations: [HomePage,SesionModalComponent]
+  declarations: [HomePage]
 })
 export class HomePageModule {}

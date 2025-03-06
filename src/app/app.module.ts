@@ -19,7 +19,9 @@ import { ProfileModalComponent } from './components/profile-modal/profile-modal.
 import { ChangeProfileComponent } from './components/change-profile/change-profile.component';
 import { AcceptGestorModalComponent } from './components/accept-gestor-modal/accept-gestor-modal.component';
 import { EntrenamientoModalComponent } from './components/entrenamiento-modal/entrenamiento-modal.component';
-import { ReactiveFormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { SesionModalComponent } from './components/sesion-modal/sesion-modal.component';
+import { JugadorSelectorComponent } from './components/jugador-selector/jugador-selector.component';
 
 @NgModule({
   declarations: [
@@ -28,7 +30,9 @@ import { ReactiveFormsModule } from '@angular/forms';
     ProfileModalComponent,
     ChangeProfileComponent,
     AcceptGestorModalComponent,
-    EntrenamientoModalComponent
+    EntrenamientoModalComponent,
+    SesionModalComponent,
+    JugadorSelectorComponent
   ],
   imports: [
     ReactiveFormsModule,
@@ -44,7 +48,8 @@ import { ReactiveFormsModule } from '@angular/forms';
   exports: [
     NavBarComponent,
     ProfileModalComponent,
-    ChangeProfileComponent
+    ChangeProfileComponent,
+    JugadorSelectorComponent
   ]
 })
 export class AppModule {

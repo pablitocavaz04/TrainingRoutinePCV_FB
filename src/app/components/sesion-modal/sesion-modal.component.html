@@ -36,11 +36,7 @@
     <!-- Selección de Jugadores -->
     <ion-item>
       <ion-label>Jugadores</ion-label>
-      <ion-select formControlName="jugadores" multiple="true" (ionChange)="onJugadoresSeleccionados()">
-        <ion-select-option *ngFor="let jugador of jugadoresDisponibles" [value]="jugador.id">
-          <img [src]="jugador.imagen" class="w-6 h-6 rounded-full mr-2" /> {{ jugador.userEmail }}
-        </ion-select-option>
-      </ion-select>
+      <app-jugador-selector formControlName="jugadores" [capacidadMaxima]="getCapacidadMaximaEntrenamiento()"></app-jugador-selector>
     </ion-item>
     
     <!-- Mensaje de error si se supera la capacidad -->

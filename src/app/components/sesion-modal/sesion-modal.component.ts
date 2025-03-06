@@ -42,11 +42,12 @@ export class SesionModalComponent implements OnInit {
       nombre: [sesionData.nombre || '', [Validators.required, Validators.minLength(3)]],
       fecha: [sesionData.fecha || '', Validators.required],
       entrenamientoId: [sesionData.entrenamientoId || '', Validators.required],
-      jugadores: [sesionData.jugadores || [], Validators.required],
+      jugadores: [sesionData.jugadores ? [...sesionData.jugadores] : [], Validators.required], 
       imagen: [sesionData.imagen || ''],
       coordenadas: [sesionData.coordenadas || null, Validators.required],
       estado: [sesionData.estado || 'Activo']
     });
+    
   
     this.cargarEntrenamientos();
     this.cargarJugadores();
@@ -131,7 +132,6 @@ getCapacidadMaximaEntrenamiento(): number {
             return;
         }
 
-        // Obtener el email del entrenador
         const entrenadoresRef = collection(db, 'personas');
         const entrenadoresQuery = query(entrenadoresRef, where('userID', '==', user.uid));
         const entrenadoresSnapshot = await getDocs(entrenadoresQuery);
@@ -144,8 +144,8 @@ getCapacidadMaximaEntrenamiento(): number {
                 sesionActualizada: { 
                     id: this.navParams.get('sesion').id, 
                     ...sesionData,
-                    entrenamientoNombre: entrenamientoSeleccionado.nombre, // Agregar el nombre del entrenamiento
-                    entrenadorEmail: entrenadorEmail // Agregar el email del entrenador
+                    entrenamientoNombre: entrenamientoSeleccionado.nombre,
+                    entrenadorEmail: entrenadorEmail
                 } 
             });
 
@@ -160,8 +160,8 @@ getCapacidadMaximaEntrenamiento(): number {
                 coordenadas: sesionData.coordenadas || null,
                 creadorId: user.uid,
                 timestamp: new Date(),
-                entrenamientoNombre: entrenamientoSeleccionado.nombre, // Agregar el nombre del entrenamiento
-                entrenadorEmail: entrenadorEmail // Agregar el email del entrenador
+                entrenamientoNombre: entrenamientoSeleccionado.nombre, 
+                entrenadorEmail: entrenadorEmail 
             };
 
             const docRef = await addDoc(sesionesRef, nuevaSesion);
@@ -173,7 +173,6 @@ getCapacidadMaximaEntrenamiento(): number {
     }
 }
 
-  // Selección de imagen
   async seleccionarImagen(origen: 'galeria' | 'camara') {
     try {
       const imagen = await Camera.getPhoto({
