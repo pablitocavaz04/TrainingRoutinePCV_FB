@@ -15,6 +15,26 @@
     overflow-y: auto;
   }
   
+  /* Estilizar la barra de scroll dentro de ion-content (Solución definitiva) */
+  ion-content::part(scroll) {
+    scrollbar-width: thin !important; /* Firefox */
+    scrollbar-color: rgba(59, 130, 246, 0.7) transparent !important;
+  }
+  
+  /* Scrollbar en Webkit (Chrome, Safari, Edge) */
+  ion-content::-webkit-scrollbar {
+    width: 6px !important;
+  }
+  
+  ion-content::-webkit-scrollbar-thumb {
+    background-color: rgba(59, 130, 246, 0.7) !important;
+    border-radius: 4px !important;
+  }
+  
+  ion-content::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.05) !important;
+  }
+  
   /* Estilo de los títulos de sección */
   .section-title {
     font-size: 16px;
@@ -127,19 +147,5 @@
     margin-top: 10px;
     font-size: 14px;
     color: #374151;
-  }
-  
-  /* Estilizar la barra de scroll */
-  .modal-content::-webkit-scrollbar {
-    width: 6px;
-  }
-  
-  .modal-content::-webkit-scrollbar-thumb {
-    background-color: rgba(59, 130, 246, 0.7);
-    border-radius: 4px;
-  }
-  
-  .modal-content::-webkit-scrollbar-track {
-    background: rgba(0, 0, 0, 0.05);
   }
   
