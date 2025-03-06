@@ -1,75 +1,55 @@
-<div class="modal-overlay fixed inset-0 bg-black bg-opacity-50 flex justify-center py-10 z-50" (click)="closeModal()">
-  <!-- Modal Principal -->
-  <div class="modal-container bg-white shadow-lg rounded-2xl flex flex-col w-full max-w-[600px] lg:max-w-[750px]"
-       (click)="$event.stopPropagation()">
+<ion-header class="modal-header">
+  <ion-toolbar>
+    <ion-title>{{ modoEdicion ? 'Editar Entrenamiento' : 'Crear Entrenamiento' }}</ion-title>
+    <ion-buttons slot="end">
+      <ion-button class="close-btn" (click)="closeModal()">
+        <ion-icon name="close-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
 
-    <!-- Header (Siempre visible) -->
-    <div class="modal-header flex justify-between items-center p-4 bg-gray-50 border-b border-gray-200 sticky top-0 z-10">
-      <h2 class="text-lg font-semibold text-gray-800">
-        {{ modoEdicion ? 'Editar Entrenamiento' : 'Crear Entrenamiento' }}
-      </h2>
-      <button class="close-btn text-2xl font-bold text-gray-500 hover:text-gray-700" (click)="closeModal()">×</button>
+<ion-content class="modal-content">
+  <form [formGroup]="entrenamientoForm" class="modal-form">
+    <!-- Nombre del Entrenamiento -->
+    <ion-item class="custom-item">
+      <ion-label position="floating">Nombre del Entrenamiento</ion-label>
+      <ion-input formControlName="nombre"></ion-input>
+    </ion-item>
+
+    <!-- Descripción -->
+    <ion-item class="custom-item">
+      <ion-label position="floating">Descripción</ion-label>
+      <ion-textarea formControlName="descripcion"></ion-textarea>
+    </ion-item>
+
+    <!-- Fecha de Caducidad -->
+    <ion-item class="custom-item">
+      <ion-label>Fecha de Caducidad</ion-label>
+      <input type="date" formControlName="fechaCaducidad" class="custom-input"/>
+    </ion-item>
+
+    <!-- Capacidad Máxima -->
+    <ion-item class="custom-item">
+      <ion-label position="floating">Capacidad Máxima</ion-label>
+      <ion-input type="number" formControlName="capacidadMaxima"></ion-input>
+    </ion-item>
+
+    <!-- Imagen (Drag & Drop mejorado) -->
+    <div class="section-title">Imagen del Entrenamiento</div>
+    <div class="image-container">
+      <div class="image-upload" (dragover)="onDragOver($event)" (drop)="onFileDropped($event)">
+        <p *ngIf="!imagenVistaPrevia">Arrastra una imagen aquí o haz clic para seleccionar</p>
+        <input type="file" class="hidden" (change)="onFileSelected($event)"/>
+        <img *ngIf="imagenVistaPrevia" [src]="imagenVistaPrevia" class="session-img"/>
+      </div>
     </div>
+  </form>
+</ion-content>
 
-    <!-- Contenido del Modal -->
-    <div class="modal-body flex-grow overflow-y-auto min-h-0 p-6 scrollbar-thin scrollbar-thumb-blue-300 scrollbar-track-gray-100">
-      <form [formGroup]="entrenamientoForm" class="space-y-4">
-        
-        <!-- Nombre -->
-        <div>
-          <label class="text-gray-700 font-semibold">Nombre del Entrenamiento</label>
-          <input type="text" formControlName="nombre" class="w-full p-3 border border-gray-300 rounded-lg focus:border-blue-500 focus:outline-none"/>
-        </div>
-
-        <!-- Descripción -->
-        <div>
-          <label class="text-gray-700 font-semibold">Descripción</label>
-          <textarea formControlName="descripcion" class="w-full p-3 border border-gray-300 rounded-lg focus:border-blue-500 focus:outline-none h-24"></textarea>
-        </div>
-
-        <!-- Fecha de Caducidad -->
-        <div>
-          <label class="text-gray-700 font-semibold">Fecha de Caducidad</label>
-          <input type="date" formControlName="fechaCaducidad" class="w-full p-3 border border-gray-300 rounded-lg focus:border-blue-500 focus:outline-none"/>
-        </div>
-
-        <!-- Capacidad Máxima -->
-        <div>
-          <label class="text-gray-700 font-semibold">Capacidad Máxima</label>
-          <input type="number" formControlName="capacidadMaxima" class="w-full p-3 border border-gray-300 rounded-lg focus:border-blue-500 focus:outline-none"/>
-        </div>
-
-        <!-- Imagen -->
-        <div>
-          <label class="text-gray-700 font-semibold">Imagen del Entrenamiento</label>
-          <div class="image-upload border-2 border-dashed border-blue-500 rounded-lg p-4 text-center cursor-pointer hover:bg-gray-50 flex flex-col items-center justify-center min-h-[150px]"
-          (dragover)="onDragOver($event)" 
-          (drop)="onFileDropped($event)">
-          
-          <p *ngIf="!imagenVistaPrevia" class="text-gray-600">Arrastra una imagen aquí o haz clic para seleccionar</p>
-          
-          <input *ngIf="!imagenVistaPrevia" type="file" class="hidden" (change)="onFileSelected($event)"/>
-          
-          <img *ngIf="imagenVistaPrevia" [src]="imagenVistaPrevia" class="w-32 h-32 object-cover rounded-lg shadow-md"/>
-        </div>
-
-        </div>
-      </form>
-    </div>
-
-    <!-- Footer (Siempre visible) -->
-    <div class="modal-footer p-4 bg-gray-50 border-t border-gray-200 sticky bottom-0 z-10">
-      <button class="w-full p-3 text-white font-bold rounded-lg transition-colors duration-300"
-              [class.bg-green-500]="!modoEdicion"
-              [class.hover:bg-green-600]="!modoEdicion"
-              [class.bg-blue-500]="modoEdicion"
-              [class.hover:bg-blue-600]="modoEdicion"
-              [disabled]="entrenamientoForm.invalid"
-              (click)="guardarEntrenamiento()">
-        <ion-icon [name]="modoEdicion ? 'save-outline' : 'add-circle-outline'" class="mr-2"></ion-icon>
-        {{ modoEdicion ? 'Actualizar Entrenamiento' : 'Crear Entrenamiento' }}
-      </button>
-    </div>
-
-  </div>
-</div>
+<!-- Botón Fijo -->
+<div class="fixed-button">
+  <button (click)="guardarEntrenamiento()" class="save-btn">
+    {{ modoEdicion ? 'Actualizar Entrenamiento' : 'Crear Entrenamiento' }}
+  </button>
+</div>  

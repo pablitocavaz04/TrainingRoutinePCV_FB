@@ -1,85 +1,121 @@
-/* Estilos del fondo oscuro */
-.modal-overlay {
-  z-index: 50; // Asegura que el modal esté por encima de otros elementos
+/* 🔹 HEADER DEL MODAL */
+.modal-header {
+  background: #f8fafc;
+  border-bottom: 1px solid #e5e7eb;
 }
 
-/* Estilos generales del modal */
-.modal-container {
+.close-btn {
+  color: #6b7280;
+  font-size: 24px;
+}
+
+/* 🔹 SOLUCIÓN PARA EL SCROLL 🔹 */
+::ng-deep ion-content::part(scroll) {
+  scrollbar-width: thin !important;
+  scrollbar-color: rgba(59, 130, 246, 0.7) transparent !important;
+}
+
+/* 🔹 Ajustes para Chrome, Edge y Safari */
+::ng-deep ion-content::-webkit-scrollbar {
+  width: 3px !important;
+}
+
+::ng-deep ion-content::-webkit-scrollbar-thumb {
+  background-color: rgba(59, 130, 246, 0.7) !important;
+  border-radius: 4px !important;
+}
+
+::ng-deep ion-content::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.05) !important;
+}
+
+/* 🔹 SOLUCIÓN PARA QUE EL BOTÓN NO TAPE EL DRAG & DROP 🔹 */
+.modal-content {
+  padding: 20px;
+  max-height: calc(100vh - 80px);
+  overflow-y: auto !important;
+  padding-bottom: 200px !important; /* 🔹 MÁS ESPACIO PARA QUE NADA SE TAPE */
+}
+
+/* 🔹 IMAGEN (Drag & Drop mejorado) */
+.image-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  margin-bottom: 15px;
+}
+
+.image-upload {
+  width: 100%;
+  max-width: 350px;
+  min-height: 150px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px dashed rgba(59, 130, 246, 0.7);
+  padding: 15px;
+  text-align: center;
+  border-radius: 10px;
+  transition: background 0.3s;
+  overflow: hidden; /* 🔹 EVITA QUE CREZCA DEMASIADO */
+  position: relative;
+}
+
+.image-upload:hover {
+  background: rgba(59, 130, 246, 0.1);
+}
+
+/* 🔹 Imagen dentro del Drag & Drop */
+.session-img {
+  width: 120px;
+  height: 120px;
+  border-radius: 8px;
+  object-fit: cover;
+  margin-top: 10px;
+}
+
+/* 🔹 SOLUCIÓN PARA QUE EL BOTÓN NO TAPE EL CONTENIDO 🔹 */
+.fixed-button {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
   background: white;
+  box-shadow: 0px -2px 6px rgba(0, 0, 0, 0.1);
+  padding: 15px;
+  text-align: center;
+  z-index: 1000; /* 🔹 CAPA SUPERIOR */
+  height: 80px; /* 🔹 MÁS ALTURA PARA MEJOR VISIBILIDAD */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* 🔹 BOTÓN GUARDAR */
+.save-btn {
+  background: #3b82f6;
+  color: white;
+  font-size: 16px;
+  padding: 12px 20px;
+  border-radius: 8px;
+  transition: background 0.3s;
+  width: 90%;
+  max-width: 400px;
+}
+
+.save-btn:hover {
+  background: #2563eb;
+}
+
+/* 🔹 Ajustes generales del modal */
+::ng-deep ion-modal {
+  --border-radius: 20px;
   border-radius: 20px;
-  border: none;
-  transition: all 0.3s ease-in-out;
   overflow: hidden;
 }
 
-/* Header */
-.modal-header {
-  background: rgba(0, 0, 0, 0.03);
-  border-bottom: 2px solid #e5e7eb;
-  border-top-left-radius: 20px;
-  border-top-right-radius: 20px;
-}
-
-/* Botón de cierre */
-.close-btn {
-  font-size: 22px;
-  font-weight: bold;
-  color: #4a4a4a;
-  background: none;
-  border: none;
-  cursor: pointer;
-  transition: color 0.3s ease-in-out;
-}
-
-.close-btn:hover {
-  color: #222;
-}
-
-/* Contenido */
-.modal-body {
-  scrollbar-width: thin;
-  scrollbar-color: rgba(59, 130, 246, 0.7) rgba(0, 0, 0, 0.05);
-}
-
-/* Barra de Scroll */
-.modal-body::-webkit-scrollbar {
-  width: 6px;
-}
-
-.modal-body::-webkit-scrollbar-thumb {
-  background-color: rgba(59, 130, 246, 0.7);
-  border-radius: 4px;
-}
-
-.modal-body::-webkit-scrollbar-track {
-  background: rgba(0, 0, 0, 0.05);
-}
-
-/* Inputs */
-.input-field {
-  transition: border-color 0.3s ease-in-out;
-}
-
-.input-field:focus {
-  border-color: #4a90e2;
-  outline: none;
-}
-
-/* Imagen */
-.image-upload {
-  transition: background 0.3s;
-}
-
-.preview-image {
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-}
-
-/* Botón Guardar */
-.save-button {
-  transition: background 0.3s ease-in-out;
-}
-
-.save-button:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
+/* 🔹 EXTRA: Ajuste en `ion-content` para evitar recortes */
+ion-content {
+  --padding-bottom: 100px !important; /* 🔹 Espacio extra dinámico */
 }

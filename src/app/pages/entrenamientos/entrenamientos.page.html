@@ -29,13 +29,11 @@
 
           <!-- Botones centrados con espacio entre ellos -->
           <div *ngIf="userRole === 'Gestor'" class="flex justify-between mt-4 space-x-4">
-            <button class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition flex items-center gap-2 text-sm md:text-base"
-              (click)="editarEntrenamiento(entrenamiento)">
-              <ion-icon name="create-outline"></ion-icon> Editar
+            <button class="btn bg-blue-500 hover:bg-blue-700" (click)="editarEntrenamiento(entrenamiento)">
+              <ion-icon name="create-outline"></ion-icon>
             </button>
-            <button class="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-700 transition flex items-center gap-2 text-sm md:text-base"
-              (click)="eliminarEntrenamiento(entrenamiento.id)">
-              <ion-icon name="trash-outline"></ion-icon> Eliminar
+            <button class="btn bg-red-500 hover:bg-red-700" (click)="eliminarEntrenamiento(entrenamiento.id)">
+              <ion-icon name="trash-outline"></ion-icon>
             </button>
           </div>
         </div>
@@ -45,8 +43,7 @@
 </div>
 
 <button *ngIf="userRole === 'Gestor'" 
-  class="fixed bottom-5 right-5 bg-green-500 text-white p-3 md:p-2 rounded-full shadow-lg hover:bg-green-600 transition flex items-center gap-2 opacity-80 hover:opacity-100"
+  class="floating-button flex items-center gap-2"
   (click)="openCreateTrainingModal()">
   <ion-icon name="add-outline" class="text-xl md:text-lg"></ion-icon>
-  <span class="hidden sm:inline text-xs md:text-sm font-semibold">Nuevo</span>
 </button>
