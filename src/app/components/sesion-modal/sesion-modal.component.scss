@@ -148,4 +148,11 @@
     font-size: 14px;
     color: #374151;
   }
+
+  ::ng-deep ion-modal {
+    --border-radius: 20px;
+    border-radius: 20px; /* Para mayor compatibilidad */
+    overflow: hidden; /* Evita que el contenido sobresalga */
+  }
+  
   
