@@ -1,0 +1,65 @@
+/* Contenedor Scrollable */
+.jugadores-scroll-container {
+  display: flex;
+  flex-wrap: nowrap; /* Mantiene los jugadores en una fila */
+  overflow-x: auto; /* Activa el scroll horizontal */
+  gap: 15px;
+  padding: 10px;
+  white-space: nowrap;
+  scrollbar-width: none; /* Oculta el scroll en Firefox */
+  touch-action: pan-x; /* Permite scroll en dispositivos táctiles */
+  -webkit-overflow-scrolling: touch;
+  user-select: none; /* Evita la selección de texto al arrastrar */
+  cursor: grab; /* Cambia el cursor */
+}
+
+/* Ocultar scrollbar en Webkit (Chrome, Safari, Edge) */
+.jugadores-scroll-container::-webkit-scrollbar {
+  display: none;
+}
+
+/* Efecto cuando el usuario está arrastrando */
+.jugadores-scroll-container:active {
+  cursor: grabbing;
+}
+
+/* Tarjetas de jugadores */
+.jugador-card {
+  flex: 0 0 auto;
+  min-width: 160px;
+  padding: 15px;
+  text-align: center;
+  background: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+  transition: transform 0.2s ease-in-out;
+}
+
+.jugador-card:hover {
+  transform: scale(1.05);
+}
+
+/* Evita que la imagen sea seleccionada o arrastrada */
+.jugador-img {
+  width: 90px;
+  height: 90px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-bottom: 8px;
+  user-select: none; /* Evita selección */
+  pointer-events: none; /* Evita eventos de clic o arrastre */
+}
+
+/* Email del jugador */
+.jugador-email {
+  font-size: 16px;
+  color: #374151;
+  font-weight: bold;
+}
+
+/* Estilo cuando un jugador está seleccionado */
+.jugador-card.seleccionado {
+  border: 3px solid #3b82f6;
+  background: rgba(59, 130, 246, 0.1);
+}

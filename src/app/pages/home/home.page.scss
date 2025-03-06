@@ -17,7 +17,44 @@ html, body {
   flex: 1;
   width: 100%;
   overflow-y: auto;
-  overflow-x: hidden; 
+  overflow-x: hidden;
+  scrollbar-width: thin !important; /* Para Firefox */
+  scrollbar-color: rgba(59, 130, 246, 0.7) rgba(0, 0, 0, 0.05) !important;
+}
+
+/* 🔹 Asegurar que los estilos del scroll se apliquen en todos los navegadores */
+.scroll-container::-webkit-scrollbar {
+  width: 6px !important;
+}
+
+.scroll-container::-webkit-scrollbar-thumb {
+  background-color: rgba(59, 130, 246, 0.7) !important; /* Forzar el color */
+  border-radius: 4px !important;
+}
+
+.scroll-container::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.05) !important;
+}
+
+/* 🔹 También aplicar los estilos en el `ion-content` si este está afectando */
+ion-content {
+  --background: transparent;
+  scrollbar-width: thin !important; /* Para Firefox */
+  scrollbar-color: rgba(59, 130, 246, 0.7) rgba(0, 0, 0, 0.05) !important;
+}
+
+/* 🔹 Asegurar que el `ion-content` respete los estilos del scroll */
+ion-content::-webkit-scrollbar {
+  width: 6px !important;
+}
+
+ion-content::-webkit-scrollbar-thumb {
+  background-color: rgba(59, 130, 246, 0.7) !important;
+  border-radius: 4px !important;
+}
+
+ion-content::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.05) !important;
 }
 
 .sesiones-container {
@@ -77,20 +114,6 @@ html, body {
 
 .card-container.flipped .card-back {
   transform: rotateY(0);
-}
-
-/* Estilos para la barra de desplazamiento */
-.scroll-container::-webkit-scrollbar {
-  width: 6px;
-}
-
-.scroll-container::-webkit-scrollbar-thumb {
-  background-color: rgba(59, 130, 246, 0.7);
-  border-radius: 4px;
-}
-
-.scroll-container::-webkit-scrollbar-track {
-  background: rgba(0, 0, 0, 0.05);
 }
 
 /* Botón flotante */

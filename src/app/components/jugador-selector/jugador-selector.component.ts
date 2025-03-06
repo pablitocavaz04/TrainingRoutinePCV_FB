@@ -1,4 +1,4 @@
-import { Component, forwardRef, Input, OnInit } from '@angular/core';
+import { Component, forwardRef, Input, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { getFirestore, collection, query, where, getDocs } from 'firebase/firestore';
 
@@ -6,7 +6,7 @@ import { getFirestore, collection, query, where, getDocs } from 'firebase/firest
   selector: 'app-jugador-selector',
   templateUrl: './jugador-selector.component.html',
   styleUrls: ['./jugador-selector.component.scss'],
-  standalone:false,
+  standalone: false,
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,
@@ -17,12 +17,18 @@ import { getFirestore, collection, query, where, getDocs } from 'firebase/firest
 })
 export class JugadorSelectorComponent implements ControlValueAccessor, OnInit {
   @Input() capacidadMaxima: number = 0;
+  @ViewChild('scrollContainer', { static: false }) scrollContainer!: ElementRef;
+
   jugadores: any[] = [];
   jugadoresSeleccionados: any[] = [];
   errorCapacidad: string = '';
 
   private onChange: (value: any) => void = () => {};
   private onTouched: () => void = () => {};
+
+  isDragging = false;
+  startX = 0;
+  scrollLeft = 0;
 
   constructor() {}
 
@@ -32,7 +38,6 @@ export class JugadorSelectorComponent implements ControlValueAccessor, OnInit {
       this.writeValue(this.jugadoresSeleccionados.map(j => j.id));
     }
   }
-  
 
   async cargarJugadores() {
     const db = getFirestore();
@@ -73,16 +78,33 @@ export class JugadorSelectorComponent implements ControlValueAccessor, OnInit {
       setTimeout(() => this.writeValue(value), 500);
     }
   }
-  
+
   registerOnChange(fn: any): void {
     this.onChange = (value: any) => {
       this.jugadoresSeleccionados = this.jugadores.filter(j => value.includes(j.id));
       fn(value);
     };
   }
-  
 
   registerOnTouched(fn: any): void {
     this.onTouched = fn;
+  }
+
+  startDragging(event: MouseEvent, container: HTMLElement) {
+    this.isDragging = true;
+    this.startX = event.pageX - container.offsetLeft;
+    this.scrollLeft = container.scrollLeft;
+  }
+
+  stopDragging() {
+    this.isDragging = false;
+  }
+
+  onDragging(event: MouseEvent, container: HTMLElement) {
+    if (!this.isDragging) return;
+    event.preventDefault();
+    const x = event.pageX - container.offsetLeft;
+    const walk = (x - this.startX) * 2; // Ajusta la velocidad del desplazamiento
+    container.scrollLeft = this.scrollLeft - walk;
   }
 }

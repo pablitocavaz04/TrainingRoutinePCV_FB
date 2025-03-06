@@ -35,9 +35,9 @@
 
     <!-- Selección de Jugadores -->
     <div class="section-title">Jugadores</div>
-    <ion-item class="custom-item">
+    <div class="scroll-wrapper">
       <app-jugador-selector formControlName="jugadores" [capacidadMaxima]="getCapacidadMaximaEntrenamiento()"></app-jugador-selector>
-    </ion-item>
+    </div>
 
     <!-- Mensaje de error si se supera la capacidad -->
     <p *ngIf="errorCapacidad" class="error-message">
