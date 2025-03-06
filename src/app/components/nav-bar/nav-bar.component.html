@@ -29,6 +29,19 @@
       <span class="absolute inset-0 border-2 border-transparent group-hover:border-white rounded-lg transition-all duration-300"></span>
       <span class="relative z-10 block w-full text-center">Mi Perfil</span>
     </li>
+
+
+    <li class="cursor-pointer px-4 py-2 rounded-lg transition-all duration-300 relative group"
+    [class.border-b-4]="isLanguageModalOpen"
+    [class.border-white]="isLanguageModalOpen"
+    (click)="openLanguageModal()">
+  <span class="absolute inset-0 border-2 border-transparent group-hover:border-white rounded-lg transition-all duration-300"></span>
+  <span class="relative z-10 block w-full text-center flex items-center justify-center gap-2">
+    <img [src]="currentLanguageFlag" alt="Flag" class="w-6 h-4 rounded-md">
+    <span class="font-medium">{{ currentLanguageName }}</span>
+  </span>
+</li>
+
   </ul>
   
   <button class="md:hidden text-white absolute right-4 top-1/2 transform -translate-y-1/2" (click)="toggleMenu()">
@@ -66,5 +79,5 @@
   </div>
 
   <app-profile-modal [isOpen]="isProfileOpen" (close)="toggleProfile()"></app-profile-modal>
-
+  <app-language-modal *ngIf="isLanguageModalOpen" (close)="closeLanguageModal()" (languageChanged)="updateLanguage($event)"></app-language-modal>
 </nav>

@@ -31,6 +31,7 @@ import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
 import { HttpClient } from '@angular/common/http';
 import { HttpClientModule } from '@angular/common/http';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
+import { LanguageModalComponent } from './components/language-modal/language-modal.component';
 
 // Función de carga de traducciones
 export function HttpLoaderFactory(http: HttpClient) {
@@ -46,7 +47,8 @@ export function HttpLoaderFactory(http: HttpClient) {
     AcceptGestorModalComponent,
     EntrenamientoModalComponent,
     SesionModalComponent,
-    JugadorSelectorComponent
+    JugadorSelectorComponent,
+    LanguageModalComponent
   ],
   imports: [
     BrowserModule,
@@ -73,7 +75,8 @@ export function HttpLoaderFactory(http: HttpClient) {
     NavBarComponent,
     ProfileModalComponent,
     ChangeProfileComponent,
-    JugadorSelectorComponent
+    JugadorSelectorComponent,
+    LanguageModalComponent
   ]
 })
 export class AppModule {
