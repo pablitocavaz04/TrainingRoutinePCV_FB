@@ -1,84 +1,93 @@
-<ion-header>
+<ion-header class="modal-header">
   <ion-toolbar>
     <ion-title>{{ modoEdicion ? 'Editar Sesión' : 'Crear Sesión' }}</ion-title>
     <ion-buttons slot="end">
-      <ion-button (click)="closeModal()">✖</ion-button>
+      <ion-button class="close-btn" (click)="closeModal()">
+        <ion-icon name="close-outline"></ion-icon>
+      </ion-button>
     </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
-<ion-content>
-  <form [formGroup]="sesionForm">
+<ion-content class="modal-content">
+  <form [formGroup]="sesionForm" class="modal-form">
     <!-- Nombre de la Sesión -->
-    <ion-item>
+    <ion-item class="custom-item">
       <ion-label position="floating">Nombre de la Sesión</ion-label>
       <ion-input formControlName="nombre"></ion-input>
     </ion-item>
 
-    <!-- Fecha con botón para abrir el calendario -->
-    <ion-item>
+    <!-- Fecha -->
+    <ion-item class="custom-item">
       <ion-label>Fecha</ion-label>
-      <input type="date"
-        formControlName="fecha"
-        class="w-full p-3 border border-gray-300 rounded-lg focus:border-blue-500 focus:outline-none"/>
+      <input type="date" formControlName="fecha" class="custom-input"/>
     </ion-item>
 
     <!-- Selección de Entrenamiento -->
-    <ion-item>
+    <ion-item class="custom-item">
       <ion-label>Entrenamiento</ion-label>
       <ion-select formControlName="entrenamientoId">
         <ion-select-option *ngFor="let entrenamiento of entrenamientos" [value]="entrenamiento.id">
-          <img [src]="entrenamiento.imagen" class="w-6 h-6 rounded-full mr-2" /> {{ entrenamiento.nombre }}
+          <img [src]="entrenamiento.imagen" class="select-img" /> {{ entrenamiento.nombre }}
         </ion-select-option>
       </ion-select>
     </ion-item>
 
     <!-- Selección de Jugadores -->
-    <ion-item>
-      <ion-label>Jugadores</ion-label>
+    <div class="section-title">Jugadores</div>
+    <ion-item class="custom-item">
       <app-jugador-selector formControlName="jugadores" [capacidadMaxima]="getCapacidadMaximaEntrenamiento()"></app-jugador-selector>
     </ion-item>
-    
+
     <!-- Mensaje de error si se supera la capacidad -->
-    <p *ngIf="errorCapacidad" class="text-red-500 text-sm mt-2 ml-4">
+    <p *ngIf="errorCapacidad" class="error-message">
       {{ errorCapacidad }}
     </p>
-    
-    <!-- Imagen de la Sesión -->
-    <ion-item>
+
+    <!-- Imagen (ahora a la derecha) -->
+    <ion-item class="custom-item image-item">
       <ion-label>Imagen</ion-label>
-      <ion-thumbnail slot="start">
-        <img *ngIf="sesionForm.value.imagen" [src]="sesionForm.value.imagen" class="w-16 h-16 object-cover rounded-lg">
-      </ion-thumbnail>
       <ion-buttons slot="end">
-        <ion-button (click)="seleccionarImagen('galeria')">📷 Galería</ion-button>
-        <ion-button (click)="seleccionarImagen('camara')">📸 Cámara</ion-button>
+        <ion-button (click)="seleccionarImagen('galeria')">
+          <ion-icon name="images-outline"></ion-icon>
+        </ion-button>
+        <ion-button (click)="seleccionarImagen('camara')">
+          <ion-icon name="camera-outline"></ion-icon>
+        </ion-button>
       </ion-buttons>
+      <ion-thumbnail slot="end">
+        <img *ngIf="sesionForm.value.imagen" [src]="sesionForm.value.imagen" class="session-img">
+      </ion-thumbnail>
     </ion-item>
 
-    <!-- Estado  -->
-    <ion-item>
+    <!-- Estado -->
+    <ion-item class="custom-item">
       <ion-label>Estado</ion-label>
       <ion-toggle formControlName="estado"></ion-toggle>
     </ion-item>
 
-    <!-- Mostrar Mapa para seleccionar ubicación -->
-    <ion-item>
-      <ion-label>Ubicación</ion-label>
-      <div id="mapa" style="width: 100%; height: 60vh;"></div>
-      <ion-button expand="full" color="primary" (click)="guardarUbicacion()">Guardar Ubicación</ion-button>
-    </ion-item>
-
-    <!-- Mostrar coordenadas si ya se seleccionó una ubicación -->
-    <ion-item *ngIf="sesionForm.value.coordenadas">
-      <p>Lat: {{ sesionForm.value.coordenadas.lat }} | Lng: {{ sesionForm.value.coordenadas.lng }}</p>
-    </ion-item>
-
-    <!-- Botón de Guardar -->
-    <div class="flex justify-center my-4">
-      <button (click)="guardarSesion()" class="bg-blue-500 text-white px-4 py-2 rounded-md">
-        {{ modoEdicion ? 'Actualizar Sesión' : 'Crear Sesión' }}
-      </button>
+    <!-- Botón Guardar Ubicación -->
+    <div class="btn-container">
+      <button class="save-btn" (click)="guardarUbicacion()">Guardar Ubicación</button>
     </div>
+
+    <!-- Mapa -->
+    <div class="map-container">
+      <div id="mapa"></div>
+    </div>
+
+    <!-- Coordenadas (Ahora debajo del mapa) -->
+    <div *ngIf="sesionForm.value.coordenadas" class="coordenadas-box">
+      <p><strong>Latitud:</strong> {{ sesionForm.value.coordenadas.lat }}</p>
+      <p><strong>Longitud:</strong> {{ sesionForm.value.coordenadas.lng }}</p>
+    </div>
+
   </form>
 </ion-content>
+
+<!-- Botón Fijo -->
+<div class="fixed-button">
+  <button (click)="guardarSesion()" class="save-btn">
+    {{ modoEdicion ? 'Actualizar Sesión' : 'Crear Sesión' }}
+  </button>
+</div>
