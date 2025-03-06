@@ -1,4 +1,4 @@
-<ion-content [fullscreen]="true" class="page-container"> 
+<ion-content [fullscreen]="true" class="page-container">
   <!-- Mensaje si no hay sesiones -->
   <div *ngIf="sesiones.length === 0" class="text-center mt-20">
     <p>No hay sesiones disponibles.</p>
@@ -18,10 +18,18 @@
 
           <div class="p-3 text-left">
             <h3 class="font-bold text-md">{{ sesion.nombre }}</h3>
-            <p class="text-gray-600 text-sm">📅 {{ sesion.fecha }}</p>
-            <p class="text-gray-500 text-sm">⚡ {{ sesion.estado }}</p>
-            <p class="text-gray-500 text-sm">🏋️ {{ sesion.entrenamientoNombre }}</p>
-            <p class="text-gray-500 text-sm">👤 {{ sesion.entrenadorEmail }}</p>
+            <p class="text-gray-600 text-sm">
+              <ion-icon name="calendar-outline"></ion-icon> {{ sesion.fecha }}
+            </p>
+            <p class="text-gray-500 text-sm">
+              <ion-icon name="flash-outline"></ion-icon> {{ sesion.estado }}
+            </p>
+            <p class="text-gray-500 text-sm">
+              <ion-icon name="barbell-outline"></ion-icon> {{ sesion.entrenamientoNombre }}
+            </p>
+            <p class="text-gray-500 text-sm">
+              <ion-icon name="person-outline"></ion-icon> {{ sesion.entrenadorEmail }}
+            </p>
 
             <!-- Contenedor de botones -->
             <div class="flex justify-between items-center mt-3">
@@ -33,7 +41,7 @@
                 *ngIf="selectedRole === 'Entrenador'" 
                 class="bg-red-500 text-white px-2 py-1 text-sm rounded-md hover:bg-red-700 transition"
                 (click)="eliminarSesion(sesion); $event.stopPropagation();">
-                🗑️
+                  <ion-icon name="trash-outline"></ion-icon>
                 </button>
 
                 <!-- Botón Editar (SOLO PARA ENTRENADORES) -->
@@ -41,14 +49,14 @@
                   *ngIf="selectedRole === 'Entrenador'" 
                   class="bg-blue-500 text-white px-2 py-1 text-sm rounded-md hover:bg-blue-700 transition"
                   (click)="editarSesion(sesion); $event.stopPropagation();">
-                  ✏️
+                  <ion-icon name="create-outline"></ion-icon>
                 </button>
 
                 <!-- Botón Compartir (VISIBLE PARA TODOS) -->
                 <button 
                   class="bg-green-500 text-white px-2 py-1 text-sm rounded-md hover:bg-green-700 transition"
                   (click)="compartirSesion(sesion); $event.stopPropagation();">
-                  📤
+                  <ion-icon name="share-outline"></ion-icon>
                 </button>
               </div>
             </div>
@@ -71,6 +79,6 @@
     class="fixed bottom-10 right-5 bg-blue-500 text-white p-4 rounded-full shadow-lg hover:bg-blue-700 transition"
     (click)="openCreateSesionModal()"
   >
-    ➕
+    <ion-icon name="add-outline"></ion-icon>
   </button> 
 </ion-content>
