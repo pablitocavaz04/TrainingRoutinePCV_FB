@@ -4,21 +4,22 @@
   <!-- Modal con evento de propagación para evitar cierre al hacer clic dentro -->
   <div class="bg-white rounded-lg shadow-lg p-6 w-80 text-center relative" (click)="$event.stopPropagation()">
     
-    <h2 class="text-xl font-bold mb-4">{{ 'SELECT_LANGUAGE' | translate }}</h2>
+    <h2 class="text-2xl font-semibold mb-4 text-black">{{ 'SELECT_LANGUAGE' | translate }}</h2>
 
     <ul class="space-y-2">
       <li *ngFor="let lang of languages"
           (click)="selectLanguage(lang.code)"
-          class="cursor-pointer flex items-center justify-center p-2 rounded-lg transition"
+          class="cursor-pointer flex items-center justify-center p-2 rounded-lg transition border-2"
           [class.bg-blue-500]="selectedLanguage === lang.code"
           [class.text-white]="selectedLanguage === lang.code"
-          [class.bg-gray-100]="selectedLanguage !== lang.code"
-          [class.hover:bg-gray-200]="selectedLanguage !== lang.code">
+          [class.bg-gray-300]="selectedLanguage !== lang.code"
+          [class.border-blue-400]="selectedLanguage !== lang.code"
+          [class.hover:bg-gray-400]="selectedLanguage !== lang.code">
         <img [src]="'assets/flags/' + lang.code + '.png'" alt="{{ lang.name }}" class="w-6 h-4 rounded-md">
         <span class="ml-2 text-lg font-medium">{{ lang.name }}</span>
       </li>
     </ul>
-
+    
     <button (click)="close.emit()" class="mt-4 px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-600 transition">
       {{ 'CLOSE' | translate }}
     </button>
