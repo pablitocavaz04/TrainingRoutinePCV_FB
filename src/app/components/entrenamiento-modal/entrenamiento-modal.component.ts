@@ -1,4 +1,4 @@
-import { Component, ElementRef, Input, OnInit, ViewChild, HostListener } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { ModalController } from '@ionic/angular';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { EntrenamientosService } from 'src/app/services/entrenamientos.service';
@@ -10,29 +10,26 @@ import { EntrenamientosService } from 'src/app/services/entrenamientos.service';
   standalone: false
 })
 export class EntrenamientoModalComponent implements OnInit {
-  @Input() entrenamiento: any | null = null;
+  @Input() entrenamiento: any;
   entrenamientoForm!: FormGroup;
-  imagenSeleccionada: File | null = null;
   imagenVistaPrevia: string | null = null;
+  imagenSeleccionada: File | null = null;
   modoEdicion: boolean = false;
-
-  @ViewChild('fechaPicker', { static: false }) fechaPicker!: ElementRef;
 
   constructor(
     private modalController: ModalController,
     private fb: FormBuilder,
-    private entrenamientoService: EntrenamientosService
+    private entrenamientosService: EntrenamientosService
   ) {}
 
   ngOnInit() {
-    this.modoEdicion = !!this.entrenamiento;
-
+    this.modoEdicion = !!this.entrenamiento; // Verifica si hay un entrenamiento pasado por `@Input()`
+    
     this.entrenamientoForm = this.fb.group({
       nombre: [this.entrenamiento?.nombre || '', [Validators.required, Validators.minLength(3)]],
-      descripcion: [this.entrenamiento?.descripcion || '', [Validators.required, Validators.minLength(10)]],
-      fechaCaducidad: [this.entrenamiento?.fechaCaducidad || '', [Validators.required]],
-      capacidadMaxima: [this.entrenamiento?.capacidadMaxima || 1, [Validators.required, Validators.min(1)]],
-      imagen: [''],
+      descripcion: [this.entrenamiento?.descripcion || '', Validators.required],
+      fechaCaducidad: [this.entrenamiento?.fechaCaducidad || '', Validators.required],
+      capacidadMaxima: [this.entrenamiento?.capacidadMaxima || 1, [Validators.required, Validators.min(1)]]
     });
 
     if (this.entrenamiento?.imagen) {
@@ -40,57 +37,54 @@ export class EntrenamientoModalComponent implements OnInit {
     }
   }
 
-  closeModal() {
-    this.modalController.dismiss();
-  }
-
   async guardarEntrenamiento() {
-    if (this.entrenamientoForm.valid) {
-      const entrenamientoData = this.entrenamientoForm.value;
+    if (!this.entrenamientoForm.valid) {
+      console.error("El formulario no es válido");
+      return;
+    }
 
+    const entrenamientoData = this.entrenamientoForm.value;
+    console.log("Guardando entrenamiento:", entrenamientoData);
+
+    try {
       if (this.modoEdicion) {
-        await this.entrenamientoService.actualizarEntrenamiento(
-          this.entrenamiento.id,
-          entrenamientoData,
-          this.imagenSeleccionada
-        );
+        await this.entrenamientosService.actualizarEntrenamiento(this.entrenamiento.id, entrenamientoData, this.imagenSeleccionada);
+        console.log("Entrenamiento actualizado correctamente");
       } else {
-        await this.entrenamientoService.crearEntrenamiento(
-          entrenamientoData,
-          this.imagenSeleccionada
-        );
+        await this.entrenamientosService.crearEntrenamiento(entrenamientoData, this.imagenSeleccionada);
+        console.log("Entrenamiento creado correctamente");
       }
 
-      this.modalController.dismiss();
+      this.modalController.dismiss({ actualizado: true });
+    } catch (error) {
+      console.error("Error al guardar el entrenamiento:", error);
     }
   }
 
-  onFileDropped(event: DragEvent) {
-    event.preventDefault();
-    if (event.dataTransfer?.files.length) {
-      this.handleFile(event.dataTransfer.files[0]);
-    }
+  closeModal() {
+    this.modalController.dismiss();
   }
 
   onFileSelected(event: any) {
     const file = event.target.files[0];
     if (file) {
-      this.handleFile(file);
+      this.imagenSeleccionada = file;
+      const reader = new FileReader();
+      reader.onload = () => {
+        this.imagenVistaPrevia = reader.result as string;
+      };
+      reader.readAsDataURL(file);
     }
-  }
-
-  handleFile(file: File) {
-    this.imagenSeleccionada = file;
-    this.entrenamientoForm.patchValue({ imagen: file });
-
-    const reader = new FileReader();
-    reader.onload = (e: any) => {
-      this.imagenVistaPrevia = e.target.result;
-    };
-    reader.readAsDataURL(file);
   }
 
   onDragOver(event: DragEvent) {
     event.preventDefault();
+  }
+
+  onFileDropped(event: DragEvent) {
+    event.preventDefault();
+    if (event.dataTransfer?.files.length) {
+      this.onFileSelected({ target: { files: event.dataTransfer.files } });
+    }
   }
 }
