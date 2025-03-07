@@ -85,10 +85,24 @@ html, body {
 }
 
 .info-text {
-  font-size: 12px;
+  display: flex;
+  align-items: center;
+  font-size: 14px;
   color: #6b7280;
+  margin-top: 4px;
 }
 
+.info-text span {
+  margin-left: 5px; /* Espacio entre el ícono y el texto */
+}
+
+.icon {
+  font-size: 18px;
+  margin-right: 8px; /* Espacio entre el ícono y el texto */
+  color: #374151; /* Puedes personalizar el color aquí */
+}
+
+/* Contenedor de botones */
 .button-container {
   display: flex;
   justify-content: center;
@@ -112,6 +126,7 @@ html, body {
   transform: scale(1.1);
 }
 
+/* Botón flotante */
 .floating-button {
   position: fixed;
   bottom: 20px;

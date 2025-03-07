@@ -1,52 +1,69 @@
-<div class="page-container">
+<ion-content [fullscreen]="true" class="page-container">
+  <!-- Mensaje si no hay entrenamientos -->
+  <div *ngIf="entrenamientos.length === 0" class="text-center mt-10 text-gray-500">
+    <p>No hay entrenamientos disponibles.</p>
+  </div>
+
+  <!-- Grid de entrenamientos -->
   <div class="scroll-container">
     <div class="entrenamientos-container">
-      
-      <div *ngIf="entrenamientos.length === 0" class="text-center mt-10 text-gray-500">
-        <p>No hay entrenamientos disponibles.</p>
-      </div>
+      <div *ngFor="let entrenamiento of entrenamientos" 
+           class="card-container"
+           (mousemove)="handleMouseMove($event, entrenamiento.id)" 
+           (mouseleave)="resetTransform(entrenamiento.id)"
+           [attr.data-id]="entrenamiento.id">
 
-      <!-- Grid de entrenamientos -->
-      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-        <div *ngFor="let entrenamiento of entrenamientos" 
-          class="card-container"
-          (mousemove)="handleMouseMove($event, entrenamiento.id)" 
-          (mouseleave)="resetTransform(entrenamiento.id)"
-          [attr.data-id]="entrenamiento.id">
+        <!-- Imagen del entrenamiento -->
+        <div class="image-container">
+          <img [src]="entrenamiento.imagen || 'assets/placeholder.png'" 
+               alt="Entrenamiento" 
+               class="session-img">
+        </div>
 
-          <!-- Imagen del entrenamiento -->
-          <div class="image-container">
-            <img [src]="entrenamiento.imagen || 'assets/placeholder.png'" 
-                 alt="Entrenamiento" 
-                 class="session-img">
-          </div>
+        <!-- Datos del Entrenamiento -->
+        <div class="text-content">
+          <!-- Nombre -->
+          <h3 class="info-text">
+            <ion-icon name="fitness-outline" class="icon"></ion-icon>
+            {{ entrenamiento.nombre }}
+          </h3>
 
-          <!-- Datos del Entrenamiento -->
-          <div class="text-content">
-            <h3>{{ entrenamiento.nombre }}</h3>
-            <p>{{ entrenamiento.descripcion }}</p>
-            <p class="info-text">Capacidad: <span>{{ entrenamiento.capacidadMaxima }}</span></p>
-            <p class="info-text">Fecha Límite: <span>{{ entrenamiento.fechaCaducidad }}</span></p>
-          </div>
+          <!-- Descripción -->
+          <p class="info-text">
+            <ion-icon name="clipboard-outline" class="icon"></ion-icon>
+            {{ entrenamiento.descripcion }}
+          </p>
 
-          <!-- Botones (SOLO PARA GESTORES) -->
-          <div *ngIf="userRole === 'Gestor'" class="button-container">
-            <button class="btn bg-blue-500 hover:bg-blue-700" (click)="editarEntrenamiento(entrenamiento)">
-              <ion-icon name="create-outline"></ion-icon>
-            </button>
-            <button class="btn bg-red-500 hover:bg-red-700" (click)="eliminarEntrenamiento(entrenamiento.id)">
-              <ion-icon name="trash-outline"></ion-icon>
-            </button>
-          </div>
+          <!-- Capacidad máxima -->
+          <p class="info-text">
+            <ion-icon name="people-outline" class="icon"></ion-icon>
+            Capacidad: <span>{{ entrenamiento.capacidadMaxima }}</span>
+          </p>
+
+          <!-- Fecha de caducidad -->
+          <p class="info-text">
+            <ion-icon name="calendar-outline" class="icon"></ion-icon>
+            Fecha Límite: <span>{{ entrenamiento.fechaCaducidad | date:'yyyy-MM-dd' }}</span>
+          </p>
+        </div>
+
+        <!-- Botones (SOLO PARA GESTORES) -->
+        <div *ngIf="userRole === 'Gestor'" class="button-container">
+          <button class="btn bg-blue-500 hover:bg-blue-700" (click)="editarEntrenamiento(entrenamiento)">
+            <ion-icon name="create-outline"></ion-icon>
+          </button>
+          <button class="btn bg-red-500 hover:bg-red-700" (click)="eliminarEntrenamiento(entrenamiento.id)">
+            <ion-icon name="trash-outline"></ion-icon>
+          </button>
         </div>
       </div>
     </div>
   </div>
-</div>
 
-<!-- Botón flotante para crear entrenamiento (Solo Gestores) -->
-<button *ngIf="userRole === 'Gestor'" 
-  class="floating-button flex items-center gap-2"
-  (click)="openCreateTrainingModal()">
-  <ion-icon name="add-outline" class="text-xl md:text-lg"></ion-icon>
-</button>  
+  <!-- Botón flotante para crear entrenamiento (Solo Gestores) -->
+  <button *ngIf="userRole === 'Gestor'" 
+    class="floating-button flex items-center gap-2"
+    (click)="openCreateTrainingModal()">
+    <ion-icon name="add-outline" class="text-xl md:text-lg"></ion-icon>
+  </button> 
+</ion-content>
