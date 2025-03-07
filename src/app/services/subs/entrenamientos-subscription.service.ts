@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { getFirestore, collection, onSnapshot, QuerySnapshot, DocumentData } from 'firebase/firestore';
 import { Observable, Subject } from 'rxjs';
-import { CollectionChange } from '../interfaces/collection-subscription.interface';
+import { CollectionChange } from '../../interfaces/collection-subscription.interface';
 
 @Injectable({
   providedIn: 'root'

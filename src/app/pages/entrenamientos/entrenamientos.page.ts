@@ -2,7 +2,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ModalController, AlertController } from '@ionic/angular';
 import { EntrenamientoModalComponent } from 'src/app/components/entrenamiento-modal/entrenamiento-modal.component';
 import { EntrenamientosService } from 'src/app/services/entrenamientos.service';
-import { EntrenamientosSubscriptionService } from 'src/app/services/entrenamientos-subscription.service';
+import { EntrenamientosSubscriptionService } from 'src/app/services/subs/entrenamientos-subscription.service';
 import { AuthService } from 'src/app/services/auth.service';
 import { Subscription } from 'rxjs';
 import { CollectionChange } from 'src/app/interfaces/collection-subscription.interface';

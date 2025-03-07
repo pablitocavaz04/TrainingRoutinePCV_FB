@@ -2,8 +2,11 @@ import { Component, OnInit } from '@angular/core';
 import { AlertController, ModalController } from '@ionic/angular';
 import { getAuth } from 'firebase/auth';
 import { getFirestore, collection, query, where, getDocs, doc, updateDoc, deleteDoc, getDoc } from 'firebase/firestore';
+import { Subscription } from 'rxjs';
 import { SesionModalComponent } from 'src/app/components/sesion-modal/sesion-modal.component';
+import { CollectionChange } from 'src/app/interfaces/collection-subscription.interface';
 import { SesionesService } from 'src/app/services/sesiones.service';
+import { SesionesSubscriptionService } from 'src/app/services/subs/sesiones-subscription.service';
 
 declare var google: any;
 @Component({
@@ -16,8 +19,10 @@ export class HomePage implements OnInit {
   userRoles: string[] = [];
   selectedRole: string = '';
   sesiones: any[] = [];
+  sesionesSubscription!: Subscription;
 
   constructor(
+    private sesionesSubscriptionService: SesionesSubscriptionService,
     private sesionesService: SesionesService, 
     private modalController: ModalController,
     private alertController: AlertController,
@@ -38,11 +43,27 @@ export class HomePage implements OnInit {
         this.userRoles = userData['roles'] || [];
       }
 
-      // Recuperar el rol seleccionado
       this.selectedRole = localStorage.getItem('selectedRole') || this.userRoles[0] || '';
 
-      // Cargar sesiones según el rol del usuario
-      await this.cargarSesiones(user.uid);
+      // 🔥 Suscribirse a la colección "sesiones" en tiempo real
+      this.sesionesSubscription = this.sesionesSubscriptionService.subscribe().subscribe((change: CollectionChange<any>) => {
+        if (change.type === 'added') {
+          this.sesiones.push(change.data);
+        } else if (change.type === 'modified') {
+          this.sesiones = this.sesiones.map(sesion =>
+            sesion.id === change.id ? { ...sesion, ...change.data } : sesion
+          );
+        } else if (change.type === 'removed') {
+          this.sesiones = this.sesiones.filter(sesion => sesion.id !== change.id);
+        }
+      });
+    }
+  }
+
+  ngOnDestroy() {
+    // ✅ Cancelar la suscripción para evitar fugas de memoria
+    if (this.sesionesSubscription) {
+      this.sesionesSubscription.unsubscribe();
     }
   }
 
