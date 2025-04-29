@@ -58,7 +58,7 @@ export class MemoryGameComponent implements OnInit {
         this.flippedCards = [];
 
         if (this.cards.every(c => c.matched)) {
-          this.successMessage = '¡Enhorabuena! Has emparejado todos los logos 🎉';
+          this.successMessage = '¡Enhorabuena! Has emparejado todos los logos.';
         }
       } else {
         setTimeout(() => {
