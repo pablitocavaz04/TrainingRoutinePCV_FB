@@ -7,6 +7,7 @@ import { IonicModule } from '@ionic/angular';
 import { AboutMePageRoutingModule } from './about-me-routing.module';
 
 import { AboutMePage } from './about-me.page';
+import { MemoryGameComponent } from 'src/app/components/memory-game/memory-game.component';
 
 @NgModule({
   imports: [
@@ -15,6 +16,6 @@ import { AboutMePage } from './about-me.page';
     IonicModule,
     AboutMePageRoutingModule
   ],
-  declarations: [AboutMePage]
+  declarations: [AboutMePage,MemoryGameComponent]
 })
 export class AboutMePageModule {}
