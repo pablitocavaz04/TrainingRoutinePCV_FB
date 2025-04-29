@@ -20,7 +20,7 @@ export class NavBarComponent implements OnInit {
   currentLanguageFlag = 'assets/flags/es.png'; // Ahora es una imagen
 
   menuItems = [
-    { label: 'Chat', route: '/chat'},
+    { label: 'Sobre Mi', route: '/about-me'},
     { label: 'Home', route: '/home' },
     { label: 'Entrenamientos', route: '/entrenamientos' },
     { label: 'Entrenadores', route: '/entrenadores' }
