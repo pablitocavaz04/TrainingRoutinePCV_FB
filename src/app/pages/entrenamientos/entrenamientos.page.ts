@@ -11,7 +11,7 @@ import { CollectionChange } from 'src/app/interfaces/collection-subscription.int
   selector: 'app-entrenamientos',
   templateUrl: './entrenamientos.page.html',
   styleUrls: ['./entrenamientos.page.scss'],
-  standalone:false
+  standalone: false
 })
 export class EntrenamientosPage implements OnInit, OnDestroy {
   entrenamientos: any[] = [];
@@ -27,13 +27,15 @@ export class EntrenamientosPage implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit() {
-    // Obtener el rol del usuario
     this.userRole = this.authService.getSelectedRole() || '';
 
-    // 🔥 Suscribirse a los cambios en tiempo real en la colección "entrenamientos"
+    // 🔥 Suscribirse a cambios en tiempo real en la colección "entrenamientos"
     this.entrenamientosSubscription = this.entrenamientosSubscriptionService.subscribe().subscribe((change: CollectionChange<any>) => {
       if (change.type === 'added') {
-        this.entrenamientos.push(change.data);
+        const yaExiste = this.entrenamientos.find(e => e.id === change.id);
+        if (!yaExiste) {
+          this.entrenamientos.push(change.data);
+        }
       } else if (change.type === 'modified') {
         this.entrenamientos = this.entrenamientos.map(entrenamiento =>
           entrenamiento.id === change.id ? { ...entrenamiento, ...change.data } : entrenamiento
@@ -45,30 +47,35 @@ export class EntrenamientosPage implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    // ✅ Cancelar la suscripción cuando se destruya el componente para evitar fugas de memoria
     if (this.entrenamientosSubscription) {
       this.entrenamientosSubscription.unsubscribe();
     }
+    this.entrenamientosSubscriptionService.unsubscribe(); // ✅ Cerramos el onSnapshot de Firestore
   }
+  
 
-  // ✅ Método para abrir el modal de creación de entrenamiento
   async openCreateTrainingModal() {
     const modal = await this.modalController.create({
       component: EntrenamientoModalComponent,
     });
+
+    // ❌ No hacemos push manualmente
+    modal.onDidDismiss().then(() => {
+      // Nada aquí
+    });
+
     return await modal.present();
   }
 
-  // ✅ Método para abrir el modal de edición de entrenamiento
   async editarEntrenamiento(entrenamiento: any) {
     const modal = await this.modalController.create({
       component: EntrenamientoModalComponent,
       componentProps: { entrenamiento }
     });
+
     return await modal.present();
   }
 
-  // ✅ Método para eliminar un entrenamiento con confirmación
   async eliminarEntrenamiento(entrenamientoId: string) {
     const alert = await this.alertController.create({
       header: 'Confirmar Eliminación',
@@ -92,7 +99,6 @@ export class EntrenamientosPage implements OnInit, OnDestroy {
     await alert.present();
   }
 
-  // ✅ Efectos visuales en tarjetas (Hover 3D)
   handleMouseMove(event: MouseEvent, cardId: string) {
     const card = document.querySelector(`[data-id="${cardId}"]`) as HTMLElement;
     if (!card) return;
